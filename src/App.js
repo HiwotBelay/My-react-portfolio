@@ -8,12 +8,16 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import 'font-awesome/css/font-awesome.min.css';
 import 'aos/dist/aos.css';
+import { Helmet } from "react-helmet";
 
 
 
 function App() {
   return (
     <div>
+       <Helmet>
+        <title>Hiwot's | Portfolio</title>
+      </Helmet>
       <Header />
       <Home />
       <About />
