@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./components/Header";
-import Home from "./components/Home"; //importing
-import About from "./components/About";
+import Home from "./components/Home"; //importing Home
+import About from "./components/About"; //importing about
 import Portfolio from "./components/Portfolio";
 //import Resume from "./components/Resume";
 import Contact from "./components/Contact";
