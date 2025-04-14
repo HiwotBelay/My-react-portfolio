@@ -19,7 +19,7 @@ Welcome to my personal portfolio website! Built using **React** and styled with 
 ✅ Modern UI with Tailwind  
 ✅ Project showcase section  
 ✅ Contact form / social links  
-✅ Interactive hover effects.  
+✅ Interactive hover effects
 
 
 
