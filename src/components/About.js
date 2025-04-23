@@ -91,6 +91,7 @@ const About = () => {
               </ul>
             </div>
             <p>
+              <br></br><br></br>
             I truly appreciate you visiting my portfolio. I'm excited to collaborate with you and turn your unique ideas into extraordinary results. 
             Reach out through the contact details provided, and let’s create something remarkable together!
             </p>
@@ -112,7 +113,7 @@ const About = () => {
     <div className="skill-item react">
       <div className="sktill-title">
         <h4>React</h4>
-        <h4>80%</h4>
+        <h4>90%</h4>
       </div>
       <div className="progressbar" ref={progressRef}>
         <div className={`percentage ${isVisible ? "react-bar" : ""}`}></div>
@@ -120,7 +121,7 @@ const About = () => {
     </div>
     <div className="skill-item mongodb">
       <div className="sktill-title">
-        <h4>MongoDB</h4>
+        <h4>MongoDB & Postgress</h4>
         <h4>80%</h4>
       </div>
       <div className="progressbar" ref={progressRef}>
@@ -130,7 +131,7 @@ const About = () => {
     <div className="skill-item tailwind">
       <div className="sktill-title">
         <h4>Tailwind CSS</h4>
-        <h4>80%</h4>
+        <h4>90%</h4>
       </div>
       <div className="progressbar" ref={progressRef}>
         <div className={`percentage ${isVisible ? "tailwind-bar" : ""}`}></div>
@@ -150,8 +151,8 @@ const About = () => {
     </div>
     <div className="skill-item node">
       <div className="sktill-title">
-        <h4>Node.js & Express.js</h4>
-        <h4>70%</h4>
+        <h4>HTML5 & CSS3</h4>
+        <h4>75%</h4>
       </div>
       <div className="progressbar" ref={progressRef}>
         <div className={`percentage ${isVisible ? "node-bar" : ""}`}></div>
@@ -159,7 +160,7 @@ const About = () => {
     </div>
     <div className="skill-item html-css">
       <div className="sktill-title">
-        <h4>HTML5 & CSS3</h4>
+        <h4>Node.js & Express.js</h4>
         <h4>80%</h4>
       </div>
       <div className="progressbar" ref={progressRef}>
