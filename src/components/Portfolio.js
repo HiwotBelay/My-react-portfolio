@@ -1,20 +1,118 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { FaGithub } from "react-icons/fa"
+import { useState, useEffect, useRef } from "react"
+import { FaGithub, FaExternalLinkAlt, FaPlay, FaPause } from "react-icons/fa"
 import AOS from "aos"
 import "aos/dist/aos.css"
 import gcc from "./img/gcc.jpg"
 import web from "./img/web.jpg"
 import mern from "./img/mern.jpg"
 import prog from "./img/prog.jpg"
-import ala from "./img/ala.jpg"
-import bit from "./img/bit.jpg"
-import hackathon from "./img/Hackathon.jpg" // Import the new Hackathon image
+import hackathon from "./img/Hackathon.jpg"
+import new1 from "./img/new1.jpg"
+import new2 from "./img/new2.jpg"
+import new3 from "./img/new3.jpg"
+// Import video files
+import petVideo from "./img/pet.mp4"
+import ecommerceVideo from "./img/ecommerce.mp4"
+import tenderVideo from "./img/tender.mp4"
+import dentalVideo from "./img/dental.mp4"
+import chatappVideo from "./img/chatapp.mp4"
+import behavVideo from "./img/behav.mp4"
+
 
 const Portfolio = () => {
   const [filter, setFilter] = useState("all")
   const [selectedImage, setSelectedImage] = useState(null)
+  const [playingVideo, setPlayingVideo] = useState(null)
+
+  // Video refs
+  const videoRefs = useRef({})
+
+  // Certificate descriptions
+  const certificateDescriptions = {
+    hackathon: 
+      "I won the SheCodes Hackathon with an Amazing AI Recruiter project that tackled a crucial need in my country, an amazing and impactful achievement!",
+    gcc: "Recognition for completing the Girls Can Code program, mastering fundamental programming concepts and developing practical coding skills.",
+    web: "Certification in Web Development fundamentals, covering HTML, CSS, JavaScript and responsive design principles.",
+    mern: "Certification in MERN Stack development, covering MongoDB, Express.js, React, and Node.js for full-stack applications.",
+    prog: "Advanced Programming certification covering algorithms, data structures, and software design patterns.",
+    ala: "African Leadership Academy recognition for leadership and entrepreneurial excellence.",
+    bit: "Bit Career Training certification for professional development in software engineering.",
+    new1: "I won 1st place at the Gig Hackathon with an amazing AI-integrated Pet Twin System—my second big hackathon win, and another proud, impactful moment!",
+    new2: "I was recognized for my communication, planning, and leadership skills while organizing a major event at Bahir Dar University.",
+    new3: "This highlights my active participation in my second hackathon competition, demonstrating both my technical growth and collaborative experience.",
+  }
+
+  // Project data
+  const projects = [
+    {
+      id: 1,
+      title: "Digital Pet Twin",
+      video: petVideo,
+      category: "Web Application/Website",
+      description:
+        "A fully interactive 3D digital pet that can 🐶 Express emotions,🎤 Talk and react to users,🌦 Show dynamic weather,🧢 Wear accessories,🧠 Remember interactions,🕹️ Even play games with you!,From day to night, sun to snow, made it ALIVE, EMOTIONAL & FUN!",
+      technologies: "Three.js, Blender, GLTF models, Web Speech API, ResponsiveVoice, CSS Keyframes, SVG Motion, LocalStorage, JavaScript, React, Next.js, Tailwind CSS",
+      github: "https://github.com/HiwotBelay/hackathon-proj",
+      demo: "#",
+    },
+    {
+      id: 2,
+      title: "E-commerce",
+      video: ecommerceVideo,
+      category: "Full Stack",
+      description:
+        "A powerful, scalable e-commerce web app inspired by Amazon – built using Next.js, React, Node.js, Express, Firebase Realtime Database, PostgreSQL, and Prisma.",
+      technologies: "Next.js, React, Node.js, Express, Firebase Realtime Database, PostgreSQL, Prisma",
+      github: "https://github.com/HiwotBelay/E-commerce",
+      demo: "#",
+    },
+    {
+      id: 3,
+      title: "Tender Management System",
+      video: tenderVideo,
+      category: "Enterprise Solution",
+      description:
+        "A comprehensive system for managing the tendering process for government and private organizations. Features include tender posting, bid submission, evaluation, and award notification.",
+      technologies: "Frontend: React, Tailwind CSS, Node.js, Express.js, MongoDB,JWT, OAuth",
+      github: "https://github.com/HiwotBelay/Tender-Managment-System",
+      demo: "#",
+    },
+    {
+      id: 4,
+      title: "Dental Clinic Management",
+      video: dentalVideo,
+      category: "Healthcare Solution",
+      description:
+        "A complete management system for dental clinics, featuring appointment scheduling, patient records, treatment plans, and billing. Designed with input from dental professionals.",
+      technologies: "React, Firebase, Material UI",
+      github: "https://github.com/HiwotBelay/dental-clinic",
+      demo: "#",
+    },
+    {
+      id: 5,
+      title: "Real-time Chat Application",
+      video: chatappVideo,
+      category: "Communication Tool",
+      description:
+        "A feature-rich chat application with real-time messaging, file sharing, and group conversations. Includes user authentication, message encryption, and read receipts.",
+      technologies: "React, Socket.io, Express, MongoDB",
+      github: "https://github.com/HiwotBelay/Chat-App",
+      demo: "#",
+    },
+    {
+      id: 6,
+      title: "Behavior-Driven-Interaction-System",
+      video: behavVideo,
+      category: "Logic and state management",
+      description:
+        "A dynamic simulation system that demonstrates behavior-driven interactions and state management through virtual agents with unique personalities. This project showcases the complexities of reactive logic and real-time user interaction in a compact, engaging interface.",
+      technologies: "React, Next.js, API",
+      github: "https://github.com/HiwotBelay/Behavior-Driven-Interaction-System",
+      demo: "#",
+    },
+  ]
 
   useEffect(() => {
     AOS.init()
@@ -22,6 +120,31 @@ const Portfolio = () => {
 
   const closeLightbox = () => {
     setSelectedImage(null)
+  }
+
+  const handleVideoPlay = (id) => {
+    // Pause any currently playing video
+    if (playingVideo && playingVideo !== id) {
+      if (videoRefs.current[playingVideo]) {
+        videoRefs.current[playingVideo].pause()
+      }
+    }
+
+    // Play or pause the clicked video
+    if (playingVideo === id) {
+      videoRefs.current[id].pause()
+      setPlayingVideo(null)
+    } else {
+      videoRefs.current[id].play()
+      setPlayingVideo(id)
+    }
+  }
+
+  // Register video ref
+  const setVideoRef = (id, element) => {
+    if (element) {
+      videoRefs.current[id] = element
+    }
   }
 
   return (
@@ -91,34 +214,132 @@ const Portfolio = () => {
         </button>
       </div>
 
-      <div className="mt-8 w-[85%] flex flex-wrap gap-4">
+    {/* Certificates Section */}
+    <div className="mt-8 w-[80%] flex flex-wrap gap-6">
         {/* New Hackathon Certificate */}
         <div
           className={
             filter === "all" || filter === "design"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
+              ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
               : "hidden"
           }
           onClick={() => setSelectedImage("/img/Hackathon.jpg")}
         >
           <div
-            className="w-full transition-all duration-300 relative overflow-hidden z-10 
-                        before:content-[''] before:bg-white/70 before:absolute before:left-8 before:right-8 before:top-8 before:bottom-8 
+            className="w-full transition-all duration-300 relative overflow-hidden z-10 group
+                        before:content-[''] before:bg-white/70 before:absolute before:left-4 before:right-4 before:top-4 before:bottom-4 
                         before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
                         hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
           >
-            <img src={hackathon || "/placeholder.svg"} className="w-full h-[150px] object-cover sm:h-auto" alt="" />
+            <img src={hackathon || "/placeholder.svg"} className="w-full h-[180px] object-cover sm:h-auto" alt="" />
             <div
               className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
-                          flex flex-col justify-center items-center
-                          before:block before:content-[''] before:w-12 before:h-12 before:absolute before:top-9 before:left-9 
+                          flex flex-col justify-center items-center p-5
+                          before:block before:content-[''] before:w-10 before:h-10 before:absolute before:top-4 before:left-4 
                           before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          after:block after:content-[''] after:w-12 after:h-12 after:absolute after:bottom-9 after:right-9 
-                          after:border-b after:border-r after:border-gray-300 after:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          group-hover:opacity-100 group-hover:after:bottom-4 group-hover:after:right-4 group-hover:before:top-4 group-hover:before:left-4"
+                          after:block after:content-[''] after:w-10 after:h-10 after:absolute after:bottom-4 after:right-4 
+                          after:border-b after:border-r after:border-gray-300 after:transition-all after:duration-500 after:ease-in-out after:z-[9994]
+                          group-hover:opacity-100 group-hover:after:bottom-2 group-hover:after:right-2 group-hover:before:top-2 group-hover:before:left-2"
             >
-              <h4 className="text-xl text-gray-700 font-semibold">Hackathon Certificate</h4>
-              <p className="text-gray-700 text-sm uppercase p-0 m-0">Coding Competition</p>
+              <h4 className="text-xl text-gray-700 font-bold">Hackathon Winner Certificate</h4>
+              <p className="text-gray-700 font-bold text-sm uppercase p-0 m-0">Innovation</p>
+              <p className="text-gray-600 font-bold text-sm mt-2 hidden group-hover:block">{certificateDescriptions.hackathon}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* 2nd Place Certificate - Using new1.jpg */}
+        <div
+          className={
+            filter === "all" || filter === "design"
+              ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
+              : "hidden"
+          }
+          onClick={() => setSelectedImage("/img/new1.jpg")}
+        >
+          <div
+            className="w-full transition-all duration-300 relative overflow-hidden z-10 group
+                        before:content-[''] before:bg-white/70 before:absolute before:left-4 before:right-4 before:top-4 before:bottom-4 
+                        before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
+                        hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
+          >
+            <img src={new1 || "/placeholder.svg"} className="w-full h-[180px] object-cover sm:h-auto" alt="" />
+            <div
+              className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
+                          flex flex-col justify-center items-center p-5
+                          before:block before:content-[''] before:w-10 before:h-10 before:absolute before:top-4 before:left-4 
+                          before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
+                          after:block after:content-[''] after:w-10 after:h-10 after:absolute after:bottom-4 after:right-4 
+                          after:border-b after:border-r after:border-gray-300 after:transition-all after:duration-500 after:ease-in-out after:z-[9994]
+                          group-hover:opacity-100 group-hover:after:bottom-2 group-hover:after:right-2 group-hover:before:top-2 group-hover:before:left-2"
+            >
+              <h4 className="text-xl text-gray-700 font-bold">Hackathon Winner Certificate</h4>
+              <p className="text-gray-700 font-bold text-sm uppercase p-0 m-0">AI Driven Innovation</p>
+              <p className="text-gray-600 font-bold text-sm mt-2 hidden group-hover:block">{certificateDescriptions.new1}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* 3rd Place Certificate - Using new2.jpg */}
+        <div
+          className={
+            filter === "all" || filter === "design"
+              ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
+              : "hidden"
+          }
+          onClick={() => setSelectedImage("/img/new2.jpg")}
+        >
+          <div
+            className="w-full transition-all duration-300 relative overflow-hidden z-10 group
+                        before:content-[''] before:bg-white/70 before:absolute before:left-4 before:right-4 before:top-4 before:bottom-4 
+                        before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
+                        hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
+          >
+            <img src={new2 || "/placeholder.svg"} className="w-full h-[180px] object-cover sm:h-auto" alt="" />
+            <div
+              className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
+                          flex flex-col justify-center items-center p-5
+                          before:block before:content-[''] before:w-10 before:h-10 before:absolute before:top-4 before:left-4 
+                          before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
+                          after:block after:content-[''] after:w-10 after:h-10 after:absolute after:bottom-4 after:right-4 
+                          after:border-b after:border-r after:border-gray-300 after:transition-all after:duration-500 after:ease-in-out after:z-[9994]
+                          group-hover:opacity-100 group-hover:after:bottom-2 group-hover:after:right-2 group-hover:before:top-2 group-hover:before:left-2"
+            >
+              <h4 className="text-xl text-gray-700 font-bold">Event Organizer Recognition</h4>
+              <p className="text-gray-700 font-bold text-sm uppercase p-0 m-0">organizing tech exhibition</p>
+              <p className="text-gray-600 font-bold text-sm mt-2 hidden group-hover:block">{certificateDescriptions.new2}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* 4th Place Certificate - Using new3.jpg */}
+        <div
+          className={
+            filter === "all" || filter === "design"
+              ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
+              : "hidden"
+          }
+          onClick={() => setSelectedImage("/img/new3.jpg")}
+        >
+          <div
+            className="w-full transition-all duration-300 relative overflow-hidden z-10 group
+                        before:content-[''] before:bg-white/70 before:absolute before:left-4 before:right-4 before:top-4 before:bottom-4 
+                        before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
+                        hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
+          >
+            <img src={new3 || "/placeholder.svg"} className="w-full h-[180px] object-cover sm:h-auto" alt="" />
+            <div
+              className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
+                          flex flex-col justify-center items-center p-5
+                          before:block before:content-[''] before:w-10 before:h-10 before:absolute before:top-4 before:left-4 
+                          before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
+                          after:block after:content-[''] after:w-10 after:h-10 after:absolute after:bottom-4 after:right-4 
+                          after:border-b after:border-r after:border-gray-300 after:transition-all after:duration-500 after:ease-in-out after:z-[9994]
+                          group-hover:opacity-100 group-hover:after:bottom-2 group-hover:after:right-2 group-hover:before:top-2 group-hover:before:left-2"
+            >
+              <h4 className="text-xl text-gray-700 font-bold">Participation Certificate</h4>
+              <p className="text-gray-700 font-bold text-sm uppercase p-0 m-0">hackathon participant</p>
+              <p className="text-gray-600 font-bold text-sm mt-2 hidden group-hover:block">{certificateDescriptions.new3}</p>
             </div>
           </div>
         </div>
@@ -127,29 +348,30 @@ const Portfolio = () => {
         <div
           className={
             filter === "all" || filter === "design"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
+              ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
               : "hidden"
           }
           onClick={() => setSelectedImage("/img/gcc.jpg")}
         >
           <div
-            className="w-full transition-all duration-300 relative overflow-hidden z-10 
-                        before:content-[''] before:bg-white/70 before:absolute before:left-8 before:right-8 before:top-8 before:bottom-8 
+            className="w-full transition-all duration-300 relative overflow-hidden z-10 group
+                        before:content-[''] before:bg-white/70 before:absolute before:left-4 before:right-4 before:top-4 before:bottom-4 
                         before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
                         hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
           >
-            <img src={gcc || "/placeholder.svg"} className="w-full h-[150px] object-contain sm:h-auto" alt="" />
+            <img src={gcc || "/placeholder.svg"} className="w-full h-[180px] object-contain sm:h-auto" alt="" />
             <div
               className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
-                          flex flex-col justify-center items-center
-                          before:block before:content-[''] before:w-12 before:h-12 before:absolute before:top-9 before:left-9 
+                          flex flex-col justify-center items-center p-5
+                          before:block before:content-[''] before:w-10 before:h-10 before:absolute before:top-4 before:left-4 
                           before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          after:block after:content-[''] after:w-12 after:h-12 after:absolute after:bottom-9 after:right-9 
-                          after:border-b after:border-r after:border-gray-300 after:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          group-hover:opacity-100 group-hover:after:bottom-4 group-hover:after:right-4 group-hover:before:top-4 group-hover:before:left-4"
+                          after:block after:content-[''] after:w-10 after:h-10 after:absolute after:bottom-4 after:right-4 
+                          after:border-b after:border-r after:border-gray-300 after:transition-all after:duration-500 after:ease-in-out after:z-[9994]
+                          group-hover:opacity-100 group-hover:after:bottom-2 group-hover:after:right-2 group-hover:before:top-2 group-hover:before:left-2"
             >
-              <h4 className="text-xl text-gray-700 font-semibold">Certificate 1</h4>
-              <p className="text-gray-700 text-sm uppercase p-0 m-0">Girls Can Code</p>
+              <h4 className="text-xl text-gray-700 font-bold">Certificate 1</h4>
+              <p className="text-gray-700 font-bold text-sm uppercase p-0 m-0">Girls Can Code</p>
+              <p className="font-bold text-gray-600 text-sm mt-2 hidden group-hover:block">{certificateDescriptions.gcc}</p>
             </div>
           </div>
         </div>
@@ -158,29 +380,30 @@ const Portfolio = () => {
         <div
           className={
             filter === "all" || filter === "design"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
+              ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
               : "hidden"
           }
-          onClick={() => setSelectedImage("/img/portfolio/portfolio-1_files/Full/Design 12.jpg")}
+          onClick={() => setSelectedImage("/img/web.jpg")}
         >
           <div
-            className="w-full transition-all duration-300 relative overflow-hidden z-10 
-                        before:content-[''] before:bg-white/70 before:absolute before:left-8 before:right-8 before:top-8 before:bottom-8 
+            className="w-full transition-all duration-300 relative overflow-hidden z-10 group
+                        before:content-[''] before:bg-white/70 before:absolute before:left-4 before:right-4 before:top-4 before:bottom-4 
                         before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
                         hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
           >
-            <img src={web || "/placeholder.svg"} className="w-full h-[150px] object-cover sm:h-auto" alt="" />
+            <img src={web || "/placeholder.svg"} className="w-full h-[180px] object-cover sm:h-auto" alt="" />
             <div
               className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
-                          flex flex-col justify-center items-center
-                          before:block before:content-[''] before:w-12 before:h-12 before:absolute before:top-9 before:left-9 
+                          flex flex-col justify-center items-center p-5
+                          before:block before:content-[''] before:w-10 before:h-10 before:absolute before:top-4 before:left-4 
                           before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          after:block after:content-[''] after:w-12 after:h-12 after:absolute after:bottom-9 after:right-9 
-                          after:border-b after:border-r after:border-gray-300 after:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          group-hover:opacity-100 group-hover:after:bottom-4 group-hover:after:right-4 group-hover:before:top-4 group-hover:before:left-4"
+                          after:block after:content-[''] after:w-10 after:h-10 after:absolute after:bottom-4 after:right-4 
+                          after:border-b after:border-r after:border-gray-300 after:transition-all after:duration-500 after:ease-in-out after:z-[9994]
+                          group-hover:opacity-100 group-hover:after:bottom-2 group-hover:after:right-2 group-hover:before:top-2 group-hover:before:left-2"
             >
-              <h4 className="text-xl text-gray-700 font-semibold">Certificate 2</h4>
-              <p className="text-gray-700 text-sm uppercase p-0 m-0">Web Development</p>
+              <h4 className="text-xl text-gray-700 font-bold">Certificate 2</h4>
+              <p className="text-gray-700 font-bold text-sm uppercase p-0 m-0">Web Development</p>
+              <p className="text-gray-600 font-bold text-sm mt-2 hidden group-hover:block">{certificateDescriptions.web}</p>
             </div>
           </div>
         </div>
@@ -189,29 +412,30 @@ const Portfolio = () => {
         <div
           className={
             filter === "all" || filter === "design"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
+              ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
               : "hidden"
           }
-          onClick={() => setSelectedImage("/img/portfolio/portfolio-1_files/Full/Design 13.jpg")}
+          onClick={() => setSelectedImage("/img/mern.jpg")}
         >
           <div
-            className="w-full transition-all duration-300 relative overflow-hidden z-10 
-                        before:content-[''] before:bg-white/70 before:absolute before:left-8 before:right-8 before:top-8 before:bottom-8 
+            className="w-full transition-all duration-300 relative overflow-hidden z-10 group
+                        before:content-[''] before:bg-white/70 before:absolute before:left-4 before:right-4 before:top-4 before:bottom-4 
                         before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
                         hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
           >
-            <img src={mern || "/placeholder.svg"} className="w-full h-[150px] object-cover sm:h-auto" alt="" />
+            <img src={mern || "/placeholder.svg"} className="w-full h-[180px] object-cover sm:h-auto" alt="" />
             <div
               className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
-                          flex flex-col justify-center items-center
-                          before:block before:content-[''] before:w-12 before:h-12 before:absolute before:top-9 before:left-9 
+                          flex flex-col justify-center items-center p-5
+                          before:block before:content-[''] before:w-10 before:h-10 before:absolute before:top-4 before:left-4 
                           before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          after:block after:content-[''] after:w-12 after:h-12 after:absolute after:bottom-9 after:right-9 
-                          after:border-b after:border-r after:border-gray-300 after:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          group-hover:opacity-100 group-hover:after:bottom-4 group-hover:after:right-4 group-hover:before:top-4 group-hover:before:left-4"
+                          after:block after:content-[''] after:w-10 after:h-10 after:absolute after:bottom-4 after:right-4 
+                          after:border-b after:border-r after:border-gray-300 after:transition-all after:duration-500 after:ease-in-out after:z-[9994]
+                          group-hover:opacity-100 group-hover:after:bottom-2 group-hover:after:right-2 group-hover:before:top-2 group-hover:before:left-2"
             >
-              <h4 className="text-xl text-gray-700 font-semibold">Certificate 3</h4>
-              <p className="text-gray-700 text-sm uppercase p-0 m-0">MERN Stack Intro</p>
+              <h4 className="text-xl text-gray-700 font-bold">Certificate 3</h4>
+              <p className="text-gray-700 font-bold text-sm uppercase p-0 m-0">MERN Stack Intro</p>
+              <p className="text-gray-600 font-bold text-sm mt-2 hidden group-hover:block">{certificateDescriptions.mern}</p>
             </div>
           </div>
         </div>
@@ -220,173 +444,112 @@ const Portfolio = () => {
         <div
           className={
             filter === "all" || filter === "design"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
+              ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
               : "hidden"
           }
-          onClick={() => setSelectedImage("/img/portfolio/portfolio-1_files/Full/Design 11.jpg")}
+          onClick={() => setSelectedImage("/img/prog.jpg")}
         >
           <div
-            className="w-full transition-all duration-300 relative overflow-hidden z-10 
-                        before:content-[''] before:bg-white/70 before:absolute before:left-8 before:right-8 before:top-8 before:bottom-8 
+            className="w-full transition-all duration-300 relative overflow-hidden z-10 group
+                        before:content-[''] before:bg-white/70 before:absolute before:left-4 before:right-4 before:top-4 before:bottom-4 
                         before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
                         hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
           >
-            <img src={prog || "/placeholder.svg"} className="w-full h-[150px] object-cover sm:h-auto" alt="" />
+            <img src={prog || "/placeholder.svg"} className="w-full h-[180px] object-cover sm:h-auto" alt="" />
             <div
               className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
-                          flex flex-col justify-center items-center
-                          before:block before:content-[''] before:w-12 before:h-12 before:absolute before:top-9 before:left-9 
+                          flex flex-col justify-center items-center p-5
+                          before:block before:content-[''] before:w-10 before:h-10 before:absolute before:top-4 before:left-4 
                           before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          after:block after:content-[''] after:w-12 after:h-12 after:absolute after:bottom-9 after:right-9 
-                          after:border-b after:border-r after:border-gray-300 after:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          group-hover:opacity-100 group-hover:after:bottom-4 group-hover:after:right-4 group-hover:before:top-4 group-hover:before:left-4"
+                          after:block after:content-[''] after:w-10 after:h-10 after:absolute after:bottom-4 after:right-4 
+                          after:border-b after:border-r after:border-gray-300 after:transition-all after:duration-500 after:ease-in-out after:z-[9994]
+                          group-hover:opacity-100 group-hover:after:bottom-2 group-hover:after:right-2 group-hover:before:top-2 group-hover:before:left-2"
             >
-              <h4 className="text-xl text-gray-700 font-semibold">Certificate 4</h4>
-              <p className="text-gray-700 text-sm uppercase p-0 m-0">Programming</p>
+              <h4 className="text-xl text-gray-700 font-bold">Certificate 4</h4>
+              <p className="text-gray-700 font-bold text-sm uppercase p-0 m-0">Programming</p>
+              <p className="text-gray-600 font-bold text-sm mt-2 hidden group-hover:block">{certificateDescriptions.prog}</p>
             </div>
           </div>
         </div>
 
-        {/* Certificate 5 */}
-        <div
-          className={
-            filter === "all" || filter === "design"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
-              : "hidden"
-          }
-          onClick={() => setSelectedImage("/img/portfolio/portfolio-1_files/Full/Design 10.jpg")}
-        >
+
+        {/* Projects Section with Videos */}
+        {projects.map((project) => (
           <div
-            className="w-full transition-all duration-300 relative overflow-hidden z-10 
-                        before:content-[''] before:bg-white/70 before:absolute before:left-8 before:right-8 before:top-8 before:bottom-8 
-                        before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
-                        hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
+            key={project.id}
+            className={
+              filter === "all" || filter === "illustration"
+                ? "w-[calc(50%-12px)] mb-6 cursor-pointer md:w-[calc(50%-12px)] sm:w-full"
+                : "hidden"
+            }
           >
-            <img src={ala || "/placeholder.svg"} className="w-full h-[150px] object-cover sm:h-auto" alt="" />
-            <div
-              className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
-                          flex flex-col justify-center items-center
-                          before:block before:content-[''] before:w-12 before:h-12 before:absolute before:top-9 before:left-9 
-                          before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          after:block after:content-[''] after:w-12 after:h-12 after:absolute after:bottom-9 after:right-9 
-                          after:border-b after:border-r after:border-gray-300 after:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          group-hover:opacity-100 group-hover:after:bottom-4 group-hover:after:right-4 group-hover:before:top-4 group-hover:before:left-4"
-            >
-              <h4 className="text-xl text-gray-700 font-semibold">Certificate 5</h4>
-              <p className="text-gray-700 text-sm uppercase p-0 m-0">ALA Experience</p>
+            <div className="w-full h-full bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-md">
+              {/* Project Video */}
+              <div className="w-full h-[220px] bg-gray-100 relative overflow-hidden">
+                <video
+                  ref={(el) => setVideoRef(project.id, el)}
+                  src={project.video}
+                  className="w-full h-full object-cover"
+                  muted
+                  loop
+                  onClick={() => handleVideoPlay(project.id)}
+                ></video>
+
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-800/30"></div>
+
+                {/* Play/Pause Button */}
+                <button
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-blue-600/80 rounded-full flex items-center justify-center text-white z-10 hover:bg-blue-700/80 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleVideoPlay(project.id)
+                  }}
+                >
+                  {playingVideo === project.id ? <FaPause /> : <FaPlay />}
+                </button>
+
+                <div className="absolute bottom-4 left-4 z-10">
+                  <span className="text-xs font-medium bg-blue-600/90 text-white py-1 px-2 rounded-full">
+                    {project.category}
+                  </span>
+                </div>
+              </div>
+
+              {/* Project Details */}
+              <div className="p-5">
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">{project.title}</h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-3">{project.description}</p>
+
+                <div className="flex flex-wrap gap-1 mb-4">
+                  {project.technologies.split(", ").map((tech, index) => (
+                    <span key={index} className="text-xs bg-gray-100 text-gray-600 py-1 px-2 rounded">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                  >
+                    <FaGithub /> GitHub
+                  </a>
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                  >
+                    <FaExternalLinkAlt /> Live Demo
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Certificate 6 */}
-        <div
-          className={
-            filter === "all" || filter === "design"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
-              : "hidden"
-          }
-          onClick={() => setSelectedImage("/img/portfolio/portfolio-1_files/Full/Design 10.jpg")}
-        >
-          <div
-            className="w-full transition-all duration-300 relative overflow-hidden z-10 
-                        before:content-[''] before:bg-white/70 before:absolute before:left-8 before:right-8 before:top-8 before:bottom-8 
-                        before:transition-all before:duration-300 before:ease-in-out before:z-20 before:opacity-0 
-                        hover:before:top-0 hover:before:left-0 hover:before:right-0 hover:before:bottom-0 hover:before:opacity-100"
-          >
-            <img src={bit || "/placeholder.svg"} className="w-full h-[150px] object-cover sm:h-auto" alt="" />
-            <div
-              className="opacity-0 absolute top-0 left-0 right-0 bottom-0 text-center z-30 transition-all duration-300 ease-in-out 
-                          flex flex-col justify-center items-center
-                          before:block before:content-[''] before:w-12 before:h-12 before:absolute before:top-9 before:left-9 
-                          before:border-t before:border-l before:border-gray-300 before:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          after:block after:content-[''] after:w-12 after:h-12 after:absolute after:bottom-9 after:right-9 
-                          after:border-b after:border-r after:border-gray-300 after:transition-all before:duration-500 before:ease-in-out before:z-[9994]
-                          group-hover:opacity-100 group-hover:after:bottom-4 group-hover:after:right-4 group-hover:before:top-4 group-hover:before:left-4"
-            >
-              <h4 className="text-xl text-gray-700 font-semibold">Certificate 6</h4>
-              <p className="text-gray-700 text-sm uppercase p-0 m-0">Bit Career Training</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Project 1 */}
-        <div
-          className={
-            filter === "all" || filter === "illustration"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
-              : "hidden"
-          }
-          onClick={() => setSelectedImage("/img/portfolio/portfolio-1_files/Full/Design 10.jpg")}
-        >
-          <div className="w-full transition-all duration-300 relative overflow-hidden z-10 p-3">
-            <p className="text-gray-700 text-sm leading-tight">
-              1. Habesha Clothing Website <br></br>I designed and developed a fully responsive e-commerce website for a
-              local clothing brand, showcasing traditional Habesha clothing. The site allows users to browse products,
-              view details, and make purchases. I integrated a sleek UI with easy navigation and ensured the site was
-              mobile-friendly, providing an enjoyable shopping experience across all devices.
-              <br></br>
-              <br></br>
-              <br></br>
-              2. React-Based Portfolio <br></br>I am currently building my own portfolio using React, with plans to
-              showcase a variety of web development projects. This project emphasizes dynamic content loading and smooth
-              transitions, and it's designed to be highly interactive, with animations and user-friendly navigation.
-              Although still a work in progress, this portfolio will serve as a central hub for my past and future
-              projects, highlighting my skills in React and other technologies.
-              <br></br>
-              <br></br>
-              <br></br>
-            </p>
-          </div>
-        </div>
-
-        {/* Project 2 */}
-        <div
-          className={
-            filter === "all" || filter === "illustration"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
-              : "hidden"
-          }
-          onClick={() => setSelectedImage("/img/portfolio/portfolio-1_files/Full/Design 10.jpg")}
-        >
-          <div className="w-full transition-all duration-300 relative overflow-hidden z-10 p-3">
-            <p className="text-gray-700 text-sm leading-tight">
-              3. Personal Blog Website with CMS Integration <br></br>
-              For a personal project, I developed a blog website with a Content Management System (CMS), allowing users
-              to easily create, edit, and publish blog posts. Built with HTML, CSS, JavaScript, and integrated with a
-              backend CMS, this project aimed to offer an intuitive platform for content creators. The blog is fully
-              responsive and includes features like a comment section, social media sharing, and an easy-to-use
-              dashboard for managing content.
-              <br></br>
-              <br></br>
-              <br></br>
-              4. Bahir Dar University Project (Pending Approval)<br></br>
-              Currently, I'm awaiting approval for a new project from **Bahir Dar University**, which involves
-              developing a platform to connect students with academic resources and university services. The website
-              will feature a clean, responsive design with sections for academic resources, news, events, and more. This
-              project will allow me to apply my full-stack development skills while creating something that benefits the
-              university community.
-            </p>
-          </div>
-        </div>
-
-        {/* Project 3 */}
-        <div
-          className={
-            filter === "all" || filter === "illustration"
-              ? "w-[calc(33.33%-16px)] mb-6 cursor-pointer md:w-[calc(50%-16px)] sm:w-full"
-              : "hidden"
-          }
-          onClick={() => setSelectedImage("/img/portfolio/portfolio-1_files/Full/Design 10.jpg")}
-        >
-          <div className="w-full transition-all duration-300 relative overflow-hidden z-10 p-3">
-            <p className="text-gray-700 text-sm leading-tight">
-              Upcoming Project: Bit CDC Website <br></br>I am also excited to announce that I'm working on the **Bit CDC
-              website**, where I will combine my expertise in web development to build a modern platform. This project
-              will showcase both technical proficiency and creative design, aiming for a user-friendly and highly
-              functional website that meets the needs of the CDC community.
-            </p>
-          </div>
-        </div>
+        ))}
 
         {/* Lightbox */}
         {selectedImage && (
@@ -419,4 +582,3 @@ const Portfolio = () => {
 }
 
 export default Portfolio
-
