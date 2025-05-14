@@ -99,79 +99,105 @@ const About = () => {
         </div>
       </div>
 
-      <section id="skill">
-        <div className="about-container">
-          <div className="title">
-            <h1>Skills</h1>
-            <p>
-            As a full-stack developer, I bring a broad set of technical skills that allow me to deliver high-quality web applications. 
-            I embrace the challenges of the fast-paced tech industry and consistently strive to improve and innovate in every project I work on.
-            </p>
+   <section id="skill" className="py-16 bg-white-50">
+  <div className="about-container max-w-5xl mx-auto px-4">
+    <div className="title text-center mb-12">
+  <h1 className="text-4xl font-bold uppercase mb-5 pb-5 relative text-gray-700 text-center after:content-[''] after:absolute after:block after:w-16 after:h-1 after:bg-blue-600 after:bottom-0 after:left-1/2 after:transform after:-translate-x-1/2">
+  Skills
+      </h1>
+      <p className="max-w-4xl mx-auto">
+        As a full-stack developer, I bring a broad set of technical skills that allow me to deliver high-quality web applications. 
+        I embrace the challenges of the fast-paced tech industry and consistently strive to improve and innovate in every project I work on.
+      </p>
+    </div>
+
+    <div className="skill-content w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+      {/* Left Column - First 3 Skills */}
+      <div className="skill-column">
+        <div className="skill-item mb-8">
+          <div className="skill-title flex justify-between mb-2">
+            <h4 className="font-medium">React</h4>
+            <h4>90%</h4>
           </div>
-          <div className="skill">
-  <div className="skill-list">
-    <div className="skill-item react">
-      <div className="sktill-title">
-        <h4>React</h4>
-        <h4>90%</h4>
-      </div>
-      <div className="progressbar" ref={progressRef}>
-        <div className={`percentage ${isVisible ? "react-bar" : ""}`}></div>
-      </div>
-    </div>
-    <div className="skill-item mongodb">
-      <div className="sktill-title">
-        <h4>MongoDB & Postgress</h4>
-        <h4>80%</h4>
-      </div>
-      <div className="progressbar" ref={progressRef}>
-        <div className={`percentage ${isVisible ? "mongodb-bar" : ""}`}></div>
-      </div>
-    </div>
-    <div className="skill-item tailwind">
-      <div className="sktill-title">
-        <h4>Tailwind CSS</h4>
-        <h4>90%</h4>
-      </div>
-      <div className="progressbar" ref={progressRef}>
-        <div className={`percentage ${isVisible ? "tailwind-bar" : ""}`}></div>
-      </div>
-    </div>
-  </div>
-
-  <div className="skill-list">
-    <div className="skill-item javascript">
-      <div className="sktill-title">
-        <h4>JavaScript</h4>
-        <h4>80%</h4>
-      </div>
-      <div className="progressbar" ref={progressRef}>
-        <div className={`percentage ${isVisible ? "javascript-bar" : ""}`}></div>
-      </div>
-    </div>
-    <div className="skill-item node">
-      <div className="sktill-title">
-        <h4>HTML5 & CSS3</h4>
-        <h4>75%</h4>
-      </div>
-      <div className="progressbar" ref={progressRef}>
-        <div className={`percentage ${isVisible ? "node-bar" : ""}`}></div>
-      </div>
-    </div>
-    <div className="skill-item html-css">
-      <div className="sktill-title">
-        <h4>Node.js & Express.js</h4>
-        <h4>80%</h4>
-      </div>
-      <div className="progressbar" ref={progressRef}>
-        <div className={`percentage ${isVisible ? "html-css-bar" : ""}`}></div>
-      </div>
-    </div>
-  </div>
-</div>
-
+          <div className="progressbar w-full h-2.5 bg-gray-300 rounded-full" ref={progressRef}>
+            <div
+              className="percentage h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: isVisible ? "90%" : "0%" }}
+            ></div>
+          </div>
         </div>
-      </section>
+
+        <div className="skill-item mb-8">
+          <div className="skill-title flex justify-between mb-2">
+            <h4 className="font-medium">MongoDB & Postgres</h4>
+            <h4>80%</h4>
+          </div>
+          <div className="progressbar w-full h-2.5 bg-gray-300 rounded-full" ref={progressRef}>
+            <div
+              className="percentage h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: isVisible ? "80%" : "0%", transitionDelay: "200ms" }}
+            ></div>
+          </div>
+        </div>
+
+        <div className="skill-item mb-8">
+          <div className="skill-title flex justify-between mb-2">
+            <h4 className="font-medium">Tailwind CSS</h4>
+            <h4>90%</h4>
+          </div>
+          <div className="progressbar w-full h-2.5 bg-gray-300 rounded-full" ref={progressRef}>
+            <div
+              className="percentage h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: isVisible ? "90%" : "0%", transitionDelay: "400ms" }}
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Column - Next 3 Skills */}
+      <div className="skill-column">
+        <div className="skill-item mb-8">
+          <div className="skill-title flex justify-between mb-2">
+            <h4 className="font-medium">JavaScript</h4>
+            <h4>80%</h4>
+          </div>
+          <div className="progressbar w-full h-2.5 bg-gray-300 rounded-full" ref={progressRef}>
+            <div
+              className="percentage h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: isVisible ? "80%" : "0%", transitionDelay: "100ms" }}
+            ></div>
+          </div>
+        </div>
+
+        <div className="skill-item mb-8">
+          <div className="skill-title flex justify-between mb-2">
+            <h4 className="font-medium">HTML5 & CSS3</h4>
+            <h4>75%</h4>
+          </div>
+          <div className="progressbar w-full h-2.5 bg-gray-300 rounded-full" ref={progressRef}>
+            <div
+              className="percentage h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: isVisible ? "75%" : "0%", transitionDelay: "300ms" }}
+            ></div>
+          </div>
+        </div>
+
+        <div className="skill-item mb-8">
+          <div className="skill-title flex justify-between mb-2">
+            <h4 className="font-medium">Node.js & Express.js</h4>
+            <h4>80%</h4>
+          </div>
+          <div className="progressbar w-full h-2.5 bg-gray-300 rounded-full" ref={progressRef}>
+            <div
+              className="percentage h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: isVisible ? "80%" : "0%", transitionDelay: "500ms" }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
     </section>
   );
 };

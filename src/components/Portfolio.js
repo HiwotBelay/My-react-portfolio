@@ -19,6 +19,7 @@ import tenderVideo from "./img/tender.mp4"
 import dentalVideo from "./img/dental.mp4"
 import chatappVideo from "./img/chatapp.mp4"
 import behavVideo from "./img/behav.mp4"
+import ethiotel from "./img/ethiotel.mp4"
 
 
 const Portfolio = () => {
@@ -110,6 +111,17 @@ const Portfolio = () => {
         "A dynamic simulation system that demonstrates behavior-driven interactions and state management through virtual agents with unique personalities. This project showcases the complexities of reactive logic and real-time user interaction in a compact, engaging interface.",
       technologies: "React, Next.js, API",
       github: "https://github.com/HiwotBelay/Behavior-Driven-Interaction-System",
+      demo: "#",
+    },
+     {
+      id: 7,
+      title: "Cloning Ethiotelecom's Website ",
+      video: ethiotel,
+      category: "Cloning / Inspiration Projects",
+      description:
+        "Ethio Telecom Website Clone This is a responsive, visually appealing clone of the Ethio Telecom official website, built for learning and design inspiration purposes. I recreated it using Next.js, React, and Tailwind CSS  focusing on layout structure, responsiveness, and UI/UX consistency.",
+      technologies: "React, Next.js, TailwindCSS, API",
+      github: "https://github.com/HiwotBelay/Cloning-Ethiotelecom-s-Website",
       demo: "#",
     },
   ]
