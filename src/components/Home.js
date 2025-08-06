@@ -1,72 +1,104 @@
 "use client"
-
 import { useState, useEffect, useRef, useMemo } from "react"
-import { Github, Send, Linkedin, Download, X, Menu } from "lucide-react"
+import { Github, Send, Linkedin, Download, X, Menu } from 'lucide-react'
 import { ReactTyped } from "react-typed"
 import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber"
 import { Float, Environment, OrbitControls, ContactShadows, Html } from "@react-three/drei"
 import { TextureLoader } from "three"
-import { useSpring, animated } from "@react-spring/three" // For smooth book animation
+import { useSpring, animated } from "@react-spring/three" // For smooth animation
 
 // 3D Floating Framework Icons Component
 function FloatingFrameworkIcons() {
   const groupRef = useRef(null)
   const { mouse, viewport } = useThree()
-
   // Load textures for each framework logo from online URLs
   const reactTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg")
   const nextjsTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/8/8e/Nextjs-logo.svg")
   const nodejsTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg")
   const phpTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg")
   const viteTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg")
+  const tsTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg")
+  const jsTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg")
 
   useFrame((state) => {
     if (groupRef.current) {
       // Subtle rotation for the entire group
-      groupRef.current.rotation.x = state.clock.elapsedTime * 0.03
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.02
-
+      groupRef.current.rotation.x = state.clock.elapsedTime * 0.015 // Slower rotation
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.01 // Slower rotation
       // Mouse-based movement for the entire group, scaled down for subtlety
-      groupRef.current.position.x = (mouse.x * viewport.width) / 25
-      groupRef.current.position.y = (mouse.y * viewport.height) / 25
+      groupRef.current.position.x = (mouse.x * viewport.width) / 30 // Less sensitive mouse follow
+      groupRef.current.position.y = (mouse.y * viewport.height) / 30 // Less sensitive mouse follow
     }
   })
 
   return (
     <group ref={groupRef}>
       {/* React Icon */}
-      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1.5}>
-        <mesh position={[-4, 2, -2]}>
-          <planeGeometry args={[1.5, 1.5]} /> {/* Adjust size as needed */}
+      <Float speed={1.2} rotationIntensity={0.3} floatIntensity={1}>
+        <mesh position={[-3.5, 2.5, -2]}>
+          <planeGeometry args={[0.5, 0.5]} /> {/* Much smaller size */}
           <meshStandardMaterial map={reactTexture} transparent />
         </mesh>
       </Float>
       {/* Next.js Icon */}
-      <Float speed={2} rotationIntensity={0.6} floatIntensity={1.8}>
-        <mesh position={[4, -1, -1]}>
-          <planeGeometry args={[1.8, 1.8]} />
+      <Float speed={1.5} rotationIntensity={0.4} floatIntensity={1.2}>
+        <mesh position={[4, -1.5, -1]}>
+          <planeGeometry args={[0.6, 0.6]} /> {/* Much smaller size */}
           <meshStandardMaterial map={nextjsTexture} transparent />
         </mesh>
       </Float>
       {/* Node.js Icon */}
-      <Float speed={1.8} rotationIntensity={0.7} floatIntensity={2}>
-        <mesh position={[2, 3, -3]}>
-          <planeGeometry args={[1.6, 1.6]} />
+      <Float speed={1.3} rotationIntensity={0.35} floatIntensity={1.1}>
+        <mesh position={[2.5, 3.5, -3]}>
+          <planeGeometry args={[0.55, 0.55]} /> {/* Much smaller size */}
           <meshStandardMaterial map={nodejsTexture} transparent />
         </mesh>
       </Float>
       {/* PHP Icon */}
-      <Float speed={1.7} rotationIntensity={0.8} floatIntensity={1.7}>
-        <mesh position={[-2, -3, -1]}>
-          <planeGeometry args={[1.4, 1.4]} />
+      <Float speed={1.4} rotationIntensity={0.45} floatIntensity={1.3}>
+        <mesh position={[-2.5, -3.5, -1]}>
+          <planeGeometry args={[0.45, 0.45]} /> {/* Much smaller size */}
           <meshStandardMaterial map={phpTexture} transparent />
         </mesh>
       </Float>
       {/* Vite Icon */}
-      <Float speed={2.1} rotationIntensity={0.9} floatIntensity={2.1}>
+      <Float speed={1.6} rotationIntensity={0.5} floatIntensity={1.4}>
         <mesh position={[0, -0.5, 3]}>
-          <planeGeometry args={[1.3, 1.3]} />
+          <planeGeometry args={[0.4, 0.4]} /> {/* Much smaller size */}
           <meshStandardMaterial map={viteTexture} transparent />
+        </mesh>
+      </Float>
+      {/* TypeScript Icon */}
+      <Float speed={1.1} rotationIntensity={0.3} floatIntensity={0.9}>
+        <mesh position={[-4.5, -0.5, 1.5]}>
+          <planeGeometry args={[0.5, 0.5]} />
+          <meshStandardMaterial map={tsTexture} transparent />
+        </mesh>
+      </Float>
+      {/* JavaScript Icon */}
+      <Float speed={1.7} rotationIntensity={0.4} floatIntensity={1.5}>
+        <mesh position={[1.5, 4.5, 0.5]}>
+          <planeGeometry args={[0.55, 0.55]} />
+          <meshStandardMaterial map={jsTexture} transparent />
+        </mesh>
+      </Float>
+      {/* Additional icons for better distribution */}
+      <Float speed={1.3} rotationIntensity={0.3} floatIntensity={1.1}>
+        <mesh position={[-1, 1.5, 4]}>
+          <planeGeometry args={[0.48, 0.48]} />
+          <meshStandardMaterial map={reactTexture} transparent /> {/* Example: another React icon */}
+        </mesh>
+      </Float>
+      <Float speed={1.5} rotationIntensity={0.4} floatIntensity={1.3}>
+        <mesh position={[3, 0.5, -4]}>
+          <planeGeometry args={[0.52, 0.52]} />
+          <meshStandardMaterial map={nodejsTexture} transparent /> {/* Example: another Node.js icon */}
+        </mesh>
+      </Float>
+      <Float speed={1.2} rotationIntensity={0.35} floatIntensity={1.0}>
+        <mesh position={[-0.5, -4, 2]}>
+          <planeGeometry args={[0.47, 0.47]} />
+          <meshStandardMaterial map={tsTexture} transparent />
         </mesh>
       </Float>
     </group>
@@ -77,7 +109,6 @@ function FloatingFrameworkIcons() {
 function InteractiveParticles() {
   const pointsRef = useRef(null)
   const { mouse, viewport } = useThree()
-
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(1000 * 3) // Increased particle count for more density
     for (let i = 0; i < 1000; i++) {
@@ -92,7 +123,6 @@ function InteractiveParticles() {
     if (pointsRef.current) {
       pointsRef.current.rotation.x = state.clock.elapsedTime * 0.02 // Slower rotation
       pointsRef.current.rotation.y = state.clock.elapsedTime * 0.01
-
       const positions = pointsRef.current.geometry.attributes.position.array
       for (let i = 0; i < positions.length; i += 3) {
         // More dynamic random movement
@@ -115,104 +145,126 @@ function InteractiveParticles() {
   )
 }
 
-// Interactive 3D Book Component
-function InteractiveBook() {
-  const bookRef = useRef(null)
+// Dynamic Welcome Crystal Component
+function DynamicWelcomeCrystal() {
+  const crystalRef = useRef(null)
   const { mouse, viewport } = useThree()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isTextVisible, setIsTextVisible] = useState(false) // Initial state: crystal visible, text hidden
   const [isHovered, setIsHovered] = useState(false)
 
-  // Spring animation for opening/closing the book
-  const { rotationY } = useSpring({
-    rotationY: isOpen ? Math.PI / 2 : 0, // Rotate 90 degrees on Y-axis to open
+  // Spring animations for crystal transformation and text appearance
+  const { crystalScale, textScale, textOpacity, crystalOpacity } = useSpring({
+    crystalScale: isTextVisible ? 0 : 1, // Crystal shrinks to 0 when text is visible
+    textScale: isTextVisible ? 1 : 0, // Text grows from 0 when visible
+    textOpacity: isTextVisible ? 1 : 0, // Text opacity
+    crystalOpacity: isTextVisible ? 0 : 1, // Crystal opacity
     config: { mass: 1, tension: 200, friction: 20 },
   })
 
   useFrame((state) => {
-    if (bookRef.current) {
-      // Mouse-based movement for the book
-      bookRef.current.position.x = 7 + (mouse.x * viewport.width) / 40 // Position on right, subtle mouse follow
-      bookRef.current.position.y = (mouse.y * viewport.height) / 40
-      bookRef.current.rotation.z = mouse.x * 0.05 // Slight tilt
+    if (crystalRef.current) {
+      // Subtle mouse-based movement for the crystal/text group
+      crystalRef.current.position.x = 7 + (mouse.x * viewport.width) / 40
+      crystalRef.current.position.y = (mouse.y * viewport.height) / 40
+      // Continuous rotation for the crystal when visible
+      if (!isTextVisible) {
+        crystalRef.current.rotation.x = state.clock.elapsedTime * 0.1
+        crystalRef.current.rotation.y = state.clock.elapsedTime * 0.08
+      }
     }
   })
 
   return (
     <animated.group
-      ref={bookRef}
+      ref={crystalRef}
       position={[7, 0, 0]} // Initial position on the right
-      rotation-y={rotationY}
-      onClick={() => setIsOpen(!isOpen)}
+      onClick={() => setIsTextVisible(!isTextVisible)} // Toggle visibility on click
       onPointerOver={() => setIsHovered(true)}
       onPointerOut={() => setIsHovered(false)}
-      scale={isHovered ? 1.05 : 1} // Hover effect
+      scale={isHovered && !isTextVisible ? 1.1 : 1} // Hover effect only when crystal is visible
+      castShadow
+      receiveShadow
     >
-      {/* Book Cover */}
-      <mesh>
-        <boxGeometry args={[2, 3, 0.2]} /> {/* Width, Height, Depth */}
-        <meshStandardMaterial color="#FFFFFF" roughness={0.2} metalness={0.1} />
-        <Html
-          position={[0, 0, 0.11]} // Position slightly above the cover
-          center
-          transform
-          occlude
+      {/* Crystal Mesh - animated scale and opacity */}
+      <animated.mesh scale={crystalScale} opacity={crystalOpacity} transparent>
+        <icosahedronGeometry args={[1.5, 0]} /> {/* A beautiful crystal shape */}
+        <meshStandardMaterial
+          color="#87CEEB" // Sky blue
+          emissive="#ADD8E6" // Lighter blue glow
+          emissiveIntensity={0.5}
+          roughness={0.2}
+          metalness={0.1}
+          transparent
+          opacity={crystalOpacity}
+        />
+      </animated.mesh>
+
+      {/* Welcome Text HTML - always rendered, controlled by springs */}
+      <Html
+        position={[0, 0, 0.05]} // Position slightly in front of the crystal's center
+        center
+        transform
+        occlude
+        style={{
+          width: "300px", // Increased width for better readability
+          height: "300px", // Increased height
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          pointerEvents: isTextVisible ? "auto" : "none", // Enable pointer events only when text is visible
+          userSelect: "none",
+          opacity: textOpacity.to((o) => o), // Animate opacity
+          transform: textScale.to((s) => `scale(${s})`), // Animate scale
+          visibility: textOpacity.to((o) => (o === 0 ? "hidden" : "visible")), // Hide completely when opacity is 0
+        }}
+      >
+        <div
+          className="p-6 rounded-lg shadow-xl"
           style={{
-            width: "1.8rem", // Adjust to fit book size
-            height: "2.8rem",
+            background: "linear-gradient(180deg, #f0f8ff, #e0f2f7)", // Light, professional gradient
+            color: "#333",
+            width: "100%",
+            height: "100%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
             alignItems: "center",
-            textAlign: "center",
-            pointerEvents: "none", // Allow click to pass through
-            color: "#333",
-            fontSize: "0.25rem", // Smaller font for 3D text
-            fontWeight: "bold",
-            textShadow: "0 0 2px rgba(0,0,0,0.1)",
+            justifyContent: "center",
+            boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
           }}
         >
-          <div className="p-1">
-            <p className="text-xs font-bold">Welcome to my</p>
-            <p className="text-lg font-extrabold text-blue-600">Portfolio</p>
-          </div>
-        </Html>
-      </mesh>
-
-      {/* Inner Page (revealed when open) */}
-      {isOpen && (
-        <mesh position={[0, 0, -0.1]}>
-          {" "}
-          {/* Position slightly behind cover */}
-          <boxGeometry args={[2, 3, 0.05]} />
-          <meshStandardMaterial color="#F8F8F8" roughness={0.8} metalness={0.05} />
-          <Html
-            position={[0, 0, 0.03]} // Position slightly above the inner page
-            center
-            transform
-            occlude
+          <h1 className="text-3xl font-bold mb-2 text-gray-800">
+            Welcome to my Portfolio!
+          </h1>
+          <p className="text-lg mb-6 text-gray-700">
+            Explore my work, skills, and journey as a Full-Stack Developer.
+          </p>
+          <button
+            onClick={(e) => {
+              e.stopPropagation() // Prevent click from bubbling to the 3D group
+              const section = document.getElementById("portfolio-section") // Assuming you have a portfolio section
+              section?.scrollIntoView({ behavior: "smooth" })
+            }}
+            className="px-6 py-3 rounded-full font-semibold text-white transition-all duration-300 ease-out"
             style={{
-              width: "1.8rem",
-              height: "2.8rem",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              textAlign: "center",
-              pointerEvents: "none",
-              color: "#555",
-              fontSize: "0.2rem",
-              lineHeight: "1.2",
+              background: "linear-gradient(45deg, #2a72e5, #6a5acd)", // Blue to purple gradient
+              boxShadow: "0 4px 15px rgba(42,114,229,0.4)",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "linear-gradient(45deg, #1e54b1, #5242a1)"
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(42,114,229,0.6)"
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "linear-gradient(45deg, #2a72e5, #6a5acd)"
+              e.currentTarget.style.boxShadow = "0 4px 15px rgba(42,114,229,0.4)"
             }}
           >
-            <div className="p-1">
-              <p className="text-xs font-semibold text-gray-700">
-                Explore my work, skills, and journey as a Full-Stack Developer.
-              </p>
-              <p className="text-xs mt-2 text-gray-600">Click to close.</p>
-            </div>
-          </Html>
-        </mesh>
-      )}
+            Explore Portfolio
+          </button>
+        </div>
+      </Html>
     </animated.group>
   )
 }
@@ -312,9 +364,9 @@ const Home = () => {
             <pointLight position={[10, 10, 10]} intensity={1.5} color="#FFFFFF" />
             <pointLight position={[-10, -10, -10]} intensity={1} color="#E0BBE4" /> {/* Soft purple light */}
             <directionalLight position={[5, 5, 5]} intensity={0.5} color="#FFFAF0" /> {/* Creamy white light */}
-            <FloatingFrameworkIcons /> {/* Now using online logos */}
+            <FloatingFrameworkIcons />
             <InteractiveParticles />
-            <InteractiveBook /> {/* The new interactive book */}
+            <DynamicWelcomeCrystal /> {/* The new interactive welcome crystal */}
             {/* Subtle floor plane */}
             <mesh position={[0, -5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[100, 100]} />
@@ -325,7 +377,6 @@ const Home = () => {
             <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
           </Canvas>
         </div>
-
         {/* Animated Background Overlay - adjusted for brighter colors */}
         <div
           className="absolute inset-0 z-10 opacity-30"
@@ -334,7 +385,6 @@ const Home = () => {
             transition: "background 0.3s ease-out",
           }}
         ></div>
-
         <div className="container relative z-20 text-left p-4 md:p-8 pl-8 md:pl-16">
           {" "}
           {/* Left alignment and increased padding */}
