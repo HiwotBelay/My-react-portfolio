@@ -1,6 +1,6 @@
 # 🌟 My Amazing Portfolio
 
-Welcome to my personal portfolio website! Built using **React** and styled with **TailwindCSS**, this project showcases my skills, projects, and passion for building beautiful and functional web experiences.
+Welcome to my personal portfolio website! Built using **React** and styled with **TailwindCSS**, this project showcases my skills, projects, and passion for building beautiful and functional web experiences
 
 
 
