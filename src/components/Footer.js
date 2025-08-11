@@ -4,7 +4,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <footer className="relative w-full bg-gradient-to-br from-fuchsia-50 via-white to-teal-50 overflow-hidden border-t-[6px] border-transparent bg-clip-padding [border-image:linear-gradient(to_right,#ec4899,#14b8a6,#10b981)1]">
+    <footer className="relative w-full bg-gradient-to-br from-fuchsia-50 via-white to-teal-50 overflow-hidden border-t-[3px] border-transparent bg-clip-padding [border-image:linear-gradient(to_right,#ec4899,#14b8a6,#10b981)1]">
       {/* Subtle Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[30rem] h-[30rem] bg-gradient-to-tr from-fuchsia-200 via-teal-200 to-transparent opacity-20 blur-3xl" />
 
