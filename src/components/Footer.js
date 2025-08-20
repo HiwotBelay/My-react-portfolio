@@ -1,6 +1,7 @@
 import React from "react";
 import { FaTelegram, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+//
 
 const Footer = () => {
   return (
