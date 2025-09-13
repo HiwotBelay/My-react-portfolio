@@ -160,8 +160,8 @@ const Home = () => {
           className="absolute inset-0 z-10 opacity-50"
           style={{
             background: `
-              radial-gradient(circle at ${(mousePosition.x + 1) * 50}% ${(-mousePosition.y + 1) * 50}%, rgba(236,72,153,0.25) 0%, rgba(20,184,166,0.15) 30%, transparent 60%),
-              radial-gradient(circle at ${(mousePosition.x + 1) * 50 + 10}% ${(-mousePosition.y + 1) * 50 + 10}%, rgba(16,185,129,0.2) 0%, transparent 40%)
+              radial-gradient(circle at ${(mousePosition.x + 1) * 50}% ${(-mousePosition.y + 1) * 50}%, rgba(236,72,153,0.25) 0%, rgba(20,184,166,0.15) 20%, transparent 45%),
+              radial-gradient(circle at ${(mousePosition.x + 1) * 50 + 10}% ${(-mousePosition.y + 1) * 50 + 10}%, rgba(16,185,129,0.2) 0%, transparent 30%)
             `,
             transition: "background 0.2s ease-out",
           }}
@@ -177,7 +177,7 @@ const Home = () => {
         />
 
         {/* Main Content - EXACT same positioning as original */}
-        <div className="container relative z-20 text-left p-4 md:p-8 pl-8 md:pl-16">
+        <div className="container relative z-20 text-left p-4 md:p-8 pl-2 md:pl-4">
           <h1
             className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight"
             style={{
@@ -403,8 +403,8 @@ const Home = () => {
           /* Cursor Ripple Effect */
           .cursor-ripple {
             position: fixed;
-            width: 40px;
-            height: 40px;
+            width: 25px;
+            height: 25px;
             border: 2px solid rgba(236,72,153,0.3);
             border-radius: 50%;
             transform: translate(-50%, -50%);

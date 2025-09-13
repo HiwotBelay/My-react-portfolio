@@ -54,8 +54,12 @@ const Header = () => {
     >
       {/* Hamburger Menu Button - Only visible on mobile */}
       <div
-        className={`fixed flex items-center justify-center w-10 h-10 rounded-full top-5 right-5 bg-[#0563bb] text-white cursor-pointer z-[2000] ${isMobile ? "flex" : "hidden"} ${toggleMenu ? "active" : ""}`}
+        className={`fixed flex items-center justify-center w-10 h-10 rounded-full top-5 right-5 cursor-pointer z-[2000] ${isMobile ? "flex" : "hidden"} ${toggleMenu ? "active" : ""}`}
         onClick={handleToggle}
+        style={{
+          background: "linear-gradient(135deg, #ec4899, #14b8a6)",
+          color: "white",
+        }}
       >
         <svg
           stroke="currentColor"
@@ -75,68 +79,116 @@ const Header = () => {
       >
         <ul>
           <li className="list-none py-2.5">
-            <Link
-              activeClass="!bg-[#0563bb] !text-white"
-              to="home"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className="flex items-center h-14 w-14 rounded-full bg-[#f2f3f5] text-[#45505b] transition-all duration-300 z-[1000] overflow-hidden cursor-pointer hover:w-[150px] hover:bg-[#0563bb] hover:text-white"
-              onClick={handleNavLinkClick}
-            >
-              <FaHome className="text-xl mx-[18px]" />
-              <span className="hidden ml-2.5 hover:block">Home</span>
-            </Link>
+            <div className="portfolio-nav-border">
+              <Link
+                activeClass="portfolio-nav-active"
+                to="home"
+                spy={true}
+                smooth={true}
+                duration={500}
+                className="flex items-center h-14 w-14 rounded-full bg-[#f2f3f5] text-[#45505b] transition-all duration-300 z-[1000] overflow-hidden cursor-pointer portfolio-nav-link"
+                onClick={handleNavLinkClick}
+              >
+                <FaHome className="text-xl mx-[18px]" />
+                <span className="hidden ml-2.5">Home</span>
+              </Link>
+            </div>
           </li>
           <li className="list-none py-2.5">
-            <Link
-              activeClass="!bg-[#0563bb] !text-white"
-              to="about"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className="flex items-center h-14 w-14 rounded-full bg-[#f2f3f5] text-[#45505b] transition-all duration-300 z-[1000] overflow-hidden cursor-pointer hover:w-[150px] hover:bg-[#0563bb] hover:text-white"
-              onClick={handleNavLinkClick}
-            >
-              <FaUser className="text-xl mx-[18px]" />
-              <span className="hidden ml-2.5 hover:block">About</span>
-            </Link>
+            <div className="portfolio-nav-border">
+              <Link
+                activeClass="portfolio-nav-active"
+                to="about"
+                spy={true}
+                smooth={true}
+                duration={500}
+                className="flex items-center h-14 w-14 rounded-full bg-[#f2f3f5] text-[#45505b] transition-all duration-300 z-[1000] overflow-hidden cursor-pointer portfolio-nav-link"
+                onClick={handleNavLinkClick}
+              >
+                <FaUser className="text-xl mx-[18px]" />
+                <span className="hidden ml-2.5">About</span>
+              </Link>
+            </div>
           </li>
           <li className="list-none py-2.5">
-            <Link
-              activeClass="!bg-[#0563bb] !text-white"
-              to="portfolio"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className="flex items-center h-14 w-14 rounded-full bg-[#f2f3f5] text-[#45505b] transition-all duration-300 z-[1000] overflow-hidden cursor-pointer hover:w-[150px] hover:bg-[#0563bb] hover:text-white"
-              onClick={handleNavLinkClick}
-            >
-              <FaBook className="text-xl mx-[18px]" />
-              <span className="hidden ml-2.5 hover:block">Experience</span>
-            </Link>
+            <div className="portfolio-nav-border">
+              <Link
+                activeClass="portfolio-nav-active"
+                to="portfolio"
+                spy={true}
+                smooth={true}
+                duration={500}
+                className="flex items-center h-14 w-14 rounded-full bg-[#f2f3f5] text-[#45505b] transition-all duration-300 z-[1000] overflow-hidden cursor-pointer portfolio-nav-link"
+                onClick={handleNavLinkClick}
+              >
+                <FaBook className="text-xl mx-[18px]" />
+                <span className="hidden ml-2.5">Experience</span>
+              </Link>
+            </div>
           </li>
           <li className="list-none py-2.5">
-            <Link
-              activeClass="!bg-[#0563bb] !text-white"
-              to="contact"
-              spy={true}
-              smooth={true}
-              duration={500}
-              className="flex items-center h-14 w-14 rounded-full bg-[#f2f3f5] text-[#45505b] transition-all duration-300 z-[1000] overflow-hidden cursor-pointer hover:w-[150px] hover:bg-[#0563bb] hover:text-white"
-              onClick={handleNavLinkClick}
-            >
-              <FaEnvelope className="text-xl mx-[18px]" />
-              <span className="hidden ml-2.5 hover:block">Contact</span>
-            </Link>
+            <div className="portfolio-nav-border">
+              <Link
+                activeClass="portfolio-nav-active"
+                to="contact"
+                spy={true}
+                smooth={true}
+                duration={500}
+                className="flex items-center h-14 w-14 rounded-full bg-[#f2f3f5] text-[#45505b] transition-all duration-300 z-[1000] overflow-hidden cursor-pointer portfolio-nav-link"
+                onClick={handleNavLinkClick}
+              >
+                <FaEnvelope className="text-xl mx-[18px]" />
+                <span className="hidden ml-2.5">Contact</span>
+              </Link>
+            </div>
           </li>
         </ul>
       </nav>
 
-      {/* Custom styles for hover effects */}
+      {/* Fixed styles - Active state = colored circle, Hover state = expanded */}
       <style jsx>{`
-        nav a:hover span {
-          display: block;
+        /* Border styling for all nav items */
+        .portfolio-nav-border {
+          position: relative;
+          border-radius: 50px;
+          padding: 1px;
+          background: conic-gradient(from 180deg at 50% 50%, rgba(236,72,153,0.6), rgba(20,184,166,0.6), rgba(16,185,129,0.6), rgba(236,72,153,0.6));
+          transition: box-shadow .25s ease, transform .25s ease;
+          display: inline-block;
+        }
+
+        .portfolio-nav-border:hover {
+          box-shadow: 0 12px 26px rgba(2,6,23,0.08), 0 0 40px rgba(20,184,166,0.16);
+          transform: translateY(-2px);
+        }
+        
+        /* HOVER state - expands with text (like your original hover) */
+        .portfolio-nav-link:hover {
+          width: 150px !important;
+          background: linear-gradient(135deg, #ec4899, #14b8a6) !important;
+          color: white !important;
+        }
+        
+        .portfolio-nav-link:hover span {
+          display: block !important;
+        }
+        
+        /* ACTIVE STATE - Just colored circle, same size (like your screenshots) */
+        .portfolio-nav-active {
+          width: 56px !important; /* Keep same size as normal */
+          background: linear-gradient(135deg, #ec4899, #14b8a6) !important;
+          color: white !important;
+        }
+        
+        .portfolio-nav-active span {
+          display: none !important; /* Hide text in active state */
+        }
+
+        /* Enhanced border for active state */
+        .portfolio-nav-border:has(.portfolio-nav-active) {
+          border-radius: 50px;
+          background: conic-gradient(from 180deg at 50% 50%, rgba(236,72,153,0.8), rgba(20,184,166,0.8), rgba(16,185,129,0.8), rgba(236,72,153,0.8)) !important;
+          box-shadow: 0 8px 20px rgba(2,6,23,0.08), 0 0 30px rgba(20,184,166,0.2) !important;
         }
       `}</style>
     </header>
