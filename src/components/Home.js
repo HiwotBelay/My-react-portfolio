@@ -1,311 +1,32 @@
 "use client"
-import { useState, useEffect, useRef, useMemo } from "react"
-import { Github, Send, Linkedin, Download, X, Menu } from 'lucide-react'
+import { useState, useEffect, useRef } from "react"
+import { Github, Send, Linkedin, Download, X, Menu } from "lucide-react"
 import { ReactTyped } from "react-typed"
-import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber"
-import { Float, Environment, OrbitControls, ContactShadows, Html } from "@react-three/drei"
-import { TextureLoader } from "three"
-import { useSpring, animated } from "@react-spring/three" // For smooth animation
-
-// 3D Floating Framework Icons Component
-function FloatingFrameworkIcons() {
-  const groupRef = useRef(null)
-  const { mouse, viewport } = useThree()
-  // Load textures for each framework logo from online URLs
-  const reactTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg")
-  const nextjsTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/8/8e/Nextjs-logo.svg")
-  const nodejsTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg")
-  const phpTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg")
-  const viteTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg")
-  const tsTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg")
-  const jsTexture = useLoader(TextureLoader, "https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg")
-
-  useFrame((state) => {
-    if (groupRef.current) {
-      // Subtle rotation for the entire group
-      groupRef.current.rotation.x = state.clock.elapsedTime * 0.015 // Slower rotation
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.01 // Slower rotation
-      // Mouse-based movement for the entire group, scaled down for subtlety
-      groupRef.current.position.x = (mouse.x * viewport.width) / 30 // Less sensitive mouse follow
-      groupRef.current.position.y = (mouse.y * viewport.height) / 30 // Less sensitive mouse follow
-    }
-  })
-
-  return (
-    <group ref={groupRef}>
-      {/* React Icon */}
-      <Float speed={1.2} rotationIntensity={0.3} floatIntensity={1}>
-        <mesh position={[-3.5, 2.5, -2]}>
-          <planeGeometry args={[0.5, 0.5]} /> {/* Much smaller size */}
-          <meshStandardMaterial map={reactTexture} transparent />
-        </mesh>
-      </Float>
-      {/* Next.js Icon */}
-      <Float speed={1.5} rotationIntensity={0.4} floatIntensity={1.2}>
-        <mesh position={[4, -1.5, -1]}>
-          <planeGeometry args={[0.6, 0.6]} /> {/* Much smaller size */}
-          <meshStandardMaterial map={nextjsTexture} transparent />
-        </mesh>
-      </Float>
-      {/* Node.js Icon */}
-      <Float speed={1.3} rotationIntensity={0.35} floatIntensity={1.1}>
-        <mesh position={[2.5, 3.5, -3]}>
-          <planeGeometry args={[0.55, 0.55]} /> {/* Much smaller size */}
-          <meshStandardMaterial map={nodejsTexture} transparent />
-        </mesh>
-      </Float>
-      {/* PHP Icon */}
-      <Float speed={1.4} rotationIntensity={0.45} floatIntensity={1.3}>
-        <mesh position={[-2.5, -3.5, -1]}>
-          <planeGeometry args={[0.45, 0.45]} /> {/* Much smaller size */}
-          <meshStandardMaterial map={phpTexture} transparent />
-        </mesh>
-      </Float>
-      {/* Vite Icon */}
-      <Float speed={1.6} rotationIntensity={0.5} floatIntensity={1.4}>
-        <mesh position={[0, -0.5, 3]}>
-          <planeGeometry args={[0.4, 0.4]} /> {/* Much smaller size */}
-          <meshStandardMaterial map={viteTexture} transparent />
-        </mesh>
-      </Float>
-      {/* TypeScript Icon */}
-      <Float speed={1.1} rotationIntensity={0.3} floatIntensity={0.9}>
-        <mesh position={[-4.5, -0.5, 1.5]}>
-          <planeGeometry args={[0.5, 0.5]} />
-          <meshStandardMaterial map={tsTexture} transparent />
-        </mesh>
-      </Float>
-      {/* JavaScript Icon */}
-      <Float speed={1.7} rotationIntensity={0.4} floatIntensity={1.5}>
-        <mesh position={[1.5, 4.5, 0.5]}>
-          <planeGeometry args={[0.55, 0.55]} />
-          <meshStandardMaterial map={jsTexture} transparent />
-        </mesh>
-      </Float>
-      {/* Additional icons for better distribution */}
-      <Float speed={1.3} rotationIntensity={0.3} floatIntensity={1.1}>
-        <mesh position={[-1, 1.5, 4]}>
-          <planeGeometry args={[0.48, 0.48]} />
-          <meshStandardMaterial map={reactTexture} transparent /> {/* Example: another React icon */}
-        </mesh>
-      </Float>
-      <Float speed={1.5} rotationIntensity={0.4} floatIntensity={1.3}>
-        <mesh position={[3, 0.5, -4]}>
-          <planeGeometry args={[0.52, 0.52]} />
-          <meshStandardMaterial map={nodejsTexture} transparent /> {/* Example: another Node.js icon */}
-        </mesh>
-      </Float>
-      <Float speed={1.2} rotationIntensity={0.35} floatIntensity={1.0}>
-        <mesh position={[-0.5, -4, 2]}>
-          <planeGeometry args={[0.47, 0.47]} />
-          <meshStandardMaterial map={tsTexture} transparent />
-        </mesh>
-      </Float>
-    </group>
-  )
-}
-
-// Interactive Particle System representing fullstack developer frameworks
-function InteractiveParticles() {
-  const pointsRef = useRef(null)
-  const { mouse, viewport } = useThree()
-  const particlesPosition = useMemo(() => {
-    const positions = new Float32Array(1000 * 3) // Increased particle count for more density
-    for (let i = 0; i < 1000; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 50 // Increased spread to cover more screen
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 50
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 50
-    }
-    return positions
-  }, [])
-
-  useFrame((state) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.x = state.clock.elapsedTime * 0.02 // Slower rotation
-      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.01
-      const positions = pointsRef.current.geometry.attributes.position.array
-      for (let i = 0; i < positions.length; i += 3) {
-        // More dynamic random movement
-        positions[i] += Math.sin(state.clock.elapsedTime * 0.8 + i) * 0.002
-        positions[i + 1] += Math.cos(state.clock.elapsedTime * 0.8 + i) * 0.002
-        positions[i + 2] += Math.sin(state.clock.elapsedTime * 0.8 + i + 1) * 0.002
-      }
-      pointsRef.current.geometry.attributes.position.needsUpdate = true
-    }
-  })
-
-  return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={1000} array={particlesPosition} itemSize={3} />
-      </bufferGeometry>
-      {/* Darker particles for visibility on white background */}
-      <pointsMaterial color="#4A4A4A" size={0.05} transparent opacity={0.7} sizeAttenuation />
-    </points>
-  )
-}
-
-// Dynamic Welcome Crystal Component
-function DynamicWelcomeCrystal() {
-  const crystalRef = useRef(null)
-  const { mouse, viewport } = useThree()
-  const [isTextVisible, setIsTextVisible] = useState(false) // Initial state: crystal visible, text hidden
-  const [isHovered, setIsHovered] = useState(false)
-
-  // Spring animations for crystal transformation and text appearance
-  const { crystalScale, textScale, textOpacity, crystalOpacity } = useSpring({
-    crystalScale: isTextVisible ? 0 : 1, // Crystal shrinks to 0 when text is visible
-    textScale: isTextVisible ? 1 : 0, // Text grows from 0 when visible
-    textOpacity: isTextVisible ? 1 : 0, // Text opacity
-    crystalOpacity: isTextVisible ? 0 : 1, // Crystal opacity
-    config: { mass: 1, tension: 200, friction: 20 },
-  })
-
-  useFrame((state) => {
-    if (crystalRef.current) {
-      // Subtle mouse-based movement for the crystal/text group
-      crystalRef.current.position.x = 7 + (mouse.x * viewport.width) / 40
-      crystalRef.current.position.y = (mouse.y * viewport.height) / 40
-      // Continuous rotation for the crystal when visible
-      if (!isTextVisible) {
-        crystalRef.current.rotation.x = state.clock.elapsedTime * 0.1
-        crystalRef.current.rotation.y = state.clock.elapsedTime * 0.08
-      }
-    }
-  })
-
-  return (
-    <animated.group
-      ref={crystalRef}
-      position={[7, 0, 0]} // Initial position on the right
-      onClick={() => setIsTextVisible(!isTextVisible)} // Toggle visibility on click
-      onPointerOver={() => setIsHovered(true)}
-      onPointerOut={() => setIsHovered(false)}
-      scale={isHovered && !isTextVisible ? 1.1 : 1} // Hover effect only when crystal is visible
-      castShadow
-      receiveShadow
-    >
-      {/* Crystal Mesh - animated scale and opacity */}
-      <animated.mesh scale={crystalScale} opacity={crystalOpacity} transparent>
-        <icosahedronGeometry args={[1.5, 0]} /> {/* A beautiful crystal shape */}
-        <meshStandardMaterial
-          color="#87CEEB" // Sky blue
-          emissive="#ADD8E6" // Lighter blue glow
-          emissiveIntensity={0.5}
-          roughness={0.2}
-          metalness={0.1}
-          transparent
-          opacity={crystalOpacity}
-        />
-      </animated.mesh>
-
-      {/* Welcome Text HTML - always rendered, controlled by springs */}
-      <Html
-        position={[0, 0, 0.05]} // Position slightly in front of the crystal's center
-        center
-        transform
-        occlude
-        style={{
-          width: "300px", // Increased width for better readability
-          height: "300px", // Increased height
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          pointerEvents: isTextVisible ? "auto" : "none", // Enable pointer events only when text is visible
-          userSelect: "none",
-          opacity: textOpacity.to((o) => o), // Animate opacity
-          transform: textScale.to((s) => `scale(${s})`), // Animate scale
-          visibility: textOpacity.to((o) => (o === 0 ? "hidden" : "visible")), // Hide completely when opacity is 0
-        }}
-      >
-        <div
-          className="p-6 rounded-lg shadow-xl"
-          style={{
-            background: "linear-gradient(180deg, #f0f8ff, #e0f2f7)", // Light, professional gradient
-            color: "#333",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
-          }}
-        >
-          <h1 className="text-3xl font-bold mb-2 text-gray-800">
-            Welcome to my Portfolio!
-          </h1>
-          <p className="text-lg mb-6 text-gray-700">
-            Explore my work, skills, and journey as a Full-Stack Developer.
-          </p>
-          <button
-            onClick={(e) => {
-              e.stopPropagation() // Prevent click from bubbling to the 3D group
-              const section = document.getElementById("portfolio-section") // Assuming you have a portfolio section
-              section?.scrollIntoView({ behavior: "smooth" })
-            }}
-            className="px-6 py-3 rounded-full font-semibold text-white transition-all duration-300 ease-out"
-            style={{
-              background: "linear-gradient(45deg, #2a72e5, #6a5acd)", // Blue to purple gradient
-              boxShadow: "0 4px 15px rgba(42,114,229,0.4)",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "linear-gradient(45deg, #1e54b1, #5242a1)"
-              e.currentTarget.style.boxShadow = "0 6px 20px rgba(42,114,229,0.6)"
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "linear-gradient(45deg, #2a72e5, #6a5acd)"
-              e.currentTarget.style.boxShadow = "0 4px 15px rgba(42,114,229,0.4)"
-            }}
-          >
-            Explore Portfolio
-          </button>
-        </div>
-      </Html>
-    </animated.group>
-  )
-}
-
-// Enhanced Social Icon with 3D Effect
-function Enhanced3DSocialIcon({ children, href }) {
-  const [isHovered, setIsHovered] = useState(false)
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="relative group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        transform: isHovered ? "translateY(-8px) scale(1.1)" : "translateY(0) scale(1)",
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        filter: isHovered ? "drop-shadow(0 10px 20px rgba(135, 206, 250, 0.5))" : "none", // Lighter shadow color
-      }}
-    >
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-200 to-cyan-100 rounded-full blur-lg opacity-0 group-hover:opacity-75 transition-opacity duration-300 animate-pulse"></div>
-      <div className="relative z-10 p-3 bg-white/80 backdrop-blur-sm rounded-full border border-blue-100 group-hover:border-blue-300 transition-all duration-300 text-gray-700 group-hover:text-blue-700">
-        {children}
-      </div>
-    </a>
-  )
-}
 
 const Home = () => {
   const [menu, toggleMenu] = useState(false)
   const headerRef = useRef(null)
   const [isMobile, setIsMobile] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [mouseTrail, setMouseTrail] = useState([])
 
   // Track mouse position for interactive effects
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setMousePosition({
+      const newPosition = {
         x: (e.clientX / window.innerWidth) * 2 - 1,
         y: -(e.clientY / window.innerHeight) * 2 + 1,
+        clientX: e.clientX,
+        clientY: e.clientY,
+        timestamp: Date.now(),
+      }
+
+      setMousePosition(newPosition)
+
+      // Create mouse trail effect
+      setMouseTrail((prev) => {
+        const newTrail = [...prev, newPosition].slice(-8) // Keep last 8 positions
+        return newTrail.filter((pos) => Date.now() - pos.timestamp < 500) // Remove old positions
       })
     }
     window.addEventListener("mousemove", handleMouseMove)
@@ -348,58 +69,130 @@ const Home = () => {
           {menu ? <X /> : <Menu />}
         </div>
       )}
-      <section
-        className="hero relative overflow-hidden flex items-center justify-start min-h-screen" // Changed to justify-start for left alignment
-        id="home"
-      >
-        {/* 3D Canvas Background */}
-        <div className="absolute inset-0 z-0">
-          <Canvas camera={{ position: [0, 0, 10], fov: 60 }} style={{ background: "#FFFFFF" }}>
-            {" "}
-            {/* White background */}
-            {/* Environment for bright, professional lighting */}
-            <Environment preset="studio" background blur={0.5} />
-            {/* Additional bright lights */}
-            <ambientLight intensity={0.8} />
-            <pointLight position={[10, 10, 10]} intensity={1.5} color="#FFFFFF" />
-            <pointLight position={[-10, -10, -10]} intensity={1} color="#E0BBE4" /> {/* Soft purple light */}
-            <directionalLight position={[5, 5, 5]} intensity={0.5} color="#FFFAF0" /> {/* Creamy white light */}
-            <FloatingFrameworkIcons />
-            <InteractiveParticles />
-            <DynamicWelcomeCrystal /> {/* The new interactive welcome crystal */}
-            {/* Subtle floor plane */}
-            <mesh position={[0, -5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-              <planeGeometry args={[100, 100]} />
-              <meshStandardMaterial color="#F0F0F0" roughness={0.8} metalness={0.1} />
-            </mesh>
-            {/* Contact shadows for realism */}
-            <ContactShadows position={[0, -4.9, 0]} scale={100} far={10} blur={2} opacity={0.7} color="#000000" />
-            <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
-          </Canvas>
+
+      <section className="hero relative overflow-hidden flex items-center justify-start min-h-screen" id="home">
+        {/* Special Creative Background Surprise */}
+        <div className="absolute inset-0 -z-10 bg-white" />
+
+        {/* 🎉 SURPRISE! Interactive Floating Code Particles */}
+        <div className="floating-code-particles">
+          <div className="code-particle code-1" data-code="&lt;/&gt;">
+            &lt;/&gt;
+          </div>
+          <div className="code-particle code-2" data-code="{ }">{`{ }`}</div>
+          <div className="code-particle code-3" data-code="=&gt;">
+            =&gt;
+          </div>
+          <div className="code-particle code-4" data-code="const">
+            const
+          </div>
+          <div className="code-particle code-5" data-code="React">
+            React
+          </div>
+          <div className="code-particle code-6" data-code="[ ]">
+            [ ]
+          </div>
+          <div className="code-particle code-7" data-code="npm">
+            npm
+          </div>
+          <div className="code-particle code-8" data-code="git">
+            git
+          </div>
+          <div className="code-particle code-9" data-code="API">
+            API
+          </div>
+          <div className="code-particle code-10" data-code="CSS">
+            CSS
+          </div>
+          <div className="code-particle code-11" data-code="JS">
+            JS
+          </div>
+          <div className="code-particle code-12" data-code="( )">{`( )`}</div>
+          <div className="code-particle code-13" data-code="async">
+            async
+          </div>
+          <div className="code-particle code-14" data-code="await">
+            await
+          </div>
+          <div className="code-particle code-15" data-code="function">
+            function
+          </div>
         </div>
-        {/* Animated Background Overlay - adjusted for brighter colors */}
+
+        {/* Enhanced Mouse Trail Effect */}
+        <div className="mouse-trail-container">
+          {mouseTrail.map((pos, index) => (
+            <div
+              key={`${pos.timestamp}-${index}`}
+              className="mouse-trail-dot"
+              style={{
+                left: pos.clientX,
+                top: pos.clientY,
+                opacity: ((index + 1) / mouseTrail.length) * 0.6,
+                transform: `scale(${(index + 1) / mouseTrail.length})`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Floating Geometric Shapes */}
+        <div className="floating-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
+          <div className="shape shape-4"></div>
+          <div className="shape shape-5"></div>
+          <div className="shape shape-6"></div>
+          <div className="shape shape-7"></div>
+          <div className="shape shape-8"></div>
+        </div>
+
+        {/* Animated Grid Pattern */}
+        <div className="animated-grid"></div>
+
+        {/* Portfolio-style Aurora and Effects */}
+        <div className="aurora-light -z-10" aria-hidden="true" />
+        <div className="dots -z-10" aria-hidden="true" />
+        <div className="paper -z-10" aria-hidden="true" />
+
+        {/* ENHANCED Interactive Mouse Glow */}
         <div
-          className="absolute inset-0 z-10 opacity-30"
+          className="absolute inset-0 z-10 opacity-50"
           style={{
-            background: `radial-gradient(circle at ${(mousePosition.x + 1) * 50}% ${(-mousePosition.y + 1) * 50}%, rgba(173, 216, 230, 0.4) 0%, transparent 50%)`, // Light blue gradient
-            transition: "background 0.3s ease-out",
+            background: `
+              radial-gradient(circle at ${(mousePosition.x + 1) * 50}% ${(-mousePosition.y + 1) * 50}%, rgba(236,72,153,0.25) 0%, rgba(20,184,166,0.15) 30%, transparent 60%),
+              radial-gradient(circle at ${(mousePosition.x + 1) * 50 + 10}% ${(-mousePosition.y + 1) * 50 + 10}%, rgba(16,185,129,0.2) 0%, transparent 40%)
+            `,
+            transition: "background 0.2s ease-out",
           }}
-        ></div>
+        />
+
+        {/* Cursor Ripple Effect */}
+        <div
+          className="cursor-ripple"
+          style={{
+            left: mousePosition.clientX,
+            top: mousePosition.clientY,
+          }}
+        />
+
+        {/* Main Content - EXACT same positioning as original */}
         <div className="container relative z-20 text-left p-4 md:p-8 pl-8 md:pl-16">
-          {" "}
-          {/* Left alignment and increased padding */}
           <h1
-            className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight text-gray-800" // Darker text color
+            className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight"
             style={{
-              textShadow: "0 0 15px rgba(0, 0, 0, 0.1), 0 0 30px rgba(173, 216, 230, 0.3)", // Subtle text shadow
+              textShadow: "0 0 15px rgba(0, 0, 0, 0.1), 0 0 30px rgba(236,72,153,0.1)",
               transform: `translateX(${mousePosition.x * 10}px) translateY(${mousePosition.y * 5}px)`,
               transition: "transform 0.3s ease-out",
             }}
           >
-            Hiwot Belay
+            <span className="bg-gradient-to-r from-fuchsia-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent">
+              Hiwot Belay
+            </span>
           </h1>
+
           <p
-            className="text-xl md:text-3xl font-medium mb-8 text-gray-700" // Darker text color
+            className="text-xl md:text-3xl font-medium mb-8 text-slate-700"
             style={{
               transform: `translateX(${mousePosition.x * 5}px)`,
               transition: "transform 0.3s ease-out",
@@ -414,61 +207,432 @@ const Home = () => {
                 backDelay={2000}
                 loop
               />
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-200 to-purple-200 rounded blur opacity-70 animate-pulse"></div>{" "}
-              {/* Brighter glow */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-fuchsia-200 via-teal-200 to-emerald-200 rounded blur opacity-70 animate-pulse"></div>
             </span>
           </p>
+
+          {/* Social Icons - EXACT same positioning */}
           <div
-            className="social relative z-30 flex justify-start gap-4 mb-12" // Changed to justify-start
+            className="social relative z-30 flex justify-start gap-4 mb-12"
             style={{
               transform: `translateY(${mousePosition.y * 3}px)`,
               transition: "transform 0.3s ease-out",
             }}
           >
-            <Enhanced3DSocialIcon href="https://github.com/HiwotBelay">
-              <Github className="h-6 w-6" />
-            </Enhanced3DSocialIcon>
-            <Enhanced3DSocialIcon href="https://x.com/belay_hiwo38480">
-              <X className="h-6 w-6" />
-            </Enhanced3DSocialIcon>
-            <Enhanced3DSocialIcon href="https://t.me/Hiwi_ina">
-              <Send className="h-6 w-6" />
-            </Enhanced3DSocialIcon>
-            <Enhanced3DSocialIcon href="https://www.linkedin.com/in/hiwot-belaym/">
-              <Linkedin className="h-6 w-6" />
-            </Enhanced3DSocialIcon>
+            <a
+              href="https://github.com/HiwotBelay"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="portfolio-social-icon group"
+            >
+              <div className="portfolio-social-inner">
+                <Github className="h-6 w-6" />
+              </div>
+            </a>
+            <a
+              href="https://x.com/belay_hiwo38480"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="portfolio-social-icon group"
+            >
+              <div className="portfolio-social-inner">
+                <X className="h-6 w-6" />
+              </div>
+            </a>
+            <a
+              href="https://t.me/Hiwi_ina"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="portfolio-social-icon group"
+            >
+              <div className="portfolio-social-inner">
+                <Send className="h-6 w-6" />
+              </div>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/hiwot-belaym/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="portfolio-social-icon group"
+            >
+              <div className="portfolio-social-inner">
+                <Linkedin className="h-6 w-6" />
+              </div>
+            </a>
           </div>
         </div>
-        {/* Enhanced Download CV button - positioned absolutely */}
-        <div
-          className="cv-download absolute top-4 right-4 z-30" // Absolute positioning
-        >
-          <a
-            href="/Hiwot_Belay CV.pdf"
-            download
-            className="download-btn group relative inline-flex items-center justify-between overflow-hidden rounded-full bg-gradient-to-br from-blue-400 to-purple-300 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 ease-out hover:from-blue-500 hover:to-purple-400 hover:shadow-xl hover:-translate-y-1"
-            style={{
-              boxShadow: "0 0 20px rgba(135, 206, 250, 0.3), 0 8px 15px rgba(0, 0, 0, 0.1)", // Lighter shadow
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = "0 0 30px rgba(135, 206, 250, 0.6), 0 12px 25px rgba(0, 0, 0, 0.2)"
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "0 0 20px rgba(135, 206, 250, 0.3), 0 8px 15px rgba(0, 0, 0, 0.1)"
-            }}
-          >
-            <span className="absolute inset-0 h-full w-full bg-gradient-to-br from-white/20 via-white/40 to-white/20 opacity-0 transition-all duration-300 group-hover:opacity-100"></span>
-            <span className="relative flex items-center space-x-2">
+
+        {/* CV Download Button - EXACT same positioning */}
+        <div className="cv-download absolute top-4 right-4 z-30">
+          <a href="/Hiwot_Belay CV.pdf" download className="portfolio-cv-button group">
+            <div className="portfolio-cv-inner">
               <Download className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-0.5" />
               <span>Get My CV</span>
-            </span>
-            <span className="absolute right-6 translate-x-3 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-              →
-            </span>
-            {/* Animated border */}
-            <div className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-200 via-cyan-200 to-purple-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+            </div>
           </a>
         </div>
+
+        {/* Styles */}
+        <style jsx>{`
+          /* Portfolio Aurora Light Effect - EXACT MATCH */
+          .aurora-light {
+            position: absolute;
+            inset: -15%;
+            background: radial-gradient(60% 40% at 20% 30%, rgba(236, 72, 153, 0.1), transparent 60%),
+              radial-gradient(50% 35% at 80% 20%, rgba(20, 184, 166, 0.1), transparent 60%),
+              radial-gradient(45% 30% at 60% 70%, rgba(34, 197, 94, 0.1), transparent 60%),
+              radial-gradient(60% 40% at 20% 80%, rgba(59, 130, 246, 0.06), transparent 60%);
+            filter: blur(30px) saturate(110%);
+            animation: auroraFloatLight 18s ease-in-out infinite alternate;
+          }
+
+          @keyframes auroraFloatLight {
+            0% { transform: translateY(-1.5%) translateX(-1%) scale(1); }
+            100% { transform: translateY(1.5%) translateX(1%) scale(1.03); }
+          }
+
+          /* Portfolio Dots - EXACT MATCH */
+          .dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+            background-size: 16px 16px;
+            mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.4), transparent 85%);
+          }
+
+          /* Portfolio Paper - EXACT MATCH */
+          .paper {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+          }
+
+          /* 🎉 SURPRISE! Interactive Floating Code Particles */
+          .floating-code-particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 2;
+            pointer-events: none;
+          }
+
+          .code-particle {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 14px;
+            color: transparent;
+            background: linear-gradient(45deg, #ec4899, #14b8a6, #10b981);
+            background-clip: text;
+            -webkit-background-clip: text;
+            opacity: 0.6;
+            animation: floatCode 15s ease-in-out infinite;
+            transition: all 0.3s ease;
+            cursor: default;
+          }
+
+          .code-particle:hover {
+            transform: scale(1.5) rotate(10deg) !important;
+            opacity: 1 !important;
+            text-shadow: 0 0 20px rgba(236,72,153,0.5);
+          }
+
+          /* Individual code particle positions and animations */
+          .code-1 { top: 10%; right: 15%; animation-delay: 0s; animation-duration: 20s; }
+          .code-2 { top: 25%; right: 8%; animation-delay: -2s; animation-duration: 18s; }
+          .code-3 { top: 40%; right: 20%; animation-delay: -4s; animation-duration: 22s; }
+          .code-4 { top: 55%; right: 12%; animation-delay: -6s; animation-duration: 16s; }
+          .code-5 { top: 70%; right: 25%; animation-delay: -8s; animation-duration: 24s; }
+          .code-6 { top: 15%; right: 35%; animation-delay: -1s; animation-duration: 19s; }
+          .code-7 { top: 35%; right: 30%; animation-delay: -3s; animation-duration: 21s; }
+          .code-8 { top: 50%; right: 5%; animation-delay: -5s; animation-duration: 17s; }
+          .code-9 { top: 65%; right: 18%; animation-delay: -7s; animation-duration: 23s; }
+          .code-10 { top: 80%; right: 10%; animation-delay: -9s; animation-duration: 15s; }
+          .code-11 { top: 20%; right: 40%; animation-delay: -1.5s; animation-duration: 25s; }
+          .code-12 { top: 45%; right: 35%; animation-delay: -3.5s; animation-duration: 20s; }
+          .code-13 { top: 60%; right: 40%; animation-delay: -5.5s; animation-duration: 18s; }
+          .code-14 { top: 75%; right: 35%; animation-delay: -7.5s; animation-duration: 22s; }
+          .code-15 { top: 30%; right: 45%; animation-delay: -9.5s; animation-duration: 16s; }
+
+          @keyframes floatCode {
+            0%, 100% { 
+              transform: translateY(0px) translateX(0px) rotate(0deg); 
+              opacity: 0.6; 
+            }
+            25% { 
+              transform: translateY(-15px) translateX(-8px) rotate(5deg); 
+              opacity: 0.8; 
+            }
+            50% { 
+              transform: translateY(-8px) translateX(12px) rotate(-3deg); 
+              opacity: 0.7; 
+            }
+            75% { 
+              transform: translateY(-20px) translateX(-5px) rotate(8deg); 
+              opacity: 0.9; 
+            }
+          }
+
+          /* Enhanced Mouse Trail Effect */
+          .mouse-trail-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 15;
+          }
+
+          .mouse-trail-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(45deg, #ec4899, #14b8a6);
+            border-radius: 50%;
+            transform-origin: center;
+            animation: trailFade 0.5s ease-out forwards;
+            margin: -4px 0 0 -4px;
+          }
+
+          @keyframes trailFade {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+          }
+
+          /* Cursor Ripple Effect */
+          .cursor-ripple {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(236,72,153,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 16;
+            animation: ripple 1.5s ease-out infinite;
+          }
+
+          @keyframes ripple {
+            0% {
+              transform: translate(-50%, -50%) scale(0.5);
+              opacity: 1;
+            }
+            100% {
+              transform: translate(-50%, -50%) scale(2);
+              opacity: 0;
+            }
+          }
+
+          /* SPECIAL CREATIVE BACKGROUND SURPRISE */
+          .floating-shapes {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 1;
+          }
+
+          .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.12;
+            animation: float 20s ease-in-out infinite;
+          }
+
+          .shape-1 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, #ec4899, #14b8a6);
+            top: 10%;
+            left: 80%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+          }
+
+          .shape-2 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #14b8a6, #10b981);
+            top: 60%;
+            left: 85%;
+            animation-delay: -5s;
+            animation-duration: 30s;
+          }
+
+          .shape-3 {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(225deg, #10b981, #ec4899);
+            top: 20%;
+            left: 70%;
+            animation-delay: -10s;
+            animation-duration: 20s;
+          }
+
+          .shape-4 {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(315deg, #ec4899, #14b8a6);
+            top: 80%;
+            left: 75%;
+            animation-delay: -15s;
+            animation-duration: 35s;
+          }
+
+          .shape-5 {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #14b8a6, #10b981);
+            top: 40%;
+            left: 90%;
+            animation-delay: -8s;
+            animation-duration: 22s;
+          }
+
+          .shape-6 {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, #10b981, #ec4899);
+            top: 5%;
+            left: 60%;
+            animation-delay: -12s;
+            animation-duration: 28s;
+          }
+
+          .shape-7 {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(225deg, #ec4899, #14b8a6);
+            top: 70%;
+            left: 95%;
+            animation-delay: -3s;
+            animation-duration: 24s;
+          }
+
+          .shape-8 {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(315deg, #14b8a6, #10b981);
+            top: 30%;
+            left: 65%;
+            animation-delay: -18s;
+            animation-duration: 32s;
+          }
+
+          @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) translateX(-10px) rotate(90deg); }
+            50% { transform: translateY(-10px) translateX(10px) rotate(180deg); }
+            75% { transform: translateY(-30px) translateX(-5px) rotate(270deg); }
+          }
+
+          /* Animated Grid Pattern */
+          .animated-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+              linear-gradient(rgba(236,72,153,0.08) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(20,184,166,0.08) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 30s linear infinite;
+            z-index: 1;
+          }
+
+          @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+          }
+
+          /* Portfolio Social Icons - EXACT MATCH */
+          .portfolio-social-icon {
+            position: relative;
+            border-radius: 18px;
+            padding: 1px;
+            background: conic-gradient(from 180deg at 50% 50%, rgba(236,72,153,0.6), rgba(20,184,166,0.6), rgba(16,185,129,0.6), rgba(236,72,153,0.6));
+            transition: box-shadow .25s ease, transform .25s ease;
+            text-decoration: none;
+            display: block;
+          }
+
+          .portfolio-social-icon:hover {
+            box-shadow: 0 12px 26px rgba(2,6,23,0.08), 0 0 40px rgba(20,184,166,0.16);
+            transform: translateY(-8px) scale(1.1);
+          }
+
+          .portfolio-social-inner {
+            border-radius: 17px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.94));
+            border: 1px solid rgba(2,6,23,0.06);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 10px 20px rgba(2,6,23,0.05);
+            padding: 12px;
+            color: #475569;
+            transition: color 0.3s ease;
+          }
+
+          .portfolio-social-icon:hover .portfolio-social-inner {
+            color: #1e293b;
+          }
+
+          /* Portfolio CV Button - EXACT MATCH */
+          .portfolio-cv-button {
+            position: relative;
+            border-radius: 50px;
+            padding: 1px;
+            background: conic-gradient(from 180deg at 50% 50%, rgba(236,72,153,0.6), rgba(20,184,166,0.6), rgba(16,185,129,0.6), rgba(236,72,153,0.6));
+            transition: box-shadow .25s ease, transform .25s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+          }
+
+          .portfolio-cv-button:hover {
+            box-shadow: 0 12px 26px rgba(2,6,23,0.08), 0 0 40px rgba(20,184,166,0.16);
+            transform: translateY(-5px) scale(1.05);
+          }
+
+          .portfolio-cv-inner {
+            border-radius: 49px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.94));
+            border: 1px solid rgba(2,6,23,0.06);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 10px 20px rgba(2,6,23,0.05);
+            padding: 12px 24px;
+            color: #334155;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          /* Additional Creative Elements */
+          .floating-shapes::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            right: 10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(236,72,153,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 8s ease-in-out infinite;
+          }
+
+          .floating-shapes::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 15%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(20,184,166,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 10s ease-in-out infinite reverse;
+          }
+
+          @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.06; }
+            50% { transform: scale(1.1); opacity: 0.12; }
+          }
+        `}</style>
       </section>
     </>
   )
