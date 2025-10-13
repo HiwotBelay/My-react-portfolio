@@ -13,6 +13,8 @@ import hackathon from "./img/Hackathon.jpg"
 import new1 from "./img/new1.jpg"
 import new2 from "./img/new2.jpg"
 import new3 from "./img/new3.jpg"
+import helder from "./img/helder.jpg"
+import kuraz from "./img/kuraz.jpg"
 
 import petVideo from "./img/pet.mp4"
 import ecommerceVideo from "./img/ecommerce.mp4"
@@ -46,6 +48,10 @@ const Portfolio = () => {
         "I was recognized for my communication, planning, and leadership skills while organizing a major event at Bahir Dar University.",
       new3:
         "This highlights my active participation in my second hackathon competition, demonstrating both my technical growth and collaborative experience.",
+      helder:
+      "This was my paid internship experience as a Front-End Developer. I had a chance to work on real client projects. I worked starting from UI/UX to developing and integration phase this has been amazing experience skill wise and other supportive skills career wise",
+      kuraz:
+      "It was Backend Development Internship. I had a role on doing real projects. I worked on PHP and MySQL database management. It was great experience and I learned a lot from it.",
     }),
     []
   )
@@ -327,8 +333,7 @@ const Portfolio = () => {
       </div>
 
       {/* Masonry Grid */}
-      <div className="mt-8 w-[92%] max-w-7xl mx-auto columns-1 sm:columns-1 md:columns-2 lg:columns-3 gap-6">
-        {/* Certificates (render only when needed for speed) */}
+     <div className="mt-8 w-[92%] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">        {/* Certificates (render only when needed for speed) */}
         {showAwards && (
           <>
             {/* Hackathon */}
@@ -382,6 +387,30 @@ const Portfolio = () => {
               </div>
             </div>
 
+            {/* helder*/}
+            <div
+              className="masonry-item inline-block w-full mb-6 break-inside-avoid cursor-pointer"
+              onClick={() => setSelectedImage("/img/helder.jpg")}
+            >
+              <div className="neon-card-light group">
+                <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
+                  <img
+                    src={helder || "/placeholder.svg?height=240&width=400&query=gig-hackathon-winner"}
+                    className="w-full h-[240px] object-cover sm:h-auto"
+                    alt="Paid Internship"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
+                  <div className="card-overlay-light">
+                    <h4 className="text-lg md:text-xl font-bold">Paid Internship</h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Front-End Development</p>
+                    <p className="desc-light">{certificateDescriptions.helder}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* new2 */}
             <div
               className="masonry-item inline-block w-full mb-6 break-inside-avoid cursor-pointer"
@@ -408,6 +437,31 @@ const Portfolio = () => {
                 </div>
               </div>
             </div>
+
+            {/* kuraz */}
+            <div
+              className="masonry-item inline-block w-full mb-6 break-inside-avoid cursor-pointer"
+              onClick={() => setSelectedImage("/img/kuraz.jpg")}
+            >
+              <div className="neon-card-light group">
+                <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
+                  <img
+                    src={kuraz || "/placeholder.svg?height=210&width=400&query=hackathon-participation"}
+                    className="w-full h-[210px] object-cover sm:h-auto"
+                    alt="Back-End Development Internship"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
+                  <div className="card-overlay-light">
+                    <h4 className="text-lg md:text-xl font-bold">Back-End Development Internship</h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Backend/PHP</p>
+                    <p className="desc-light">{certificateDescriptions.kuraz}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
             {/* new3 */}
             <div
