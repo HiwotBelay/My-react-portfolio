@@ -1,36 +1,80 @@
-"use client"
-import { useState, useEffect, useRef, useMemo } from "react"
-import { FaGithub, FaExternalLinkAlt, FaPlay, FaPause } from "react-icons/fa"
-import AOS from "aos"
-import "aos/dist/aos.css"
+"use client";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { FaGithub, FaExternalLinkAlt, FaPlay, FaPause } from "react-icons/fa";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 // Your assets
-import gcc from "./img/gcc.jpg"
-import web from "./img/web.jpg"
-import mern from "./img/mern.jpg"
-import prog from "./img/prog.jpg"
-import hackathon from "./img/Hackathon.jpg"
-import new1 from "./img/new1.jpg"
-import new2 from "./img/new2.jpg"
-import new3 from "./img/new3.jpg"
-import helder from "./img/helder.jpg"
-import kuraz from "./img/kuraz.jpg"
+import gcc from "./img/gcc.jpg";
+import web from "./img/web.jpg";
+import mern from "./img/mern.jpg";
+import prog from "./img/prog.jpg";
+import hackathon from "./img/Hackathon.jpg";
+import new1 from "./img/new1.jpg";
+import new2 from "./img/new2.jpg";
+import new3 from "./img/new3.jpg";
+import helder from "./img/helder.jpg";
+import kuraz from "./img/kuraz.jpg";
 
-import petVideo from "./img/pet.mp4"
-import ecommerceVideo from "./img/ecommerce.mp4"
-import tenderVideo from "./img/tender.mp4"
-import dentalVideo from "./img/dental.mp4"
-import chatappVideo from "./img/chatapp.mp4"
-import behavVideo from "./img/behav.mp4"
-import ethiotel from "./img/ethiotel.mp4"
+import petVideo from "./img/pet.mp4";
+import ecommerceVideo from "./img/ecommerce.mp4";
+import tenderVideo from "./img/tender.mp4";
+import dentalVideo from "./img/dental.mp4";
+import chatappVideo from "./img/chatapp.mp4";
+import behavVideo from "./img/behav.mp4";
+import ethiotel from "./img/ethiotel.mp4";
 
 const Portfolio = () => {
-  const [filter, setFilter] = useState("all")
-  const [selectedImage, setSelectedImage] = useState(null)
-  const [playingVideo, setPlayingVideo] = useState(null)
+  const [filter, setFilter] = useState("all");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [playingVideo, setPlayingVideo] = useState(null);
 
   // Refs
-  const videoRefs = useRef({})
+  const videoRefs = useRef({});
+
+  // Playback speed for demos (2 = 2x, 3 = 3x). Adjust as needed.
+  const VIDEO_SPEED = 2;
+
+  // IntersectionObserver: progressively enable preloading for videos that are (or soon will be) visible.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const videos = Array.from(document.querySelectorAll("#portfolio video"));
+    if (!videos.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const v = entry.target;
+          // When a video becomes visible, switch preload to "auto" and call load() so the browser starts fetching.
+          if (entry.isIntersecting) {
+            if (v.getAttribute("data-preloaded")) return;
+            try {
+              v.setAttribute("preload", "auto");
+              v.load(); // start fetch
+              v.setAttribute("data-preloaded", "1");
+            } catch (e) {
+              /* ignore */
+            }
+          } else {
+            // When far offscreen, revert to metadata to avoid loading everything at once.
+            if (!v.getAttribute("data-preloaded")) return;
+            try {
+              // don't unload completely to avoid jank, just keep as metadata for now
+              v.setAttribute("preload", "metadata");
+            } catch (e) {}
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "400px", // pre-load when close to viewport
+        threshold: 0.05,
+      }
+    );
+
+    videos.forEach((v) => io.observe(v));
+    return () => io.disconnect();
+  }, [filter]);
 
   const certificateDescriptions = useMemo(
     () => ({
@@ -42,19 +86,16 @@ const Portfolio = () => {
       prog: "Advanced Programming certification covering algorithms, data structures, and software design patterns.",
       ala: "African Leadership Academy recognition for leadership and entrepreneurial excellence.",
       bit: "Bit Career Training certification for professional development in software engineering.",
-      new1:
-        "I won 1st place at the Gig Hackathon with an amazing AI-integrated Pet Twin System—my second big hackathon win, and another proud, impactful moment!",
-      new2:
-        "I was recognized for my communication, planning, and leadership skills while organizing a major event at Bahir Dar University.",
-      new3:
-        "This highlights my active participation in my second hackathon competition, demonstrating both my technical growth and collaborative experience.",
+      new1: "I won 1st place at the Gig Hackathon with an amazing AI-integrated Pet Twin System—my second big hackathon win, and another proud, impactful moment!",
+      new2: "I was recognized for my communication, planning, and leadership skills while organizing a major event at Bahir Dar University.",
+      new3: "This highlights my active participation in my second hackathon competition, demonstrating both my technical growth and collaborative experience.",
       helder:
-      "This was my paid internship experience as a Front-End Developer. I had a chance to work on real client projects. I worked starting from UI/UX to developing and integration phase this has been amazing experience skill wise and other supportive skills career wise",
+        "This was my paid internship experience as a Front-End Developer. I had a chance to work on real client projects. I worked starting from UI/UX to developing and integration phase this has been amazing experience skill wise and other supportive skills career wise",
       kuraz:
-      "It was Backend Development Internship. I had a role on doing real projects. I worked on PHP and MySQL database management. It was great experience and I learned a lot from it.",
+        "It was Backend Development Internship. I had a role on doing real projects. I worked on PHP and MySQL database management. It was great experience and I learned a lot from it.",
     }),
     []
-  )
+  );
 
   const projects = useMemo(
     () => [
@@ -77,7 +118,8 @@ const Portfolio = () => {
         category: "Full Stack",
         description:
           "A powerful, scalable e-commerce web app inspired by Amazon – built using Next.js, React, Node.js, Express, Firebase Realtime Database, PostgreSQL, and Prisma.",
-        technologies: "Next.js, React, Node.js, Express, Firebase Realtime Database, PostgreSQL, Prisma",
+        technologies:
+          "Next.js, React, Node.js, Express, Firebase Realtime Database, PostgreSQL, Prisma",
         github: "https://github.com/HiwotBelay/E-commerce",
         demo: "#",
       },
@@ -88,7 +130,8 @@ const Portfolio = () => {
         category: "Enterprise Solution",
         description:
           "A comprehensive system for managing the tendering process for government and private organizations. Features include tender posting, bid submission, evaluation, and award notification.",
-        technologies: "Frontend: React, Tailwind CSS, Node.js, Express.js, MongoDB,JWT, OAuth",
+        technologies:
+          "Frontend: React, Tailwind CSS, Node.js, Express.js, MongoDB,JWT, OAuth",
         github: "https://github.com/HiwotBelay/Tender-Managment-System",
         demo: "#",
       },
@@ -122,7 +165,8 @@ const Portfolio = () => {
         description:
           "A dynamic simulation system that demonstrates behavior-driven interactions and state management through virtual agents with unique personalities. This project showcases the complexities of reactive logic and real-time user interaction in a compact, engaging interface.",
         technologies: "React, Next.js, API",
-        github: "https://github.com/HiwotBelay/Behavior-Driven-Interaction-System",
+        github:
+          "https://github.com/HiwotBelay/Behavior-Driven-Interaction-System",
         demo: "#",
       },
       {
@@ -138,140 +182,153 @@ const Portfolio = () => {
       },
     ],
     []
-  )
+  );
 
   useEffect(() => {
-    AOS.init()
-  }, [])
+    AOS.init();
+  }, []);
 
-  const closeLightbox = () => setSelectedImage(null)
+  const closeLightbox = () => setSelectedImage(null);
 
   const handleVideoPlay = (id) => {
     if (playingVideo && playingVideo !== id) {
-      if (videoRefs.current[playingVideo]) videoRefs.current[playingVideo].pause()
+      if (videoRefs.current[playingVideo])
+        videoRefs.current[playingVideo].pause();
     }
     if (playingVideo === id) {
-      if (videoRefs.current[id]) videoRefs.current[id].pause()
-      setPlayingVideo(null)
+      if (videoRefs.current[id]) videoRefs.current[id].pause();
+      setPlayingVideo(null);
     } else {
-      if (videoRefs.current[id]) videoRefs.current[id].play()
-      setPlayingVideo(id)
+      if (videoRefs.current[id]) {
+        // set faster playback for quicker previews
+        try {
+          videoRefs.current[id].playbackRate = VIDEO_SPEED;
+        } catch (e) {}
+        videoRefs.current[id].play();
+      }
+      setPlayingVideo(id);
     }
-  }
+  };
 
   const setVideoRef = (id, element) => {
-    if (element) videoRefs.current[id] = element
-  }
+    if (element) videoRefs.current[id] = element;
+  };
 
   // Pause videos and clear playing state on category change (speed + avoid jank)
   useEffect(() => {
-    Object.values(videoRefs.current || {}).forEach((v) => v && v.pause && v.pause())
-    setPlayingVideo(null)
-  }, [filter])
+    Object.values(videoRefs.current || {}).forEach(
+      (v) => v && v.pause && v.pause()
+    );
+    setPlayingVideo(null);
+  }, [filter]);
 
   // 3D tilt (optimized: pointer: fine only, rAF throttled, attach listeners only for visible items)
   useEffect(() => {
-    if (typeof window === "undefined") return
-    const supportsFine = window.matchMedia && window.matchMedia("(pointer: fine)").matches
-    if (!supportsFine) return
+    if (typeof window === "undefined") return;
+    const supportsFine =
+      window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+    if (!supportsFine) return;
 
-    const cards = document.querySelectorAll("#portfolio .tilt")
-    const boundsMap = new WeakMap()
-    const rafMap = new WeakMap()
+    const cards = document.querySelectorAll("#portfolio .tilt");
+    const boundsMap = new WeakMap();
+    const rafMap = new WeakMap();
 
     const onEnter = (el) => {
-      el.style.willChange = "transform"
-    }
+      el.style.willChange = "transform";
+    };
     const onLeave = (el) => {
-      el.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)"
-      el.style.willChange = "auto"
-      const glare = el.querySelector(".glare")
-      if (glare) glare.style.opacity = "0"
-    }
+      el.style.transform =
+        "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)";
+      el.style.willChange = "auto";
+      const glare = el.querySelector(".glare");
+      if (glare) glare.style.opacity = "0";
+    };
     const onMove = (el, e) => {
-      if (rafMap.get(el)) return
+      if (rafMap.get(el)) return;
       const rafId = requestAnimationFrame(() => {
-        let rect = boundsMap.get(el)
+        let rect = boundsMap.get(el);
         if (!rect) {
-          rect = el.getBoundingClientRect()
-          boundsMap.set(el, rect)
+          rect = el.getBoundingClientRect();
+          boundsMap.set(el, rect);
         }
-        const px = (e.clientX - rect.left) / rect.width
-        const py = (e.clientY - rect.top) / rect.height
-        const rotX = (0.5 - py) * 10
-        const rotY = (px - 0.5) * 14
-        el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(8px)`
-        const glare = el.querySelector(".glare")
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        const rotX = (0.5 - py) * 10;
+        const rotY = (px - 0.5) * 14;
+        el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(8px)`;
+        const glare = el.querySelector(".glare");
         if (glare) {
-          const gx = (px * 100).toFixed(1)
-          const gy = (py * 100).toFixed(1)
-          glare.style.opacity = "1"
-          glare.style.background = `radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.45), rgba(255,255,255,0))`
+          const gx = (px * 100).toFixed(1);
+          const gy = (py * 100).toFixed(1);
+          glare.style.opacity = "1";
+          glare.style.background = `radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.45), rgba(255,255,255,0))`;
         }
-        rafMap.set(el, null)
-      })
-      rafMap.set(el, rafId)
-    }
+        rafMap.set(el, null);
+      });
+      rafMap.set(el, rafId);
+    };
 
-    const listeners = []
+    const listeners = [];
     cards.forEach((el) => {
-      const enter = () => onEnter(el)
-      const leave = () => onLeave(el)
-      const move = (e) => onMove(el, e)
+      const enter = () => onEnter(el);
+      const leave = () => onLeave(el);
+      const move = (e) => onMove(el, e);
 
-      el.addEventListener("mouseenter", enter, { passive: true })
-      el.addEventListener("mouseleave", leave, { passive: true })
-      el.addEventListener("mousemove", move, { passive: true })
+      el.addEventListener("mouseenter", enter, { passive: true });
+      el.addEventListener("mouseleave", leave, { passive: true });
+      el.addEventListener("mousemove", move, { passive: true });
 
       listeners.push(() => {
-        el.removeEventListener("mouseenter", enter)
-        el.removeEventListener("mouseleave", leave)
-        el.removeEventListener("mousemove", move)
-      })
-    })
+        el.removeEventListener("mouseenter", enter);
+        el.removeEventListener("mouseleave", leave);
+        el.removeEventListener("mousemove", move);
+      });
+    });
 
     return () => {
-      listeners.forEach((off) => off())
+      listeners.forEach((off) => off());
       cards.forEach((el) => {
-        const id = rafMap.get(el)
-        if (id) cancelAnimationFrame(id)
-      })
-    }
-  }, [filter])
+        const id = rafMap.get(el);
+        if (id) cancelAnimationFrame(id);
+      });
+    };
+  }, [filter]);
 
   // Entrance animation (optimized & fast) for only currently rendered items
   useEffect(() => {
-    const items = Array.from(document.querySelectorAll("#portfolio .masonry-item"))
-    const directions = ["left", "right", "top", "bottom"]
+    const items = Array.from(
+      document.querySelectorAll("#portfolio .masonry-item")
+    );
+    const directions = ["left", "right", "top", "bottom"];
 
     items.forEach((el, i) => {
-      el.style.setProperty("--i", String(i))
-      const dir = directions[i % directions.length]
+      el.style.setProperty("--i", String(i));
+      const dir = directions[i % directions.length];
       if (dir === "left") {
-        el.style.setProperty("--tx", "-35vw")
-        el.style.setProperty("--ty", "8vh")
+        el.style.setProperty("--tx", "-35vw");
+        el.style.setProperty("--ty", "8vh");
       } else if (dir === "right") {
-        el.style.setProperty("--tx", "35vw")
-        el.style.setProperty("--ty", "6vh")
+        el.style.setProperty("--tx", "35vw");
+        el.style.setProperty("--ty", "6vh");
       } else if (dir === "top") {
-        el.style.setProperty("--tx", "0vw")
-        el.style.setProperty("--ty", "-30vh")
+        el.style.setProperty("--tx", "0vw");
+        el.style.setProperty("--ty", "-30vh");
       } else if (dir === "bottom") {
-        el.style.setProperty("--tx", "0vw")
-        el.style.setProperty("--ty", "28vh")
+        el.style.setProperty("--tx", "0vw");
+        el.style.setProperty("--ty", "28vh");
       }
-      el.classList.remove("enter")
-    })
+      el.classList.remove("enter");
+    });
 
     // Use a single rAF to trigger enter state (faster than IO for instant category switch)
     requestAnimationFrame(() => {
-      items.forEach((el) => el.classList.add("enter"))
-    })
-  }, [filter])
+      items.forEach((el) => el.classList.add("enter"));
+    });
+  }, [filter]);
 
-  const showAwards = filter === "all" || filter === "design"
-  const showProjects = filter === "all" || filter === "illustration"
-  const showVenture = filter === "videos"
+  const showAwards = filter === "all" || filter === "design";
+  const showProjects = filter === "all" || filter === "illustration";
+  const showVenture = filter === "videos";
 
   return (
     <section
@@ -296,16 +353,24 @@ const Portfolio = () => {
             </span>
             <span className="title-underline-light" />
           </h1>
-          <p className="text-slate-600 leading-relaxed" data-aos="fade-up" data-aos-delay="100">
-            I'm a full-stack developer with a strong passion for creating interactive and visually striking web
-            applications. From front-end design to back-end development, I thrive on building projects that are not only
-            functional but also user-friendly. My experience spans working with technologies like React, Node.js, and
-            MongoDB, and I've had the opportunity to apply these skills in a variety of projects that challenge me to
-            learn and grow. While I have gained knowledge through various courses and certifications, the real value
-            comes from the hands-on experience I've gained over time. Currently, I'm focused on developing the Bit CDC
-            website, which will allow me to showcase both my technical skills and my creative approach to web
-            development. I'm always up for new challenges and excited to continue growing in the ever-evolving world of
-            software development.
+          <p
+            className="text-slate-600 leading-relaxed"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            I'm a full-stack developer with a strong passion for creating
+            interactive and visually striking web applications. From front-end
+            design to back-end development, I thrive on building projects that
+            are not only functional but also user-friendly. My experience spans
+            working with technologies like React, Node.js, and MongoDB, and I've
+            had the opportunity to apply these skills in a variety of projects
+            that challenge me to learn and grow. While I have gained knowledge
+            through various courses and certifications, the real value comes
+            from the hands-on experience I've gained over time. Currently, I'm
+            focused on developing the Bit CDC website, which will allow me to
+            showcase both my technical skills and my creative approach to web
+            development. I'm always up for new challenges and excited to
+            continue growing in the ever-evolving world of software development.
           </p>
         </div>
       </div>
@@ -315,25 +380,38 @@ const Portfolio = () => {
         className="glass-pills-light flex w-[360px] items-center justify-between my-6 rounded-3xl px-2 shadow-[inset_0_0_0_1px_rgba(2,6,23,0.06)] md:w-[360px] sm:w-[320px]"
         data-aos="zoom-in"
       >
-        <button className={filter === "all" ? "pill-light active" : "pill-light"} onClick={() => setFilter("all")}>
+        <button
+          className={filter === "all" ? "pill-light active" : "pill-light"}
+          onClick={() => setFilter("all")}
+        >
           All
         </button>
-        <button className={filter === "design" ? "pill-light active" : "pill-light"} onClick={() => setFilter("design")}>
+        <button
+          className={filter === "design" ? "pill-light active" : "pill-light"}
+          onClick={() => setFilter("design")}
+        >
           Awards
         </button>
         <button
-          className={filter === "illustration" ? "pill-light active" : "pill-light"}
+          className={
+            filter === "illustration" ? "pill-light active" : "pill-light"
+          }
           onClick={() => setFilter("illustration")}
         >
           Projects
         </button>
-        <button className={filter === "videos" ? "pill-light active" : "pill-light"} onClick={() => setFilter("videos")}>
+        <button
+          className={filter === "videos" ? "pill-light active" : "pill-light"}
+          onClick={() => setFilter("videos")}
+        >
           Venture
         </button>
       </div>
 
       {/* Masonry Grid */}
-     <div className="mt-8 w-[92%] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">        {/* Certificates (render only when needed for speed) */}
+      <div className="mt-8 w-[92%] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
+        {" "}
+        {/* Certificates (render only when needed for speed) */}
         {showAwards && (
           <>
             {/* Hackathon */}
@@ -346,8 +424,9 @@ const Portfolio = () => {
                   <img
                     src={
                       hackathon ||
-                      "/placeholder.svg?height=220&width=400&query=hackathon-winner-certificate"
-                     || "/placeholder.svg"}
+                      "/placeholder.svg?height=220&width=400&query=hackathon-winner-certificate" ||
+                      "/placeholder.svg"
+                    }
                     className="w-full h-[220px] object-cover sm:h-auto"
                     alt="Hackathon Winner Certificate"
                     loading="lazy"
@@ -355,9 +434,15 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Hackathon Winner Certificate</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Innovation</p>
-                    <p className="desc-light">{certificateDescriptions.hackathon}</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Hackathon Winner Certificate
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Innovation
+                    </p>
+                    <p className="desc-light">
+                      {certificateDescriptions.hackathon}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -371,7 +456,10 @@ const Portfolio = () => {
               <div className="neon-card-light group">
                 <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
                   <img
-                    src={new1 || "/placeholder.svg?height=240&width=400&query=gig-hackathon-winner"}
+                    src={
+                      new1 ||
+                      "/placeholder.svg?height=240&width=400&query=gig-hackathon-winner"
+                    }
                     className="w-full h-[240px] object-cover sm:h-auto"
                     alt="Hackathon Winner Certificate"
                     loading="lazy"
@@ -379,8 +467,12 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Hackathon Winner Certificate</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">AI Driven Innovation</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Hackathon Winner Certificate
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      AI Driven Innovation
+                    </p>
                     <p className="desc-light">{certificateDescriptions.new1}</p>
                   </div>
                 </div>
@@ -395,7 +487,10 @@ const Portfolio = () => {
               <div className="neon-card-light group">
                 <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
                   <img
-                    src={helder || "/placeholder.svg?height=240&width=400&query=gig-hackathon-winner"}
+                    src={
+                      helder ||
+                      "/placeholder.svg?height=240&width=400&query=gig-hackathon-winner"
+                    }
                     className="w-full h-[240px] object-cover sm:h-auto"
                     alt="Paid Internship"
                     loading="lazy"
@@ -403,9 +498,15 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Paid Internship</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Front-End Development</p>
-                    <p className="desc-light">{certificateDescriptions.helder}</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Paid Internship
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Front-End Development
+                    </p>
+                    <p className="desc-light">
+                      {certificateDescriptions.helder}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -421,8 +522,9 @@ const Portfolio = () => {
                   <img
                     src={
                       new2 ||
-                      "/placeholder.svg?height=260&width=400&query=event-organizer-recognition"
-                     || "/placeholder.svg"}
+                      "/placeholder.svg?height=260&width=400&query=event-organizer-recognition" ||
+                      "/placeholder.svg"
+                    }
                     className="w-full h-[260px] object-cover sm:h-auto"
                     alt="Event Organizer Recognition"
                     loading="lazy"
@@ -430,8 +532,12 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Event Organizer Recognition</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">organizing tech exhibition</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Event Organizer Recognition
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      organizing tech exhibition
+                    </p>
                     <p className="desc-light">{certificateDescriptions.new2}</p>
                   </div>
                 </div>
@@ -446,7 +552,10 @@ const Portfolio = () => {
               <div className="neon-card-light group">
                 <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
                   <img
-                    src={kuraz || "/placeholder.svg?height=210&width=400&query=hackathon-participation"}
+                    src={
+                      kuraz ||
+                      "/placeholder.svg?height=210&width=400&query=hackathon-participation"
+                    }
                     className="w-full h-[210px] object-cover sm:h-auto"
                     alt="Back-End Development Internship"
                     loading="lazy"
@@ -454,14 +563,19 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Back-End Development Internship</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Backend/PHP</p>
-                    <p className="desc-light">{certificateDescriptions.kuraz}</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Back-End Development Internship
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Backend/PHP
+                    </p>
+                    <p className="desc-light">
+                      {certificateDescriptions.kuraz}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-
 
             {/* new3 */}
             <div
@@ -471,7 +585,10 @@ const Portfolio = () => {
               <div className="neon-card-light group">
                 <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
                   <img
-                    src={new3 || "/placeholder.svg?height=210&width=400&query=hackathon-participation"}
+                    src={
+                      new3 ||
+                      "/placeholder.svg?height=210&width=400&query=hackathon-participation"
+                    }
                     className="w-full h-[210px] object-cover sm:h-auto"
                     alt="Participation Certificate"
                     loading="lazy"
@@ -479,8 +596,12 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Participation Certificate</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">hackathon participant</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Participation Certificate
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      hackathon participant
+                    </p>
                     <p className="desc-light">{certificateDescriptions.new3}</p>
                   </div>
                 </div>
@@ -496,7 +617,8 @@ const Portfolio = () => {
                 <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
                   <img
                     src={
-                      gcc || "/placeholder.svg?height=220&width=400&query=girls-can-code-certificate"
+                      gcc ||
+                      "/placeholder.svg?height=220&width=400&query=girls-can-code-certificate"
                     }
                     className="w-full h-[220px] object-contain sm:h-auto bg-white"
                     alt="Girls Can Code Certificate"
@@ -505,8 +627,12 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Certificate 1</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Girls Can Code</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Certificate 1
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Girls Can Code
+                    </p>
                     <p className="desc-light">{certificateDescriptions.gcc}</p>
                   </div>
                 </div>
@@ -522,7 +648,8 @@ const Portfolio = () => {
                 <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
                   <img
                     src={
-                      web || "/placeholder.svg?height=230&width=400&query=web-development-certificate"
+                      web ||
+                      "/placeholder.svg?height=230&width=400&query=web-development-certificate"
                     }
                     className="w-full h-[230px] object-cover sm:h-auto"
                     alt="Web Development Certificate"
@@ -531,8 +658,12 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Certificate 2</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Web Development</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Certificate 2
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Web Development
+                    </p>
                     <p className="desc-light">{certificateDescriptions.web}</p>
                   </div>
                 </div>
@@ -548,7 +679,8 @@ const Portfolio = () => {
                 <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
                   <img
                     src={
-                      mern || "/placeholder.svg?height=215&width=400&query=mern-stack-certificate"
+                      mern ||
+                      "/placeholder.svg?height=215&width=400&query=mern-stack-certificate"
                     }
                     className="w-full h-[215px] object-cover sm:h-auto"
                     alt="MERN Stack Intro"
@@ -557,8 +689,12 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Certificate 3</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">MERN Stack Intro</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Certificate 3
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      MERN Stack Intro
+                    </p>
                     <p className="desc-light">{certificateDescriptions.mern}</p>
                   </div>
                 </div>
@@ -573,7 +709,10 @@ const Portfolio = () => {
               <div className="neon-card-light group">
                 <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
                   <img
-                    src={prog || "/placeholder.svg?height=230&width=400&query=programming-certificate"}
+                    src={
+                      prog ||
+                      "/placeholder.svg?height=230&width=400&query=programming-certificate"
+                    }
                     className="w-full h-[230px] object-cover sm:h-auto"
                     alt="Programming Certificate"
                     loading="lazy"
@@ -581,8 +720,12 @@ const Portfolio = () => {
                   />
                   <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
                   <div className="card-overlay-light">
-                    <h4 className="text-lg md:text-xl font-bold">Certificate 4</h4>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Programming</p>
+                    <h4 className="text-lg md:text-xl font-bold">
+                      Certificate 4
+                    </h4>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Programming
+                    </p>
                     <p className="desc-light">{certificateDescriptions.prog}</p>
                   </div>
                 </div>
@@ -590,11 +733,13 @@ const Portfolio = () => {
             </div>
           </>
         )}
-
         {/* Projects (render only when needed) */}
         {showProjects &&
           projects.map((project, idx) => (
-            <div key={project.id} className="masonry-item inline-block w-full mb-6 break-inside-avoid">
+            <div
+              key={project.id}
+              className="masonry-item inline-block w-full mb-6 break-inside-avoid"
+            >
               <div className="neon-card-light group">
                 <div className="neon-inner-light tilt relative overflow-hidden">
                   <div className="w-full bg-white relative overflow-hidden">
@@ -613,11 +758,19 @@ const Portfolio = () => {
                     <button
                       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white bg-gradient-to-r from-fuchsia-500 to-teal-500 shadow-[0_0_30px_rgba(168,85,247,0.35)] group-hover:scale-105 transition-all"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        handleVideoPlay(project.id)
+                        e.stopPropagation();
+                        handleVideoPlay(project.id);
                       }}
-                      aria-label={playingVideo === project.id ? "Pause video" : "Play video"}
-                      title={playingVideo === project.id ? "Pause video" : "Play video"}
+                      aria-label={
+                        playingVideo === project.id
+                          ? "Pause video"
+                          : "Play video"
+                      }
+                      title={
+                        playingVideo === project.id
+                          ? "Pause video"
+                          : "Play video"
+                      }
                     >
                       {playingVideo === project.id ? <FaPause /> : <FaPlay />}
                     </button>
@@ -629,8 +782,12 @@ const Portfolio = () => {
                   </div>
 
                   <div className="p-5 md:p-6">
-                    <h3 className="text-xl font-semibold text-slate-900 mb-2">{project.title}</h3>
-                    <p className="text-slate-600 text-sm mb-4 line-clamp-3">{project.description}</p>
+                    <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-slate-600 text-sm mb-4 line-clamp-3">
+                      {project.description}
+                    </p>
 
                     <div className="flex flex-wrap gap-1.5 mb-5">
                       {project.technologies.split(", ").map((tech, index) => (
@@ -666,7 +823,6 @@ const Portfolio = () => {
               </div>
             </div>
           ))}
-
         {/* Venture CTA (render only when needed) */}
         {showVenture && (
           <div className="masonry-item inline-block w-full mb-6 break-inside-avoid">
@@ -676,7 +832,10 @@ const Portfolio = () => {
                 <h3 className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-fuchsia-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent">
                   For More Projects Check on my github profile
                 </h3>
-                <p className="mt-3 text-slate-600">Explore additional ventures, experiments, and works-in-progress.</p>
+                <p className="mt-3 text-slate-600">
+                  Explore additional ventures, experiments, and
+                  works-in-progress.
+                </p>
                 <a
                   href="https://github.com/HiwotBelay"
                   target="_blank"
@@ -690,7 +849,6 @@ const Portfolio = () => {
             </div>
           </div>
         )}
-
         {/* Lightbox */}
         {selectedImage && (
           <div
@@ -699,7 +857,10 @@ const Portfolio = () => {
           >
             <div className="w-full h-full flex items-center justify-center p-4">
               <img
-                src={selectedImage || "/placeholder.svg?height=800&width=1200&query=certificate-full"}
+                src={
+                  selectedImage ||
+                  "/placeholder.svg?height=800&width=1200&query=certificate-full"
+                }
                 className="max-w-[92%] max-h-[90%] object-contain object-center rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] border border-slate-200 bg-white"
                 alt="certificate"
                 loading="lazy"
@@ -715,7 +876,9 @@ const Portfolio = () => {
         className="w-[90%] max-w-4xl flex flex-wrap items-center gap-3 justify-center mt-10 py-6 px-6 rounded-xl border border-slate-200 bg-white/80 backdrop-blur shadow-[0_10px_30px_rgba(2,6,23,0.06)]"
         data-aos="zoom-in-up"
       >
-        <h3 className="text-slate-700">For More Projects Check on my github profile</h3>
+        <h3 className="text-slate-700">
+          For More Projects Check on my github profile
+        </h3>
         <a
           href="https://github.com/HiwotBelay"
           className="cursor-pointer text-base md:text-lg py-2 px-5 rounded-full bg-gradient-to-r from-fuchsia-500 to-teal-500 text-white font-semibold shadow-[0_0_28px_rgba(16,185,129,0.25)] hover:scale-[1.02] transition-transform"
@@ -723,7 +886,9 @@ const Portfolio = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="inline-flex items-center gap-2"><FaGithub /> GitHub</span>
+          <span className="inline-flex items-center gap-2">
+            <FaGithub /> GitHub
+          </span>
         </a>
       </div>
 
@@ -790,7 +955,7 @@ const Portfolio = () => {
         }
       `}</style>
     </section>
-  )
-}
+  );
+};
 
-export default Portfolio
+export default Portfolio;
