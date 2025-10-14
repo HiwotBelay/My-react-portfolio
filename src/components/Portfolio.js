@@ -24,6 +24,7 @@ import new2 from "./img/new2.jpg"
 import new3 from "./img/new3.jpg"
 import helder from "./img/helder.jpg"
 import kuraz from "./img/kuraz.jpg"
+import code from "./img/code.jpg"
 
 import petVideo from "./img/pet.mp4"
 import ecommerceVideo from "./img/ecommerce.mp4"
@@ -116,6 +117,7 @@ const Portfolio = () => {
         "This was my paid internship experience as a Front-End Developer. I had a chance to work on real client projects. I worked starting from UI/UX to developing and integration phase this has been amazing experience skill wise and other supportive skills career wise",
       kuraz:
         "It was Backend Development Internship. I had a role on doing real projects. I worked on PHP and MySQL database management. It was great experience and I learned a lot from it.",
+      code: "I have participated on DevQuest 2025, where me and my team had done a lot of real solving exam competitons.",
     }),
     [],
   )
@@ -217,10 +219,11 @@ const Portfolio = () => {
       { img: new2, title: "Event Organizer", subtitle: "Tech Exhibition", desc: certificateDescriptions.new2 },
       { img: kuraz, title: "Backend Internship", subtitle: "PHP/MySQL", desc: certificateDescriptions.kuraz },
       { img: new3, title: "Participation", subtitle: "Hackathon", desc: certificateDescriptions.new3 },
-      { img: gcc, title: "Girls Can Code", subtitle: "Programming", desc: certificateDescriptions.gcc },
       { img: web, title: "Web Development", subtitle: "HTML/CSS/JS", desc: certificateDescriptions.web },
+      { img: gcc, title: "Girls Can Code", subtitle: "Programming", desc: certificateDescriptions.gcc },
       { img: mern, title: "MERN Stack", subtitle: "Full-Stack", desc: certificateDescriptions.mern },
       { img: prog, title: "Programming", subtitle: "Algorithms", desc: certificateDescriptions.prog },
+      { img: code, title: "DevQuest 2025", subtitle: "Problem Solving", desc: certificateDescriptions.code },
     ],
     [certificateDescriptions],
   )
