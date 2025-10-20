@@ -25,6 +25,7 @@ import new3 from "./img/new3.jpg"
 import helder from "./img/helder.jpg"
 import kuraz from "./img/kuraz.jpg"
 import code from "./img/code.jpg"
+import ethioware from "./img/ethioware.png"
 
 import petVideo from "./img/pet.mp4"
 import ecommerceVideo from "./img/ecommerce.mp4"
@@ -114,10 +115,11 @@ const Portfolio = () => {
       new2: "I was recognized for my communication, planning, and leadership skills while organizing a major event at Bahir Dar University.",
       new3: "This highlights my active participation in my second hackathon competition, demonstrating both my technical growth and collaborative experience.",
       helder:
-        "This was my paid internship experience as a Front-End Developer. I had a chance to work on real client projects. I worked starting from UI/UX to developing and integration phase this has been amazing experience skill wise and other supportive skills career wise",
+        "This was my paid internship experience as a Front-End Developer. I had a chance to work on real client projects. I worked starting from UI/UX to developing and integration phase this has been amazing experience skill wise and other supportive skills career wise.",
       kuraz:
         "It was Backend Development Internship. I had a role on doing real projects. I worked on PHP and MySQL database management. It was great experience and I learned a lot from it.",
       code: "I have participated on DevQuest 2025, where me and my team had done a lot of real solving exam competitons.",
+      ethioware: "Recognition for successfully completing the Fullstack Development 3 Month internship program, I was my group team lead too and me as an individual and my team got 2 recognitions on the best top 10 performers. Had practical skills in software development and industry best practices.",
     }),
     [],
   )
@@ -217,6 +219,7 @@ const Portfolio = () => {
         desc: certificateDescriptions.helder,
       },
       { img: new2, title: "Event Organizer", subtitle: "Tech Exhibition", desc: certificateDescriptions.new2 },
+      { img: ethioware, title: "Fullstack Development", subtitle: "Internship Program", desc: certificateDescriptions.ethioware },
       { img: kuraz, title: "Backend Internship", subtitle: "PHP/MySQL", desc: certificateDescriptions.kuraz },
       { img: new3, title: "Participation", subtitle: "Hackathon", desc: certificateDescriptions.new3 },
       { img: web, title: "Web Development", subtitle: "HTML/CSS/JS", desc: certificateDescriptions.web },
