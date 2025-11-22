@@ -1,65 +1,41 @@
-"use client"
-import { useEffect, useState, useRef } from "react"
-import { FaAngleRight } from "react-icons/fa"
-import AOS from "aos"
-import "aos/dist/aos.css"
-import profileImage from "./img/profile-img.jpg"
+"use client";
+import { useEffect, useState, useRef } from "react";
+import { FaAngleRight } from "react-icons/fa";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import profileImage from "./img/profile-img.jpg";
 
 const About = () => {
-  const [isVisible, setIsVisible] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [mouseTrail, setMouseTrail] = useState([])
-  const progressRef = useRef(null)
-
-  // Mouse tracking effects - SAME AS HOME
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const newPosition = {
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1,
-        clientX: e.clientX,
-        clientY: e.clientY,
-        timestamp: Date.now(),
-      }
-
-      setMousePosition(newPosition)
-
-      setMouseTrail((prev) => {
-        const newTrail = [...prev, newPosition].slice(-8)
-        return newTrail.filter((pos) => Date.now() - pos.timestamp < 500)
-      })
-    }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
+  const [isVisible, setIsVisible] = useState(false);
+  const progressRef = useRef(null);
 
   useEffect(() => {
-    AOS.init()
+    AOS.init();
 
     const options = {
       root: null,
       rootMargin: "0px",
       threshold: 0.5,
-    }
+    };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
+          setIsVisible(true);
         }
-      })
-    }, options)
+      });
+    }, options);
 
     if (progressRef.current) {
-      observer.observe(progressRef.current)
+      observer.observe(progressRef.current);
     }
 
     return () => {
       if (progressRef.current) {
-        observer.unobserve(progressRef.current)
+        observer.unobserve(progressRef.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const skills = [
     { name: "React", percentage: 90, delay: 0 },
@@ -68,112 +44,59 @@ const About = () => {
     { name: "AI Integration", percentage: 85, delay: 300 },
     { name: "Tailwind CSS", percentage: 90, delay: 400 },
     { name: "Node.js & Express.js & PHP", percentage: 80, delay: 500 },
-  ]
+  ];
 
   return (
-    <section id="about" className="relative w-full overflow-hidden bg-white py-16">
+    <section
+      id="about"
+      className="relative w-full overflow-hidden bg-[#F5F5F0] py-16"
+    >
       {/* Background Effects - SAME AS HOME */}
       <div className="absolute inset-0 -z-10">
         <div className="aurora-light" />
-        <div className="dots" />
-        <div className="paper" />
       </div>
 
-      {/* Floating Code Particles - SAME AS HOME */}
-      <div className="floating-code-particles">
-        <div className="code-particle code-1">&lt;/&gt;</div>
-        <div className="code-particle code-2">{`{ }`}</div>
-        <div className="code-particle code-3">=&gt;</div>
-        <div className="code-particle code-4">const</div>
-        <div className="code-particle code-5">React</div>
-        <div className="code-particle code-6">[ ]</div>
-        <div className="code-particle code-7">npm</div>
-        <div className="code-particle code-8">git</div>
-        <div className="code-particle code-9">API</div>
-        <div className="code-particle code-10">CSS</div>
-        <div className="code-particle code-11">JS</div>
-        <div className="code-particle code-12">{`( )`}</div>
-        <div className="code-particle code-13">async</div>
-        <div className="code-particle code-14">await</div>
-        <div className="code-particle code-15">function</div>
+      {/* Fixed Creative Background */}
+      <div className="about-fixed-bg">
+        <div className="about-blob blob-1"></div>
+        <div className="about-blob blob-2"></div>
       </div>
-
-      {/* Mouse Trail - SAME AS HOME */}
-      <div className="mouse-trail-container">
-        {mouseTrail.map((pos, index) => (
-          <div
-            key={`${pos.timestamp}-${index}`}
-            className="mouse-trail-dot"
-            style={{
-              left: pos.clientX,
-              top: pos.clientY,
-              opacity: ((index + 1) / mouseTrail.length) * 0.6,
-              transform: `scale(${(index + 1) / mouseTrail.length})`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Floating Shapes - SAME AS HOME */}
-      <div className="floating-shapes">
-        <div className="shape shape-1"></div>
-        <div className="shape shape-2"></div>
-        <div className="shape shape-3"></div>
-        <div className="shape shape-4"></div>
-        <div className="shape shape-5"></div>
-        <div className="shape shape-6"></div>
-        <div className="shape shape-7"></div>
-        <div className="shape shape-8"></div>
-      </div>
-
-      {/* Animated Grid - SAME AS HOME */}
-      <div className="animated-grid"></div>
-
-      {/* Mouse Glow - SAME AS HOME */}
-      <div
-        className="absolute inset-0 z-10 opacity-50 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(circle at ${(mousePosition.x + 1) * 50}% ${(-mousePosition.y + 1) * 50}%, rgba(236,72,153,0.25) 0%, rgba(20,184,166,0.15) 20%, transparent 45%),
-            radial-gradient(circle at ${(mousePosition.x + 1) * 50 + 10}% ${(-mousePosition.y + 1) * 50 + 10}%, rgba(16,185,129,0.2) 0%, transparent 30%)
-          `,
-          transition: "background 0.2s ease-out",
-        }}
-      />
-
-      {/* Cursor Ripple - SAME AS HOME */}
-      <div
-        className="cursor-ripple"
-        style={{
-          left: mousePosition.clientX,
-          top: mousePosition.clientY,
-        }}
-      />
 
       {/* Main Content */}
       <div className="relative z-20 w-full flex flex-col items-center justify-center px-4">
         {/* Title Section */}
         <div className="w-full md:w-[65%] text-center py-5">
           <h1 className="text-4xl font-bold uppercase mb-5 pb-5 relative">
-            <span className="bg-gradient-to-r from-fuchsia-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent">
+            <span
+              className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent"
+              style={{ fontWeight: 900 }}
+            >
               About
             </span>
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[120px] h-[1px] bg-gray-300"></div>
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-gradient-to-r from-fuchsia-600 via-teal-500 to-emerald-600"></div>
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-gradient-to-r from-[#8B0000] to-[#111827]"></div>
           </h1>
           <p className="text-slate-600 leading-relaxed">
-            I'm a full-stack developer and software engineer with over 3 years of experience in building innovative and
-            user-focused digital solutions. I'm always eager to explore new technologies and deliver impactful projects
-            that bridge creativity and functionality. With a strong foundation in programming, problem-solving, and the
-            technical nuances of the development process, I can adapt to various frameworks and tools to meet project
-            requirements! This portfolio showcases some of my latest projects.
+            I'm a full-stack developer and software engineer with over 3 years
+            of experience in building innovative and user-focused digital
+            solutions. I'm always eager to explore new technologies and deliver
+            impactful projects that bridge creativity and functionality. With a
+            strong foundation in programming, problem-solving, and the technical
+            nuances of the development process, I can adapt to various
+            frameworks and tools to meet project requirements! This portfolio
+            showcases some of my latest projects.
           </p>
         </div>
 
         {/* Content Section */}
         <div className="w-full md:w-[65%] flex flex-col md:flex-row gap-12 py-12">
           {/* Profile Image with Card Effect */}
-          <div className="portfolio-card-wrapper" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
+          <div
+            className="portfolio-card-wrapper"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="300"
+          >
             <div className="portfolio-card-inner">
               <img
                 src={profileImage || "/placeholder.svg"}
@@ -194,9 +117,11 @@ const About = () => {
               Software Engineer | Full-Stack Developer
             </h2>
             <p className="text-slate-600 leading-relaxed">
-              As a full-stack developer and software engineer, I possess a diverse range of technical skills that enable
-              me to deliver exceptional solutions. I thrive on the challenges presented by the fast-evolving tech
-              landscape and continuously strive for innovation and excellence in every project I undertake.
+              As a full-stack developer and software engineer, I possess a
+              diverse range of technical skills that enable me to deliver
+              exceptional solutions. I thrive on the challenges presented by the
+              fast-evolving tech landscape and continuously strive for
+              innovation and excellence in every project I undertake.
             </p>
 
             {/* Info List with Card Effects */}
@@ -204,27 +129,31 @@ const About = () => {
               <li className="flex items-start gap-2 text-slate-700">
                 <FaAngleRight className="text-slate-500 mt-1 flex-shrink-0" />
                 <span>
-                  <strong className="text-slate-600">Email:</strong> hiwotbelay060@gmail.com
+                  <strong className="text-slate-600">Email:</strong>{" "}
+                  hiwotbelay060@gmail.com
                 </span>
               </li>
               <li className="flex items-start gap-2 text-slate-700">
                 <FaAngleRight className="text-slate-500 mt-1 flex-shrink-0" />
                 <span>
-                  <strong className="text-slate-600">Phone:</strong> +251 946561519
+                  <strong className="text-slate-600">Phone:</strong> +251
+                  946561519
                 </span>
               </li>
               <li className="flex items-start gap-2 text-slate-700">
                 <FaAngleRight className="text-slate-500 mt-1 flex-shrink-0" />
                 <span>
-                  <strong className="text-slate-600">Address:</strong> Bahir Dar, Ethiopia
+                  <strong className="text-slate-600">Address:</strong> Bahir
+                  Dar, Ethiopia
                 </span>
               </li>
             </ul>
 
             <p className="text-slate-600 leading-relaxed mt-4">
-              I truly appreciate you visiting my portfolio. I'm excited to collaborate with you and turn your unique
-              ideas into extraordinary results. Reach out through the contact details provided, and let's create
-              something remarkable together!
+              I truly appreciate you visiting my portfolio. I'm excited to
+              collaborate with you and turn your unique ideas into extraordinary
+              results. Reach out through the contact details provided, and let's
+              create something remarkable together!
             </p>
           </div>
         </div>
@@ -236,21 +165,28 @@ const About = () => {
           {/* Skills Title */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold uppercase mb-5 pb-5 relative">
-              <span className="bg-gradient-to-r from-fuchsia-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent">
+              <span
+                className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent"
+                style={{ fontWeight: 900 }}
+              >
                 Skills
               </span>
               <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[120px] h-[1px] bg-gray-300"></div>
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-gradient-to-r from-fuchsia-600 via-teal-500 to-emerald-600"></div>
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-gradient-to-r from-[#8B0000] to-[#111827]"></div>
             </h1>
             <p className="text-slate-600 leading-relaxed max-w-4xl mx-auto">
-              As a full-stack developer, I bring a broad set of technical skills that allow me to deliver high-quality
-              web applications. I embrace the challenges of the fast-paced tech industry and consistently strive to
-              improve and innovate in every project I work on.
+              As a full-stack developer, I bring a broad set of technical skills
+              that allow me to deliver high-quality web applications. I embrace
+              the challenges of the fast-paced tech industry and consistently
+              strive to improve and innovate in every project I work on.
             </p>
           </div>
 
           {/* Skills Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16" ref={progressRef}>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16"
+            ref={progressRef}
+          >
             {skills.map((skill, index) => (
               <div key={skill.name} className="skill-item">
                 <div className="flex justify-between mb-2">
@@ -262,7 +198,7 @@ const About = () => {
                     className="h-full rounded-full transition-all duration-1000 ease-out"
                     style={{
                       width: isVisible ? `${skill.percentage}%` : "0%",
-                      background: "linear-gradient(90deg, #ec4899, #14b8a6, #10b981)",
+                      background: "linear-gradient(90deg, #8B0000, #111827)",
                       transitionDelay: `${skill.delay}ms`,
                     }}
                   />
@@ -279,40 +215,30 @@ const About = () => {
         .aurora-light {
           position: absolute;
           inset: -15%;
-          background: radial-gradient(60% 40% at 20% 30%, rgba(236, 72, 153, 0.1), transparent 60%),
-            radial-gradient(50% 35% at 80% 20%, rgba(20, 184, 166, 0.1), transparent 60%),
-            radial-gradient(45% 30% at 60% 70%, rgba(34, 197, 94, 0.1), transparent 60%),
-            radial-gradient(60% 40% at 20% 80%, rgba(59, 130, 246, 0.06), transparent 60%);
+          background: radial-gradient(
+              60% 40% at 20% 30%,
+              rgba(139, 0, 0, 0.25),
+              transparent 60%
+            ),
+            radial-gradient(
+              50% 35% at 80% 20%,
+              rgba(17, 24, 39, 0.25),
+              transparent 60%
+            ),
+            radial-gradient(
+              45% 30% at 60% 70%,
+              rgba(139, 0, 0, 0.2),
+              transparent 60%
+            ),
+            radial-gradient(
+              60% 40% at 20% 80%,
+              rgba(139, 0, 0, 0.15),
+              transparent 60%
+            );
           filter: blur(30px) saturate(110%);
-          animation: auroraFloatLight 18s ease-in-out infinite alternate;
-        }
-
-        @keyframes auroraFloatLight {
-          0% {
-            transform: translateY(-1.5%) translateX(-1%) scale(1);
-          }
-          100% {
-            transform: translateY(1.5%) translateX(1%) scale(1.03);
-          }
         }
 
         /* Dots - SAME AS HOME */
-        .dots {
-          position: absolute;
-          inset: 0;
-          background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
-          background-size: 16px 16px;
-          mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.4), transparent 85%);
-        }
-
-        /* Paper - SAME AS HOME */
-        .paper {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
-          mix-blend-mode: multiply;
-        }
 
         /* Floating Code Particles - SAME AS HOME */
         .floating-code-particles {
@@ -328,7 +254,7 @@ const About = () => {
           font-family: "Courier New", monospace;
           font-weight: bold;
           font-size: 14px;
-          background: linear-gradient(45deg, #ec4899, #14b8a6, #10b981);
+          background: linear-gradient(45deg, #8b0000, #111827);
           background-clip: text;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -340,7 +266,7 @@ const About = () => {
         .code-particle:hover {
           transform: scale(1.5) rotate(10deg) !important;
           opacity: 1 !important;
-          filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.5));
+          filter: drop-shadow(0 0 20px rgba(139, 0, 0, 0.5));
         }
 
         .code-1 {
@@ -621,23 +547,45 @@ const About = () => {
         }
 
         /* Animated Grid - SAME AS HOME */
-        .animated-grid {
+
+        /* Fixed Creative Background */
+        .about-fixed-bg {
           position: absolute;
           inset: 0;
-          background-image: linear-gradient(rgba(236, 72, 153, 0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(20, 184, 166, 0.08) 1px, transparent 1px);
-          background-size: 50px 50px;
-          animation: gridMove 30s linear infinite;
           z-index: 1;
+          pointer-events: none;
+          overflow: hidden;
         }
 
-        @keyframes gridMove {
-          0% {
-            transform: translate(0, 0);
-          }
-          100% {
-            transform: translate(50px, 50px);
-          }
+        .about-blob {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(70px);
+          opacity: 0.35;
+        }
+
+        .blob-1 {
+          width: 500px;
+          height: 500px;
+          background: radial-gradient(
+            circle,
+            rgba(139, 0, 0, 0.35),
+            transparent 70%
+          );
+          top: 10%;
+          right: 10%;
+        }
+
+        .blob-2 {
+          width: 450px;
+          height: 450px;
+          background: radial-gradient(
+            circle,
+            rgba(17, 24, 39, 0.35),
+            transparent 70%
+          );
+          bottom: 15%;
+          left: 12%;
         }
 
         /* Portfolio Card Effect - MATCHING HOME CARDS */
@@ -647,66 +595,35 @@ const About = () => {
           padding: 1px;
           background: conic-gradient(
             from 180deg at 50% 50%,
-            rgba(236, 72, 153, 0.6),
-            rgba(20, 184, 166, 0.6),
-            rgba(16, 185, 129, 0.6),
-            rgba(236, 72, 153, 0.6)
+            rgba(139, 0, 0, 0.9),
+            rgba(17, 24, 39, 0.9),
+            rgba(139, 0, 0, 0.9),
+            rgba(17, 24, 39, 0.9)
           );
           transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
         .portfolio-card-wrapper:hover {
-          box-shadow: 0 12px 26px rgba(2, 6, 23, 0.08), 0 0 40px rgba(20, 184, 166, 0.16);
+          box-shadow: 0 12px 26px rgba(2, 6, 23, 0.08),
+            0 0 40px rgba(20, 184, 166, 0.16);
           transform: translateY(-2px);
         }
 
         .portfolio-card-inner {
           border-radius: 17px;
-          background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.94));
+          background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.96),
+            rgba(255, 255, 255, 0.94)
+          );
           border: 1px solid rgba(2, 6, 23, 0.06);
-          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 10px 20px rgba(2, 6, 23, 0.05);
+          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
+            0 10px 20px rgba(2, 6, 23, 0.05);
           overflow: hidden;
-        }
-
-        /* Additional Floating Shapes Effects */
-        .floating-shapes::before {
-          content: "";
-          position: absolute;
-          top: 15%;
-          right: 10%;
-          width: 300px;
-          height: 300px;
-          background: radial-gradient(circle, rgba(236, 72, 153, 0.06) 0%, transparent 70%);
-          border-radius: 50%;
-          animation: pulse 8s ease-in-out infinite;
-        }
-
-        .floating-shapes::after {
-          content: "";
-          position: absolute;
-          bottom: 20%;
-          right: 15%;
-          width: 250px;
-          height: 250px;
-          background: radial-gradient(circle, rgba(20, 184, 166, 0.06) 0%, transparent 70%);
-          border-radius: 50%;
-          animation: pulse 10s ease-in-out infinite reverse;
-        }
-
-        @keyframes pulse {
-          0%,
-          100% {
-            transform: scale(1);
-            opacity: 0.06;
-          }
-          50% {
-            transform: scale(1.1);
-            opacity: 0.12;
-          }
         }
       `}</style>
     </section>
-  )
-}
+  );
+};
 
-export default About
+export default About;

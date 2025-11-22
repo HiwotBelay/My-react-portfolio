@@ -1,62 +1,203 @@
-"use client"
-import { useState, useEffect, useRef } from "react"
-import { Github, Send, Linkedin, Download, X, Menu } from "lucide-react"
-import { ReactTyped } from "react-typed"
+"use client";
+import { useState, useEffect, useRef } from "react";
+import {
+  Github,
+  Send,
+  Linkedin,
+  Download,
+  X,
+  Menu,
+  Play,
+  Terminal,
+} from "lucide-react";
+import { ReactTyped } from "react-typed";
+import {
+  SiReact,
+  SiNodedotjs,
+  SiPhp,
+  SiNextdotjs,
+  SiPostgresql,
+} from "react-icons/si";
+
+// Code Editor Component
+const CodeEditor = () => {
+  const [currentCodeIndex, setCurrentCodeIndex] = useState(0);
+  const [displayedCode, setDisplayedCode] = useState("");
+  const [output, setOutput] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const typingTimeoutRef = useRef(null);
+  const executeTimeoutRef = useRef(null);
+
+  const codeExamples = [
+    {
+      code: `// React Component\nconst Portfolio = () => {\n  return (\n    <div className="app">\n      <h1>Hiwot Belay</h1>\n      <p>Full-Stack Developer</p>\n    </div>\n  );\n};`,
+      output:
+        "✓ Component rendered successfully\n✓ React 18.2.0\n✓ Build completed in 2.3s",
+      icon: <SiReact className="code-icon" />,
+      language: "javascript",
+    },
+    {
+      code: `// Node.js API Server\nconst express = require('express');\nconst app = express();\n\napp.get('/api/portfolio', (req, res) => {\n  res.json({ \n    name: 'Hiwot Belay',\n    role: 'Full-Stack Developer'\n  });\n});\n\napp.listen(3000);`,
+      output:
+        "✓ Server started on port 3000\n✓ Express 4.18.2\n✓ API endpoint ready",
+      icon: <SiNodedotjs className="code-icon" />,
+      language: "javascript",
+    },
+    {
+      code: `// Next.js Page\nimport { useState } from 'react';\n\nexport default function Home() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Portfolio</h1>\n      <button onClick={() => setCount(count + 1)}>\n        Count: {count}\n      </button>\n    </div>\n  );\n}`,
+      output: "✓ Next.js 14.0.0\n✓ Page compiled successfully\n✓ Ready in 1.8s",
+      icon: <SiNextdotjs className="code-icon" />,
+      language: "javascript",
+    },
+    {
+      code: `<?php\n// PHP Backend\nclass Portfolio {\n  public function getInfo() {\n    return [\n      'name' => 'Hiwot Belay',\n      'skills' => ['PHP', 'MySQL', 'Laravel']\n    ];\n  }\n}\n\n$portfolio = new Portfolio();\necho json_encode($portfolio->getInfo());\n?>`,
+      output: "✓ PHP 8.2.0\n✓ Script executed\n✓ JSON response generated",
+      icon: <SiPhp className="code-icon" />,
+      language: "php",
+    },
+    {
+      code: `-- PostgreSQL Query\nSELECT \n  name,\n  role,\n  skills\nFROM developers\nWHERE name = 'Hiwot Belay';\n\n-- Result:\n-- name: Hiwot Belay\n-- role: Full-Stack Developer\n-- skills: [React, Node.js, PHP, Next.js]`,
+      output: "✓ PostgreSQL 15.0\n✓ Query executed\n✓ 1 row returned",
+      icon: <SiPostgresql className="code-icon" />,
+      language: "sql",
+    },
+  ];
+
+  useEffect(() => {
+    const currentExample = codeExamples[currentCodeIndex];
+    let charIndex = 0;
+    setIsTyping(true);
+    setDisplayedCode("");
+    setOutput("");
+
+    const typeCode = () => {
+      if (charIndex < currentExample.code.length) {
+        setDisplayedCode(currentExample.code.slice(0, charIndex + 1));
+        charIndex++;
+        typingTimeoutRef.current = setTimeout(typeCode, 30);
+      } else {
+        setIsTyping(false);
+        setIsExecuting(true);
+        // Show output after typing completes
+        executeTimeoutRef.current = setTimeout(() => {
+          setOutput(currentExample.output);
+          setIsExecuting(false);
+          // Move to next example after showing output
+          setTimeout(() => {
+            setCurrentCodeIndex((prev) => (prev + 1) % codeExamples.length);
+          }, 3000);
+        }, 500);
+      }
+    };
+
+    typeCode();
+
+    return () => {
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+      if (executeTimeoutRef.current) clearTimeout(executeTimeoutRef.current);
+    };
+  }, [currentCodeIndex]);
+
+  const currentExample = codeExamples[currentCodeIndex];
+
+  return (
+    <div className="code-editor-container">
+      {/* Framework Icons Badge */}
+      <div className="framework-badges">
+        {codeExamples.map((example, index) => (
+          <div
+            key={index}
+            className={`framework-badge ${
+              index === currentCodeIndex ? "active" : ""
+            }`}
+          >
+            {example.icon}
+          </div>
+        ))}
+      </div>
+
+      {/* Code Editor Window */}
+      <div className="code-editor-window">
+        {/* Editor Header */}
+        <div className="editor-header">
+          <div className="editor-dots">
+            <span className="dot dot-red"></span>
+            <span className="dot dot-yellow"></span>
+            <span className="dot dot-green"></span>
+          </div>
+          <div className="editor-title">
+            <Terminal className="editor-icon" />
+            <span>portfolio.{currentExample.language}</span>
+          </div>
+          <div className="editor-status">
+            {isTyping ? (
+              <span className="status-typing">Typing...</span>
+            ) : isExecuting ? (
+              <span className="status-executing">
+                <Play className="play-icon" /> Executing...
+              </span>
+            ) : (
+              <span className="status-ready">✓ Ready</span>
+            )}
+          </div>
+        </div>
+
+        {/* Code Content */}
+        <div className="editor-content">
+          <pre className="code-block">
+            <code className={`language-${currentExample.language}`}>
+              {displayedCode}
+              {isTyping && <span className="cursor">|</span>}
+            </code>
+          </pre>
+        </div>
+
+        {/* Output Terminal */}
+        {output && (
+          <div className="editor-output">
+            <div className="output-header">
+              <span>Output</span>
+            </div>
+            <div className="output-content">
+              <pre>{output}</pre>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const Home = () => {
-  const [menu, toggleMenu] = useState(false)
-  const headerRef = useRef(null)
-  const [isMobile, setIsMobile] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [mouseTrail, setMouseTrail] = useState([])
-
-  // Track mouse position for interactive effects
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const newPosition = {
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1,
-        clientX: e.clientX,
-        clientY: e.clientY,
-        timestamp: Date.now(),
-      }
-
-      setMousePosition(newPosition)
-
-      // Create mouse trail effect
-      setMouseTrail((prev) => {
-        const newTrail = [...prev, newPosition].slice(-8) // Keep last 8 positions
-        return newTrail.filter((pos) => Date.now() - pos.timestamp < 500) // Remove old positions
-      })
-    }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
+  const [menu, toggleMenu] = useState(false);
+  const headerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Check if screen is mobile size
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 991)
-    }
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
+      setIsMobile(window.innerWidth <= 991);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (headerRef.current && !headerRef.current.contains(event.target)) {
-        toggleMenu(false)
+        toggleMenu(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function handleNavLinkClick() {
-    toggleMenu(false)
+    toggleMenu(false);
   }
 
   return (
@@ -70,155 +211,46 @@ const Home = () => {
         </div>
       )}
 
-      <section className="hero relative overflow-hidden flex items-center justify-start min-h-screen" id="home">
-        {/* Special Creative Background Surprise */}
-        <div className="absolute inset-0 -z-10 bg-white" />
+      <section
+        className="hero relative overflow-hidden flex items-center min-h-screen"
+        id="home"
+      >
+        {/* Simple Background */}
+        <div className="absolute inset-0 -z-10 bg-[#F5F5F0]" />
 
-        {/* 🎉 SURPRISE! Interactive Floating Code Particles */}
-        <div className="floating-code-particles">
-          <div className="code-particle code-1" data-code="&lt;/&gt;">
-            &lt;/&gt;
-          </div>
-          <div className="code-particle code-2" data-code="{ }">{`{ }`}</div>
-          <div className="code-particle code-3" data-code="=&gt;">
-            =&gt;
-          </div>
-          <div className="code-particle code-4" data-code="const">
-            const
-          </div>
-          <div className="code-particle code-5" data-code="React">
-            React
-          </div>
-          <div className="code-particle code-6" data-code="[ ]">
-            [ ]
-          </div>
-          <div className="code-particle code-7" data-code="npm">
-            npm
-          </div>
-          <div className="code-particle code-8" data-code="git">
-            git
-          </div>
-          <div className="code-particle code-9" data-code="API">
-            API
-          </div>
-          <div className="code-particle code-10" data-code="CSS">
-            CSS
-          </div>
-          <div className="code-particle code-11" data-code="JS">
-            JS
-          </div>
-          <div className="code-particle code-12" data-code="( )">{`( )`}</div>
-          <div className="code-particle code-13" data-code="async">
-            async
-          </div>
-          <div className="code-particle code-14" data-code="await">
-            await
-          </div>
-          <div className="code-particle code-15" data-code="function">
-            function
-          </div>
-        </div>
-
-        {/* Enhanced Mouse Trail Effect */}
-        <div className="mouse-trail-container">
-          {mouseTrail.map((pos, index) => (
-            <div
-              key={`${pos.timestamp}-${index}`}
-              className="mouse-trail-dot"
-              style={{
-                left: pos.clientX,
-                top: pos.clientY,
-                opacity: ((index + 1) / mouseTrail.length) * 0.6,
-                transform: `scale(${(index + 1) / mouseTrail.length})`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Floating Geometric Shapes */}
-        <div className="floating-shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-          <div className="shape shape-4"></div>
-          <div className="shape shape-5"></div>
-          <div className="shape shape-6"></div>
-          <div className="shape shape-7"></div>
-          <div className="shape shape-8"></div>
-        </div>
-
-        {/* Animated Grid Pattern */}
-        <div className="animated-grid"></div>
-
-        {/* Portfolio-style Aurora and Effects */}
-        <div className="aurora-light -z-10" aria-hidden="true" />
-        <div className="dots -z-10" aria-hidden="true" />
-        <div className="paper -z-10" aria-hidden="true" />
-
-        {/* ENHANCED Interactive Mouse Glow */}
+        {/* Name Section - Independent, Close to Navbar */}
         <div
-          className="absolute inset-0 z-10 opacity-50"
-          style={{
-            background: `
-              radial-gradient(circle at ${(mousePosition.x + 1) * 50}% ${(-mousePosition.y + 1) * 50}%, rgba(236,72,153,0.25) 0%, rgba(20,184,166,0.15) 20%, transparent 45%),
-              radial-gradient(circle at ${(mousePosition.x + 1) * 50 + 10}% ${(-mousePosition.y + 1) * 50 + 10}%, rgba(16,185,129,0.2) 0%, transparent 30%)
-            `,
-            transition: "background 0.2s ease-out",
-          }}
-        />
-
-        {/* Cursor Ripple Effect */}
-        <div
-          className="cursor-ripple"
-          style={{
-            left: mousePosition.clientX,
-            top: mousePosition.clientY,
-          }}
-        />
-
-        {/* Main Content - EXACT same positioning as original */}
-        <div className="container relative z-20 text-left p-4 md:p-8 pl-2 md:pl-4">
-          <h1
-            className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight"
-            style={{
-              textShadow: "0 0 15px rgba(0, 0, 0, 0.1), 0 0 30px rgba(236,72,153,0.1)",
-              transform: `translateX(${mousePosition.x * 10}px) translateY(${mousePosition.y * 5}px)`,
-              transition: "transform 0.3s ease-out",
-            }}
-          >
-            <span className="bg-gradient-to-r from-fuchsia-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent">
+          className="home-name-section relative md:absolute left-0 md:top-1/2 md:-translate-y-1/2 z-20 text-left px-4 md:px-0"
+          style={{ marginLeft: "435px" }}
+        >
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight whitespace-nowrap">
+            <span
+              className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent"
+              style={{ fontWeight: 900 }}
+            >
               Hiwot Belay
             </span>
           </h1>
 
-          <p
-            className="text-xl md:text-3xl font-medium mb-8 text-slate-700"
-            style={{
-              transform: `translateX(${mousePosition.x * 5}px)`,
-              transition: "transform 0.3s ease-out",
-            }}
-          >
+          <p className="text-xl md:text-3xl font-medium mb-8 text-slate-700">
             I'm{" "}
-            <span className="relative inline-block">
+            <span className="relative inline-block brand-color-text">
               <ReactTyped
-                strings={["Software Engineer", "Full-Stack Developer", "Accountant"]}
+                strings={[
+                  "Software Engineer",
+                  "Full-Stack Developer",
+                  "Accountant",
+                ]}
                 typeSpeed={100}
                 backSpeed={50}
                 backDelay={2000}
                 loop
               />
-              <div className="absolute -inset-1 bg-gradient-to-r from-fuchsia-200 via-teal-200 to-emerald-200 rounded blur opacity-70 animate-pulse"></div>
             </span>
           </p>
 
-          {/* Social Icons - EXACT same positioning */}
-          <div
-            className="social relative z-30 flex justify-start gap-4 mb-12"
-            style={{
-              transform: `translateY(${mousePosition.y * 3}px)`,
-              transition: "transform 0.3s ease-out",
-            }}
-          >
+          {/* Social Icons */}
+          <div className="social relative z-30 flex justify-start gap-4 mb-12">
             <a
               href="https://github.com/HiwotBelay"
               target="_blank"
@@ -262,9 +294,21 @@ const Home = () => {
           </div>
         </div>
 
+        {/* Interactive Code Editor - Independent, Right Side */}
+        <div
+          className="home-code-section relative md:absolute right-0 md:top-1/2 md:-translate-y-1/2 z-20 px-4 md:px-0 mt-8 md:mt-0 flex items-center justify-center"
+          style={{ marginRight: "clamp(20px, 3vw, 60px)" }}
+        >
+          <CodeEditor />
+        </div>
+
         {/* CV Download Button - EXACT same positioning */}
         <div className="cv-download absolute top-4 right-4 z-30">
-          <a href="/Hiwot_Belay CV.pdf" download className="portfolio-cv-button group">
+          <a
+            href="/Hiwot_Belay CV.pdf"
+            download
+            className="portfolio-cv-button group"
+          >
             <div className="portfolio-cv-inner">
               <Download className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-0.5" />
               <span>Get My CV</span>
@@ -275,272 +319,316 @@ const Home = () => {
         {/* Styles */}
         <style jsx>{`
           /* Portfolio Aurora Light Effect - EXACT MATCH */
-          .aurora-light {
-            position: absolute;
-            inset: -15%;
-            background: radial-gradient(60% 40% at 20% 30%, rgba(236, 72, 153, 0.1), transparent 60%),
-              radial-gradient(50% 35% at 80% 20%, rgba(20, 184, 166, 0.1), transparent 60%),
-              radial-gradient(45% 30% at 60% 70%, rgba(34, 197, 94, 0.1), transparent 60%),
-              radial-gradient(60% 40% at 20% 80%, rgba(59, 130, 246, 0.06), transparent 60%);
-            filter: blur(30px) saturate(110%);
-            animation: auroraFloatLight 18s ease-in-out infinite alternate;
-          }
 
-          @keyframes auroraFloatLight {
-            0% { transform: translateY(-1.5%) translateX(-1%) scale(1); }
-            100% { transform: translateY(1.5%) translateX(1%) scale(1.03); }
-          }
+          /* Fixed Creative Background */
 
-          /* Portfolio Dots - EXACT MATCH */
-          .dots {
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
-            background-size: 16px 16px;
-            mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.4), transparent 85%);
-          }
-
-          /* Portfolio Paper - EXACT MATCH */
-          .paper {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
-            mix-blend-mode: multiply;
-          }
-
-          /* 🎉 SURPRISE! Interactive Floating Code Particles */
-          .floating-code-particles {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            z-index: 2;
-            pointer-events: none;
-          }
-
-          .code-particle {
-            position: absolute;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            font-size: 14px;
-            color: transparent;
-            background: linear-gradient(45deg, #ec4899, #14b8a6, #10b981);
-            background-clip: text;
+          /* Brand Color Text */
+          .brand-color-text {
+            background: linear-gradient(135deg, #8b0000, #111827);
             -webkit-background-clip: text;
-            opacity: 0.6;
-            animation: floatCode 15s ease-in-out infinite;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+          }
+
+          /* Interactive Code Editor */
+          .code-editor-container {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          /* Framework Badges */
+          .framework-badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+          }
+
+          .framework-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(139, 0, 0, 0.2);
             transition: all 0.3s ease;
-            cursor: default;
+            cursor: pointer;
           }
 
-          .code-particle:hover {
-            transform: scale(1.5) rotate(10deg) !important;
-            opacity: 1 !important;
-            text-shadow: 0 0 20px rgba(236,72,153,0.5);
+          .framework-badge.active {
+            background: linear-gradient(135deg, #8b0000, #111827);
+            border-color: #8b0000;
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(139, 0, 0, 0.4);
           }
 
-          /* Individual code particle positions and animations */
-          .code-1 { top: 10%; right: 15%; animation-delay: 0s; animation-duration: 20s; }
-          .code-2 { top: 25%; right: 8%; animation-delay: -2s; animation-duration: 18s; }
-          .code-3 { top: 40%; right: 20%; animation-delay: -4s; animation-duration: 22s; }
-          .code-4 { top: 55%; right: 12%; animation-delay: -6s; animation-duration: 16s; }
-          .code-5 { top: 70%; right: 25%; animation-delay: -8s; animation-duration: 24s; }
-          .code-6 { top: 15%; right: 35%; animation-delay: -1s; animation-duration: 19s; }
-          .code-7 { top: 35%; right: 30%; animation-delay: -3s; animation-duration: 21s; }
-          .code-8 { top: 50%; right: 5%; animation-delay: -5s; animation-duration: 17s; }
-          .code-9 { top: 65%; right: 18%; animation-delay: -7s; animation-duration: 23s; }
-          .code-10 { top: 80%; right: 10%; animation-delay: -9s; animation-duration: 15s; }
-          .code-11 { top: 20%; right: 40%; animation-delay: -1.5s; animation-duration: 25s; }
-          .code-12 { top: 45%; right: 35%; animation-delay: -3.5s; animation-duration: 20s; }
-          .code-13 { top: 60%; right: 40%; animation-delay: -5.5s; animation-duration: 18s; }
-          .code-14 { top: 75%; right: 35%; animation-delay: -7.5s; animation-duration: 22s; }
-          .code-15 { top: 30%; right: 45%; animation-delay: -9.5s; animation-duration: 16s; }
-
-          @keyframes floatCode {
-            0%, 100% { 
-              transform: translateY(0px) translateX(0px) rotate(0deg); 
-              opacity: 0.6; 
-            }
-            25% { 
-              transform: translateY(-15px) translateX(-8px) rotate(5deg); 
-              opacity: 0.8; 
-            }
-            50% { 
-              transform: translateY(-8px) translateX(12px) rotate(-3deg); 
-              opacity: 0.7; 
-            }
-            75% { 
-              transform: translateY(-20px) translateX(-5px) rotate(8deg); 
-              opacity: 0.9; 
-            }
+          .framework-badge:hover {
+            transform: scale(1.1);
+            border-color: #8b0000;
           }
 
-          /* Enhanced Mouse Trail Effect */
-          .mouse-trail-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 15;
+          .code-icon {
+            width: 28px;
+            height: 28px;
+            color: #111827;
+            transition: color 0.3s ease;
           }
 
-          .mouse-trail-dot {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(45deg, #ec4899, #14b8a6);
+          .framework-badge.active .code-icon {
+            color: #f5f5f0;
+          }
+
+          /* Code Editor Window */
+          .code-editor-window {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
+              0 0 0 1px rgba(139, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+          }
+
+          .code-editor-window:hover {
+            box-shadow: 0 25px 70px rgba(139, 0, 0, 0.25),
+              0 0 0 1px rgba(139, 0, 0, 0.3);
+          }
+
+          /* Editor Header */
+          .editor-header {
+            background: linear-gradient(135deg, #8b0000, #111827);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(139, 0, 0, 0.3);
+            flex-shrink: 0;
+          }
+
+          .editor-dots {
+            display: flex;
+            gap: 6px;
+          }
+
+          .dot {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            transform-origin: center;
-            animation: trailFade 0.5s ease-out forwards;
-            margin: -4px 0 0 -4px;
           }
 
-          @keyframes trailFade {
-            0% { opacity: 0.8; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.3); }
+          .dot-red {
+            background: #ff5f56;
           }
 
-          /* Cursor Ripple Effect */
-          .cursor-ripple {
-            position: fixed;
-            width: 25px;
-            height: 25px;
-            border: 2px solid rgba(236,72,153,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 16;
-            animation: ripple 1.5s ease-out infinite;
+          .dot-yellow {
+            background: #ffbd2e;
           }
 
-          @keyframes ripple {
-            0% {
-              transform: translate(-50%, -50%) scale(0.5);
+          .dot-green {
+            background: #27c93f;
+          }
+
+          .editor-title {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #f5f5f0;
+            font-size: 14px;
+            font-weight: 600;
+          }
+
+          .editor-icon {
+            width: 16px;
+            height: 16px;
+          }
+
+          .editor-status {
+            font-size: 12px;
+            font-weight: 500;
+          }
+
+          .status-typing {
+            color: #f5f5f0;
+            animation: blink 1s infinite;
+          }
+
+          .status-executing {
+            color: #8b0000;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+
+          .play-icon {
+            width: 12px;
+            height: 12px;
+          }
+
+          .status-ready {
+            color: #8b0000;
+          }
+
+          @keyframes blink {
+            0%,
+            100% {
               opacity: 1;
             }
+            50% {
+              opacity: 0.5;
+            }
+          }
+
+          /* Editor Content */
+          .editor-content {
+            background: rgba(245, 245, 240, 0.8);
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+          }
+
+          .code-block {
+            margin: 0;
+            font-family: "Courier New", "Monaco", "Menlo", monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #111827;
+          }
+
+          .code-block code {
+            color: inherit;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+          }
+
+          /* Cursor */
+          .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 18px;
+            background: #8b0000;
+            margin-left: 2px;
+            animation: cursorBlink 1s infinite;
+            vertical-align: middle;
+          }
+
+          @keyframes cursorBlink {
+            0%,
+            50% {
+              opacity: 1;
+            }
+            51%,
             100% {
-              transform: translate(-50%, -50%) scale(2);
               opacity: 0;
             }
           }
 
-          /* SPECIAL CREATIVE BACKGROUND SURPRISE */
-          .floating-shapes {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            z-index: 1;
+          /* Output Terminal */
+          .editor-output {
+            background: rgba(245, 245, 240, 0.9);
+            border-top: 1px solid rgba(139, 0, 0, 0.2);
+            padding: 16px 20px;
+            animation: slideUp 0.3s ease;
+            flex-shrink: 0;
           }
 
-          .shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.12;
-            animation: float 20s ease-in-out infinite;
+          @keyframes slideUp {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
 
-          .shape-1 {
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(45deg, #ec4899, #14b8a6);
-            top: 10%;
-            left: 80%;
-            animation-delay: 0s;
-            animation-duration: 25s;
+          .output-header {
+            color: #111827;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
           }
 
-          .shape-2 {
-            width: 150px;
-            height: 150px;
-            background: linear-gradient(135deg, #14b8a6, #10b981);
-            top: 60%;
-            left: 85%;
-            animation-delay: -5s;
-            animation-duration: 30s;
+          .output-content {
+            font-family: "Courier New", "Monaco", "Menlo", monospace;
+            font-size: 12px;
+            color: #8b0000;
+            line-height: 1.8;
           }
 
-          .shape-3 {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(225deg, #10b981, #ec4899);
-            top: 20%;
-            left: 70%;
-            animation-delay: -10s;
-            animation-duration: 20s;
+          .output-content pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
           }
 
-          .shape-4 {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(315deg, #ec4899, #14b8a6);
-            top: 80%;
-            left: 75%;
-            animation-delay: -15s;
-            animation-duration: 35s;
-          }
+          /* Responsive Design */
+          @media (max-width: 768px) {
+            .code-editor-container {
+              max-width: 100%;
+              padding: 0 10px;
+            }
 
-          .shape-5 {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(45deg, #14b8a6, #10b981);
-            top: 40%;
-            left: 90%;
-            animation-delay: -8s;
-            animation-duration: 22s;
-          }
+            .code-editor-window {
+              height: 400px;
+            }
 
-          .shape-6 {
-            width: 180px;
-            height: 180px;
-            background: linear-gradient(135deg, #10b981, #ec4899);
-            top: 5%;
-            left: 60%;
-            animation-delay: -12s;
-            animation-duration: 28s;
-          }
+            .editor-content {
+              padding: 16px;
+            }
 
-          .shape-7 {
-            width: 90px;
-            height: 90px;
-            background: linear-gradient(225deg, #ec4899, #14b8a6);
-            top: 70%;
-            left: 95%;
-            animation-delay: -3s;
-            animation-duration: 24s;
-          }
+            .code-block {
+              font-size: 11px;
+            }
 
-          .shape-8 {
-            width: 110px;
-            height: 110px;
-            background: linear-gradient(315deg, #14b8a6, #10b981);
-            top: 30%;
-            left: 65%;
-            animation-delay: -18s;
-            animation-duration: 32s;
-          }
+            .framework-badge {
+              width: 40px;
+              height: 40px;
+            }
 
-          @keyframes float {
-            0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
-            25% { transform: translateY(-20px) translateX(-10px) rotate(90deg); }
-            50% { transform: translateY(-10px) translateX(10px) rotate(180deg); }
-            75% { transform: translateY(-30px) translateX(-5px) rotate(270deg); }
-          }
+            .code-icon {
+              width: 22px;
+              height: 22px;
+            }
 
-          /* Animated Grid Pattern */
-          .animated-grid {
-            position: absolute;
-            inset: 0;
-            background-image: 
-              linear-gradient(rgba(236,72,153,0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(20,184,166,0.08) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 30s linear infinite;
-            z-index: 1;
-          }
+            /* Name Section Mobile */
+            .home-name-section {
+              position: relative !important;
+              margin-left: 0 !important;
+              margin-top: 2rem;
+              margin-bottom: 2rem;
+              text-align: center;
+            }
 
-          @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
+            .home-name-section h1 {
+              font-size: 2.5rem !important;
+              white-space: normal !important;
+            }
+
+            .home-name-section p {
+              font-size: 1.25rem !important;
+            }
+
+            /* Code Section Mobile */
+            .home-code-section {
+              position: relative !important;
+              margin-left: 0 !important;
+              margin-top: 1rem;
+              margin-bottom: 2rem;
+            }
           }
 
           /* Portfolio Social Icons - EXACT MATCH */
@@ -548,22 +636,34 @@ const Home = () => {
             position: relative;
             border-radius: 18px;
             padding: 1px;
-            background: conic-gradient(from 180deg at 50% 50%, rgba(236,72,153,0.6), rgba(20,184,166,0.6), rgba(16,185,129,0.6), rgba(236,72,153,0.6));
-            transition: box-shadow .25s ease, transform .25s ease;
+            background: conic-gradient(
+              from 180deg at 50% 50%,
+              rgba(139, 0, 0, 0.9),
+              rgba(17, 24, 39, 0.9),
+              rgba(139, 0, 0, 0.9),
+              rgba(17, 24, 39, 0.9)
+            );
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
             text-decoration: none;
             display: block;
           }
 
           .portfolio-social-icon:hover {
-            box-shadow: 0 12px 26px rgba(2,6,23,0.08), 0 0 40px rgba(20,184,166,0.16);
+            box-shadow: 0 12px 26px rgba(2, 6, 23, 0.08),
+              0 0 40px rgba(139, 0, 0, 0.16);
             transform: translateY(-8px) scale(1.1);
           }
 
           .portfolio-social-inner {
             border-radius: 17px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.94));
-            border: 1px solid rgba(2,6,23,0.06);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 10px 20px rgba(2,6,23,0.05);
+            background: linear-gradient(
+              180deg,
+              rgba(255, 255, 255, 0.96),
+              rgba(255, 255, 255, 0.94)
+            );
+            border: 1px solid rgba(2, 6, 23, 0.06);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
+              0 10px 20px rgba(2, 6, 23, 0.05);
             padding: 12px;
             color: #475569;
             transition: color 0.3s ease;
@@ -578,23 +678,35 @@ const Home = () => {
             position: relative;
             border-radius: 50px;
             padding: 1px;
-            background: conic-gradient(from 180deg at 50% 50%, rgba(236,72,153,0.6), rgba(20,184,166,0.6), rgba(16,185,129,0.6), rgba(236,72,153,0.6));
-            transition: box-shadow .25s ease, transform .25s ease;
+            background: conic-gradient(
+              from 180deg at 50% 50%,
+              rgba(139, 0, 0, 0.9),
+              rgba(17, 24, 39, 0.9),
+              rgba(139, 0, 0, 0.9),
+              rgba(17, 24, 39, 0.9)
+            );
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
           }
 
           .portfolio-cv-button:hover {
-            box-shadow: 0 12px 26px rgba(2,6,23,0.08), 0 0 40px rgba(20,184,166,0.16);
+            box-shadow: 0 12px 26px rgba(2, 6, 23, 0.08),
+              0 0 40px rgba(139, 0, 0, 0.16);
             transform: translateY(-5px) scale(1.05);
           }
 
           .portfolio-cv-inner {
             border-radius: 49px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.94));
-            border: 1px solid rgba(2,6,23,0.06);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 10px 20px rgba(2,6,23,0.05);
+            background: linear-gradient(
+              180deg,
+              rgba(255, 255, 255, 0.96),
+              rgba(255, 255, 255, 0.94)
+            );
+            border: 1px solid rgba(2, 6, 23, 0.06);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
+              0 10px 20px rgba(2, 6, 23, 0.05);
             padding: 12px 24px;
             color: #334155;
             font-weight: 600;
@@ -602,40 +714,10 @@ const Home = () => {
             align-items: center;
             gap: 8px;
           }
-
-          /* Additional Creative Elements */
-          .floating-shapes::before {
-            content: '';
-            position: absolute;
-            top: 15%;
-            right: 10%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(236,72,153,0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: pulse 8s ease-in-out infinite;
-          }
-
-          .floating-shapes::after {
-            content: '';
-            position: absolute;
-            bottom: 20%;
-            right: 15%;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(20,184,166,0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: pulse 10s ease-in-out infinite reverse;
-          }
-
-          @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.06; }
-            50% { transform: scale(1.1); opacity: 0.12; }
-          }
         `}</style>
       </section>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
