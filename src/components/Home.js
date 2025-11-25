@@ -322,7 +322,7 @@ const Home = () => {
 
           /* Brand Color Text */
           .brand-color-text {
-            color: #8b0000;
+            color: #111827;
             font-weight: 700;
           }
 
