@@ -67,14 +67,9 @@ const About = () => {
         {/* Title Section */}
         <div className="w-full md:w-[65%] text-center py-5">
           <h1 className="text-4xl font-bold uppercase mb-5 pb-5 relative">
-            <span
-              className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent"
-              style={{ fontWeight: 900 }}
-            >
-              About
-            </span>
+            <span style={{ fontWeight: 900, color: "#8B0000" }}>About</span>
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[120px] h-[1px] bg-gray-300"></div>
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-gradient-to-r from-[#8B0000] to-[#111827]"></div>
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-[#8B0000]"></div>
           </h1>
           <p className="text-slate-600 leading-relaxed">
             I'm a full-stack developer and software engineer with over 3 years
@@ -165,14 +160,9 @@ const About = () => {
           {/* Skills Title */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold uppercase mb-5 pb-5 relative">
-              <span
-                className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent"
-                style={{ fontWeight: 900 }}
-              >
-                Skills
-              </span>
+              <span style={{ color: "#8B0000", fontWeight: 900 }}>Skills</span>
               <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[120px] h-[1px] bg-gray-300"></div>
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-gradient-to-r from-[#8B0000] to-[#111827]"></div>
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-[#8B0000]"></div>
             </h1>
             <p className="text-slate-600 leading-relaxed max-w-4xl mx-auto">
               As a full-stack developer, I bring a broad set of technical skills
@@ -198,7 +188,7 @@ const About = () => {
                     className="h-full rounded-full transition-all duration-1000 ease-out"
                     style={{
                       width: isVisible ? `${skill.percentage}%` : "0%",
-                      background: "linear-gradient(90deg, #8B0000, #111827)",
+                      background: "#8B0000",
                       transitionDelay: `${skill.delay}ms`,
                     }}
                   />
@@ -215,26 +205,7 @@ const About = () => {
         .aurora-light {
           position: absolute;
           inset: -15%;
-          background: radial-gradient(
-              60% 40% at 20% 30%,
-              rgba(139, 0, 0, 0.25),
-              transparent 60%
-            ),
-            radial-gradient(
-              50% 35% at 80% 20%,
-              rgba(17, 24, 39, 0.25),
-              transparent 60%
-            ),
-            radial-gradient(
-              45% 30% at 60% 70%,
-              rgba(139, 0, 0, 0.2),
-              transparent 60%
-            ),
-            radial-gradient(
-              60% 40% at 20% 80%,
-              rgba(139, 0, 0, 0.15),
-              transparent 60%
-            );
+          background: transparent;
           filter: blur(30px) saturate(110%);
         }
 
@@ -254,10 +225,7 @@ const About = () => {
           font-family: "Courier New", monospace;
           font-weight: bold;
           font-size: 14px;
-          background: linear-gradient(45deg, #8b0000, #111827);
-          background-clip: text;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          color: #8b0000;
           opacity: 0.6;
           animation: floatCode 15s ease-in-out infinite;
           transition: all 0.3s ease;
@@ -393,7 +361,7 @@ const About = () => {
           position: absolute;
           width: 8px;
           height: 8px;
-          background: linear-gradient(45deg, #ec4899, #14b8a6);
+          background: #8b0000;
           border-radius: 50%;
           transform-origin: center;
           animation: trailFade 0.5s ease-out forwards;
@@ -453,7 +421,7 @@ const About = () => {
         .shape-1 {
           width: 200px;
           height: 200px;
-          background: linear-gradient(45deg, #ec4899, #14b8a6);
+          background: #8b0000;
           top: 10%;
           left: 80%;
           animation-delay: 0s;
@@ -463,7 +431,7 @@ const About = () => {
         .shape-2 {
           width: 150px;
           height: 150px;
-          background: linear-gradient(135deg, #14b8a6, #10b981);
+          background: #111827;
           top: 60%;
           left: 85%;
           animation-delay: -5s;
@@ -473,7 +441,7 @@ const About = () => {
         .shape-3 {
           width: 100px;
           height: 100px;
-          background: linear-gradient(225deg, #10b981, #ec4899);
+          background: #8b0000;
           top: 20%;
           left: 70%;
           animation-delay: -10s;
@@ -483,7 +451,7 @@ const About = () => {
         .shape-4 {
           width: 120px;
           height: 120px;
-          background: linear-gradient(315deg, #ec4899, #14b8a6);
+          background: #111827;
           top: 80%;
           left: 75%;
           animation-delay: -15s;
@@ -493,7 +461,7 @@ const About = () => {
         .shape-5 {
           width: 80px;
           height: 80px;
-          background: linear-gradient(45deg, #14b8a6, #10b981);
+          background: #8b0000;
           top: 40%;
           left: 90%;
           animation-delay: -8s;
@@ -503,7 +471,7 @@ const About = () => {
         .shape-6 {
           width: 180px;
           height: 180px;
-          background: linear-gradient(135deg, #10b981, #ec4899);
+          background: #111827;
           top: 5%;
           left: 60%;
           animation-delay: -12s;
@@ -513,7 +481,7 @@ const About = () => {
         .shape-7 {
           width: 90px;
           height: 90px;
-          background: linear-gradient(225deg, #ec4899, #14b8a6);
+          background: #8b0000;
           top: 70%;
           left: 95%;
           animation-delay: -3s;
@@ -523,7 +491,7 @@ const About = () => {
         .shape-8 {
           width: 110px;
           height: 110px;
-          background: linear-gradient(315deg, #14b8a6, #10b981);
+          background: #111827;
           top: 30%;
           left: 65%;
           animation-delay: -18s;
@@ -567,11 +535,8 @@ const About = () => {
         .blob-1 {
           width: 500px;
           height: 500px;
-          background: radial-gradient(
-            circle,
-            rgba(139, 0, 0, 0.35),
-            transparent 70%
-          );
+          background: rgba(139, 0, 0, 0.35);
+          border-radius: 50%;
           top: 10%;
           right: 10%;
         }
@@ -579,11 +544,8 @@ const About = () => {
         .blob-2 {
           width: 450px;
           height: 450px;
-          background: radial-gradient(
-            circle,
-            rgba(17, 24, 39, 0.35),
-            transparent 70%
-          );
+          background: rgba(17, 24, 39, 0.35);
+          border-radius: 50%;
           bottom: 15%;
           left: 12%;
         }
@@ -593,13 +555,7 @@ const About = () => {
           position: relative;
           border-radius: 18px;
           padding: 1px;
-          background: conic-gradient(
-            from 180deg at 50% 50%,
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9),
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9)
-          );
+          background: #8b0000;
           transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
@@ -611,11 +567,7 @@ const About = () => {
 
         .portfolio-card-inner {
           border-radius: 17px;
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.96),
-            rgba(255, 255, 255, 0.94)
-          );
+          background: rgba(255, 255, 255, 0.96);
           border: 1px solid rgba(2, 6, 23, 0.06);
           box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
             0 10px 20px rgba(2, 6, 23, 0.05);

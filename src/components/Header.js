@@ -59,7 +59,7 @@ const Header = () => {
         } ${toggleMenu ? "active" : ""}`}
         onClick={handleToggle}
         style={{
-          background: "linear-gradient(135deg, #8B0000, #111827)",
+          background: "#8B0000",
           color: "white",
         }}
       >
@@ -158,13 +158,7 @@ const Header = () => {
           position: relative;
           border-radius: 50px;
           padding: 1px;
-          background: conic-gradient(
-            from 180deg at 50% 50%,
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9),
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9)
-          );
+          background: #8b0000;
           transition: box-shadow 0.25s ease, transform 0.25s ease;
           display: inline-block;
         }
@@ -178,7 +172,7 @@ const Header = () => {
         /* HOVER state - expands with text (like your original hover) */
         .portfolio-nav-link:hover {
           width: 150px !important;
-          background: linear-gradient(135deg, #8b0000, #111827) !important;
+          background: #8b0000 !important;
           color: white !important;
         }
 
@@ -189,7 +183,7 @@ const Header = () => {
         /* ACTIVE STATE - Just colored circle, same size (like your screenshots) */
         .portfolio-nav-active {
           width: 56px !important; /* Keep same size as normal */
-          background: linear-gradient(135deg, #8b0000, #111827) !important;
+          background: #8b0000 !important;
           color: white !important;
         }
 
@@ -200,13 +194,7 @@ const Header = () => {
         /* Enhanced border for active state */
         .portfolio-nav-border:has(.portfolio-nav-active) {
           border-radius: 50px;
-          background: conic-gradient(
-            from 180deg at 50% 50%,
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9),
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9)
-          ) !important;
+          background: #8b0000 !important;
           box-shadow: 0 8px 20px rgba(2, 6, 23, 0.08),
             0 0 30px rgba(139, 0, 0, 0.2) !important;
         }

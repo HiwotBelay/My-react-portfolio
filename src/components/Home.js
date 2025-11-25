@@ -17,6 +17,7 @@ import {
   SiPhp,
   SiNextdotjs,
   SiPostgresql,
+  SiLeetcode,
 } from "react-icons/si";
 
 // Code Editor Component
@@ -224,10 +225,7 @@ const Home = () => {
           style={{ marginLeft: "435px" }}
         >
           <h1 className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight whitespace-nowrap">
-            <span
-              className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent"
-              style={{ fontWeight: 900 }}
-            >
+            <span style={{ fontWeight: 900, color: "#8B0000" }}>
               Hiwot Belay
             </span>
           </h1>
@@ -262,13 +260,13 @@ const Home = () => {
               </div>
             </a>
             <a
-              href="https://x.com/belay_hiwo38480"
+              href="https://leetcode.com/u/Hiwot_Belay/"
               target="_blank"
               rel="noopener noreferrer"
               className="portfolio-social-icon group"
             >
               <div className="portfolio-social-inner">
-                <X className="h-6 w-6" />
+                <SiLeetcode className="h-6 w-6" />
               </div>
             </a>
             <a
@@ -324,10 +322,7 @@ const Home = () => {
 
           /* Brand Color Text */
           .brand-color-text {
-            background: linear-gradient(135deg, #8b0000, #111827);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #8b0000;
             font-weight: 700;
           }
 
@@ -363,7 +358,7 @@ const Home = () => {
           }
 
           .framework-badge.active {
-            background: linear-gradient(135deg, #8b0000, #111827);
+            background: #8b0000;
             border-color: #8b0000;
             transform: scale(1.15);
             box-shadow: 0 8px 25px rgba(139, 0, 0, 0.4);
@@ -405,7 +400,7 @@ const Home = () => {
 
           /* Editor Header */
           .editor-header {
-            background: linear-gradient(135deg, #8b0000, #111827);
+            background: #8b0000;
             padding: 12px 16px;
             display: flex;
             align-items: center;
@@ -636,13 +631,7 @@ const Home = () => {
             position: relative;
             border-radius: 18px;
             padding: 1px;
-            background: conic-gradient(
-              from 180deg at 50% 50%,
-              rgba(139, 0, 0, 0.9),
-              rgba(17, 24, 39, 0.9),
-              rgba(139, 0, 0, 0.9),
-              rgba(17, 24, 39, 0.9)
-            );
+            background: #8b0000;
             transition: box-shadow 0.25s ease, transform 0.25s ease;
             text-decoration: none;
             display: block;
@@ -656,11 +645,7 @@ const Home = () => {
 
           .portfolio-social-inner {
             border-radius: 17px;
-            background: linear-gradient(
-              180deg,
-              rgba(255, 255, 255, 0.96),
-              rgba(255, 255, 255, 0.94)
-            );
+            background: rgba(255, 255, 255, 0.96);
             border: 1px solid rgba(2, 6, 23, 0.06);
             box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
               0 10px 20px rgba(2, 6, 23, 0.05);
@@ -678,13 +663,7 @@ const Home = () => {
             position: relative;
             border-radius: 50px;
             padding: 1px;
-            background: conic-gradient(
-              from 180deg at 50% 50%,
-              rgba(139, 0, 0, 0.9),
-              rgba(17, 24, 39, 0.9),
-              rgba(139, 0, 0, 0.9),
-              rgba(17, 24, 39, 0.9)
-            );
+            background: #8b0000;
             transition: box-shadow 0.25s ease, transform 0.25s ease;
             text-decoration: none;
             display: inline-flex;
@@ -699,11 +678,7 @@ const Home = () => {
 
           .portfolio-cv-inner {
             border-radius: 49px;
-            background: linear-gradient(
-              180deg,
-              rgba(255, 255, 255, 0.96),
-              rgba(255, 255, 255, 0.94)
-            );
+            background: rgba(255, 255, 255, 0.96);
             border: 1px solid rgba(2, 6, 23, 0.06);
             box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
               0 10px 20px rgba(2, 6, 23, 0.05);

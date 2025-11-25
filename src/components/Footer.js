@@ -48,11 +48,7 @@ const Footer = () => {
       <div
         className="absolute inset-0 z-0 opacity-30 pointer-events-none"
         style={{
-          background: `radial-gradient(circle at ${
-            (mousePosition.x + 1) * 50
-          }% ${
-            (-mousePosition.y + 1) * 50
-          }%, rgba(139,0,0,0.15) 0%, rgba(17,24,39,0.1) 20%, transparent 40%)`,
+          background: `transparent`,
           transition: "background 0.3s ease-out",
         }}
       />
@@ -63,18 +59,16 @@ const Footer = () => {
           {/* Left: Brand & Copyright */}
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
             <h2 className="text-xl md:text-2xl font-bold">
-              <span className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent">
-                Hiwot Belay
-              </span>
+              <span style={{ color: "#8B0000" }}>Hiwot Belay</span>
             </h2>
-            <div className="hidden md:block w-[2px] h-8 bg-gradient-to-b from-[#8B0000] to-[#111827] rounded-full" />
+            <div className="hidden md:block w-[2px] h-8 bg-[#8B0000] rounded-full" />
             <div className="text-center md:text-left">
               <p className="text-slate-500 text-sm">
                 © {currentYear} All Rights Reserved
               </p>
               <p className="text-slate-600 text-xs">
                 Designed by{" "}
-                <span className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent font-semibold">
+                <span style={{ color: "#8B0000" }} className="font-semibold">
                   Hiwot Belay
                 </span>
               </p>
@@ -121,7 +115,7 @@ const Footer = () => {
       <style jsx>{`
         /* Footer Border Gradient */
         .footer-border-gradient {
-          border-image: linear-gradient(to right, #8b0000, #111827) 1;
+          border-top-color: #8b0000;
         }
 
         /* Card Styles - CONSISTENT */
@@ -129,13 +123,7 @@ const Footer = () => {
           position: relative;
           border-radius: 12px;
           padding: 1px;
-          background: conic-gradient(
-            from 180deg at 50% 50%,
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9),
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9)
-          );
+          background: #8b0000;
           transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
@@ -147,11 +135,7 @@ const Footer = () => {
 
         .neon-inner-light {
           border-radius: 11px;
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.96),
-            rgba(255, 255, 255, 0.94)
-          );
+          background: rgba(255, 255, 255, 0.96);
           border: 1px solid rgba(2, 6, 23, 0.06);
           box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
             0 4px 10px rgba(2, 6, 23, 0.05);
@@ -196,7 +180,7 @@ const Footer = () => {
           left: 0;
           width: 0;
           height: 2px;
-          background: linear-gradient(90deg, #8b0000, #111827);
+          background: #8b0000;
           transition: width 0.25s ease;
         }
 

@@ -27,10 +27,7 @@ const Contact = () => {
               {/* Contact Info */}
               <div className="flex-1 w-full">
                 <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-                  <span
-                    className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent"
-                    style={{ fontWeight: 900 }}
-                  >
+                  <span style={{ fontWeight: 900, color: "#8B0000" }}>
                     Get in Touch
                   </span>
                 </h2>
@@ -121,23 +118,7 @@ const Contact = () => {
         .aurora-light {
           position: absolute;
           inset: -15%;
-          background: radial-gradient(
-              60% 40% at 20% 30%,
-              rgba(139, 0, 0, 0.25),
-              transparent 60%
-            ),
-            radial-gradient(
-              50% 35% at 80% 20%,
-              rgba(17, 24, 39, 0.25),
-              transparent 60%
-            ),
-            radial-gradient(
-              45% 30% at 60% 70%,
-              rgba(139, 0, 0, 0.2),
-              transparent 60%
-            ),
-            radial-gradient(
-              60% 40% at 20% 80%,
+          background: transparent;
               rgba(139, 0, 0, 0.15),
               transparent 60%
             );
@@ -158,10 +139,7 @@ const Contact = () => {
           font-family: "Courier New", monospace;
           font-weight: bold;
           font-size: 14px;
-          background: linear-gradient(45deg, #8b0000, #111827);
-          background-clip: text;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          color: #8b0000;
           opacity: 0.6;
           animation: floatCode 15s ease-in-out infinite;
           transition: all 0.3s ease;
@@ -297,7 +275,7 @@ const Contact = () => {
           position: absolute;
           width: 8px;
           height: 8px;
-          background: linear-gradient(45deg, #8b0000, #111827);
+          background: #8b0000;
           border-radius: 50%;
           animation: trailFade 0.5s ease-out forwards;
           margin: -4px 0 0 -4px;
@@ -356,7 +334,7 @@ const Contact = () => {
         .shape-1 {
           width: 200px;
           height: 200px;
-          background: linear-gradient(45deg, #8b0000, #111827);
+          background: #8b0000;
           top: 10%;
           left: 80%;
           animation-delay: 0s;
@@ -365,7 +343,7 @@ const Contact = () => {
         .shape-2 {
           width: 150px;
           height: 150px;
-          background: linear-gradient(135deg, #14b8a6, #10b981);
+          background: #111827;
           top: 60%;
           left: 85%;
           animation-delay: -5s;
@@ -374,7 +352,7 @@ const Contact = () => {
         .shape-3 {
           width: 100px;
           height: 100px;
-          background: linear-gradient(225deg, #10b981, #ec4899);
+          background: #111827;
           top: 20%;
           left: 70%;
           animation-delay: -10s;
@@ -383,7 +361,7 @@ const Contact = () => {
         .shape-4 {
           width: 120px;
           height: 120px;
-          background: linear-gradient(315deg, #ec4899, #14b8a6);
+          background: #8b0000;
           top: 80%;
           left: 75%;
           animation-delay: -15s;
@@ -392,7 +370,7 @@ const Contact = () => {
         .shape-5 {
           width: 80px;
           height: 80px;
-          background: linear-gradient(45deg, #14b8a6, #10b981);
+          background: #111827;
           top: 40%;
           left: 90%;
           animation-delay: -8s;
@@ -401,7 +379,7 @@ const Contact = () => {
         .shape-6 {
           width: 180px;
           height: 180px;
-          background: linear-gradient(135deg, #10b981, #ec4899);
+          background: #8b0000;
           top: 5%;
           left: 60%;
           animation-delay: -12s;
@@ -410,7 +388,7 @@ const Contact = () => {
         .shape-7 {
           width: 90px;
           height: 90px;
-          background: linear-gradient(225deg, #ec4899, #14b8a6);
+          background: #111827;
           top: 70%;
           left: 95%;
           animation-delay: -3s;
@@ -419,7 +397,7 @@ const Contact = () => {
         .shape-8 {
           width: 110px;
           height: 110px;
-          background: linear-gradient(315deg, #14b8a6, #10b981);
+          background: #8b0000;
           top: 30%;
           left: 65%;
           animation-delay: -18s;
@@ -463,11 +441,8 @@ const Contact = () => {
         .blob-1 {
           width: 550px;
           height: 550px;
-          background: radial-gradient(
-            circle,
-            rgba(139, 0, 0, 0.35),
-            transparent 70%
-          );
+          background: rgba(139, 0, 0, 0.35);
+          border-radius: 50%;
           top: -15%;
           right: -8%;
         }
@@ -475,11 +450,8 @@ const Contact = () => {
         .blob-2 {
           width: 480px;
           height: 480px;
-          background: radial-gradient(
-            circle,
-            rgba(17, 24, 39, 0.35),
-            transparent 70%
-          );
+          background: rgba(17, 24, 39, 0.35);
+          border-radius: 50%;
           bottom: -12%;
           left: -10%;
         }
@@ -489,13 +461,7 @@ const Contact = () => {
           position: relative;
           border-radius: 18px;
           padding: 1px;
-          background: conic-gradient(
-            from 180deg at 50% 50%,
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9),
-            rgba(139, 0, 0, 0.9),
-            rgba(17, 24, 39, 0.9)
-          );
+          background: #8b0000;
           transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
@@ -507,11 +473,7 @@ const Contact = () => {
 
         .neon-inner-light {
           border-radius: 17px;
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.96),
-            rgba(255, 255, 255, 0.94)
-          );
+          background: rgba(255, 255, 255, 0.96);
           border: 1px solid rgba(2, 6, 23, 0.06);
           box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
             0 10px 20px rgba(2, 6, 23, 0.05);
@@ -592,7 +554,7 @@ const Contact = () => {
           gap: 0.5rem;
           padding: 0.75rem 1.5rem;
           border-radius: 9999px;
-          background: linear-gradient(135deg, #8b0000, #111827);
+          background: #8b0000;
           box-shadow: 0 12px 30px rgba(139, 0, 0, 0.3),
             0 0 40px rgba(17, 24, 39, 0.2);
           color: white;

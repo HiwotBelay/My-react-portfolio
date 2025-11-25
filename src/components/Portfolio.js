@@ -40,6 +40,7 @@ const Portfolio = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [playingVideo, setPlayingVideo] = useState(null);
   const [allViewTab, setAllViewTab] = useState("awards"); // NEW: for "all" filter creative view
+  const [experienceTab, setExperienceTab] = useState("frontend"); // NEW: for experience tabs
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mouseTrail, setMouseTrail] = useState([]);
 
@@ -412,7 +413,7 @@ const Portfolio = () => {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/35 to-white/0" />
             <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
             <button
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white bg-gradient-to-r from-[#8B0000] to-[#111827] shadow-[0_0_30px_rgba(139,0,0,0.4)] group-hover:scale-105 transition-all"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white bg-[#8B0000] shadow-[0_0_30px_rgba(139,0,0,0.4)] group-hover:scale-105 transition-all"
               onClick={(e) => {
                 e.stopPropagation();
                 handleVideoPlay(project.id);
@@ -486,11 +487,9 @@ const Portfolio = () => {
         {/* Heading */}
         <div className="w-full md:w-[65%] text-center py-5">
           <h1 className="text-4xl font-bold uppercase mb-5 pb-5 relative">
-            <span className="bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent">
-              Experience
-            </span>
+            <span style={{ color: "#8B0000" }}>Experience</span>
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[120px] h-[1px] bg-gray-300"></div>
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-gradient-to-r from-[#8B0000] to-[#111827]"></div>
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[40px] h-[3px] bg-[#8B0000]"></div>
           </h1>
           <p
             className="text-slate-600 leading-relaxed"
@@ -507,120 +506,136 @@ const Portfolio = () => {
           </p>
         </div>
 
-        {/* Work Experience Section - Clean Simple Layout */}
-        <div className="experience-clean-container w-full max-w-4xl mx-auto my-12 px-4">
-          {/* Ethioware */}
-          <div
-            className="experience-clean-card"
-            data-aos="fade-up"
-            data-aos-duration="600"
-          >
-            <h3 className="company-name">
-              <a
-                href="https://ethioware.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="company-link"
+        {/* Work Experience Section - Tabbed Interface */}
+        <div className="experience-tabbed-container w-full max-w-4xl mx-auto my-12 px-4">
+          {/* Experience Tabs */}
+          <div className="experience-tabs-wrapper mb-8" data-aos="fade-up">
+            <div className="experience-tabs">
+              <button
+                className={`experience-tab ${
+                  experienceTab === "frontend" ? "active" : ""
+                }`}
+                onClick={() => setExperienceTab("frontend")}
               >
-                Ethioware - EdTech Initiative
-              </a>
-            </h3>
-            <p className="role-title">
-              Fullstack Developer Intern and Team Lead
-            </p>
-            <p className="experience-works">
-              3 Months Internship Program - Team Lead - Top 10 Performers
-              Recognition
-            </p>
-            <div className="experience-images">
+                <span className="tab-label">Frontend Experience</span>
+                <span className="tab-badge">1</span>
+              </button>
+              <button
+                className={`experience-tab ${
+                  experienceTab === "fullstack" ? "active" : ""
+                }`}
+                onClick={() => setExperienceTab("fullstack")}
+              >
+                <span className="tab-label">
+                  Backend and Fullstack Experience
+                </span>
+                <span className="tab-badge">2</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Experience Cards - Filtered by Tab */}
+          <div className="experience-cards-container">
+            {/* Frontend Experiences */}
+            {experienceTab === "frontend" && (
               <div
-                className="experience-image-wrapper"
-                onClick={() => setSelectedImage("/ethioware1.png")}
+                className="experience-clean-card"
+                data-aos="fade-up"
+                data-aos-duration="600"
               >
-                <img
-                  src="/ethioware1.png"
-                  alt="Ethioware Experience 1"
-                  className="experience-image"
-                />
+                <h3 className="company-name">Helder</h3>
+                <p className="role-title">
+                  Front-End Developer (Paid Internship)
+                </p>
+                <p className="experience-works">
+                  Real Client Projects - UI/UX Design - Development &
+                  Integration
+                </p>
+                <div className="experience-images">
+                  <div className="experience-image-placeholder">
+                    <span>Image 1</span>
+                  </div>
+                  <div className="experience-image-placeholder">
+                    <span>Image 2</span>
+                  </div>
+                </div>
               </div>
-              <div
-                className="experience-image-wrapper"
-                onClick={() => setSelectedImage("/ethioware2.png")}
-              >
-                <img
-                  src="/ethioware2.png"
-                  alt="Ethioware Experience 2"
-                  className="experience-image"
-                />
-              </div>
-            </div>
-          </div>
+            )}
 
-          {/* Helder */}
-          <div
-            className="experience-clean-card"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="100"
-          >
-            <h3 className="company-name">Helder</h3>
-            <p className="role-title">Front-End Developer (Paid Internship)</p>
-            <p className="experience-works">
-              Real Client Projects - UI/UX Design - Development & Integration
-            </p>
-            <div className="experience-images">
-              <div className="experience-image-placeholder">
-                <span>Image 1</span>
-              </div>
-              <div className="experience-image-placeholder">
-                <span>Image 2</span>
-              </div>
-            </div>
-          </div>
+            {/* Backend and Fullstack Experiences */}
+            {experienceTab === "fullstack" && (
+              <>
+                {/* Ethioware */}
+                <div
+                  className="experience-clean-card"
+                  data-aos="fade-up"
+                  data-aos-duration="600"
+                >
+                  <h3 className="company-name">
+                    <a
+                      href="https://ethioware.org/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="company-link"
+                    >
+                      Ethioware - EdTech Initiative
+                    </a>
+                  </h3>
+                  <p className="role-title">
+                    Fullstack Developer Intern and Team Lead
+                  </p>
+                  <p className="experience-works">
+                    3 Months Internship Program - Team Lead - Top 10 Performers
+                    Recognition
+                  </p>
+                  <div className="experience-images">
+                    <div
+                      className="experience-image-wrapper"
+                      onClick={() => setSelectedImage("/ethioware1.png")}
+                    >
+                      <img
+                        src="/ethioware1.png"
+                        alt="Ethioware Experience 1"
+                        className="experience-image"
+                      />
+                    </div>
+                    <div
+                      className="experience-image-wrapper"
+                      onClick={() => setSelectedImage("/ethioware2.png")}
+                    >
+                      <img
+                        src="/ethioware2.png"
+                        alt="Ethioware Experience 2"
+                        className="experience-image"
+                      />
+                    </div>
+                  </div>
+                </div>
 
-          {/* Bahir Dar University */}
-          <div
-            className="experience-clean-card"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="200"
-          >
-            <h3 className="company-name">Bahir Dar University</h3>
-            <p className="role-title">Event Organizer & Student</p>
-            <p className="experience-works">
-              Tech Exhibition Organization - Leadership & Communication Skills
-            </p>
-            <div className="experience-images">
-              <div className="experience-image-placeholder">
-                <span>Image 1</span>
-              </div>
-              <div className="experience-image-placeholder">
-                <span>Image 2</span>
-              </div>
-            </div>
-          </div>
-
-          {/* SewAsset */}
-          <div
-            className="experience-clean-card"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="300"
-          >
-            <h3 className="company-name">SewAsset</h3>
-            <p className="role-title">Full-Stack Developer</p>
-            <p className="experience-works">
-              Consulting Company - Helping System Development - Full-Stack
-              Solutions
-            </p>
-            <div className="experience-images">
-              <div className="experience-image-placeholder">
-                <span>Image 1</span>
-              </div>
-              <div className="experience-image-placeholder">
-                <span>Image 2</span>
-              </div>
-            </div>
+                {/* SewAsset */}
+                <div
+                  className="experience-clean-card"
+                  data-aos="fade-up"
+                  data-aos-duration="600"
+                  data-aos-delay="100"
+                >
+                  <h3 className="company-name">SewAsset</h3>
+                  <p className="role-title">Full-Stack Developer</p>
+                  <p className="experience-works">
+                    Consulting Company - Helping System Development - Full-Stack
+                    Solutions
+                  </p>
+                  <div className="experience-images">
+                    <div className="experience-image-placeholder">
+                      <span>Image 1</span>
+                    </div>
+                    <div className="experience-image-placeholder">
+                      <span>Image 2</span>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -773,7 +788,10 @@ const Portfolio = () => {
             <div className="masonry-item col-span-full">
               <div className="neon-card-light">
                 <div className="neon-inner-light relative overflow-hidden p-8 md:p-10 text-center">
-                  <h3 className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-[#8B0000] to-[#111827] bg-clip-text text-transparent">
+                  <h3
+                    className="text-2xl md:text-3xl font-extrabold"
+                    style={{ color: "#8B0000" }}
+                  >
                     For More Projects Check on my github profile
                   </h3>
                   <p className="mt-3 text-slate-600">
@@ -784,7 +802,7 @@ const Portfolio = () => {
                     href="https://github.com/HiwotBelay"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-[#8B0000] to-[#111827] shadow-[0_12px_30px_rgba(139,0,0,0.3)] hover:scale-[1.015] transition-transform"
+                    className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full text-white font-semibold bg-[#8B0000] shadow-[0_12px_30px_rgba(139,0,0,0.3)] hover:scale-[1.015] transition-transform"
                   >
                     <FaGithub /> GitHub
                   </a>
@@ -821,7 +839,7 @@ const Portfolio = () => {
         </h3>
         <a
           href="https://github.com/HiwotBelay"
-          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#8B0000] to-[#111827] text-white font-semibold hover:scale-[1.02] transition-transform"
+          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#8B0000] text-white font-semibold hover:scale-[1.02] transition-transform"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -831,6 +849,84 @@ const Portfolio = () => {
 
       {/* Styles - MATCHING HOME + NEW CREATIVE TABS */}
       <style jsx>{`
+        /* Experience Tabbed Interface */
+        .experience-tabbed-container {
+          position: relative;
+          padding: 20px 0;
+        }
+
+        .experience-tabs-wrapper {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 32px;
+        }
+
+        .experience-tabs {
+          display: flex;
+          gap: 12px;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          padding: 6px;
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08),
+            0 0 0 1px rgba(139, 0, 0, 0.1);
+        }
+
+        .experience-tab {
+          position: relative;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 24px;
+          border: none;
+          background: transparent;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          font-weight: 600;
+          font-size: 15px;
+          color: #64748b;
+        }
+
+        .experience-tab:hover {
+          color: #1e293b;
+          background: rgba(139, 0, 0, 0.05);
+        }
+
+        .experience-tab.active {
+          color: white;
+          background: #8b0000;
+          box-shadow: 0 8px 24px rgba(139, 0, 0, 0.3),
+            0 0 40px rgba(17, 24, 39, 0.2);
+          transform: translateY(-2px);
+        }
+
+        .tab-label {
+          white-space: nowrap;
+        }
+
+        .tab-badge {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 24px;
+          height: 24px;
+          padding: 0 8px;
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 700;
+          background: rgba(255, 255, 255, 0.2);
+          color: inherit;
+        }
+
+        .experience-tab.active .tab-badge {
+          background: rgba(255, 255, 255, 0.3);
+        }
+
+        .experience-cards-container {
+          min-height: 200px;
+        }
+
         /* Clean Experience Layout */
         .experience-clean-container {
           position: relative;
@@ -934,7 +1030,7 @@ const Portfolio = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, #8b0000, #111827);
+          background: #8b0000;
           color: #f5f5f0;
           font-size: 14px;
           font-weight: 600;
@@ -943,8 +1039,21 @@ const Portfolio = () => {
         }
 
         @media (max-width: 768px) {
-          .experience-road {
-            margin-bottom: 60px;
+          .experience-tabs {
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+          }
+
+          .experience-tab {
+            width: 100%;
+            justify-content: center;
+            padding: 14px 20px;
+            font-size: 14px;
+          }
+
+          .tab-label {
+            font-size: 14px;
           }
 
           .experience-clean-card {
@@ -1086,7 +1195,7 @@ const Portfolio = () => {
 
         .pill-light.active {
           color: white;
-          background: linear-gradient(135deg, #8b0000, #111827);
+          background: #8b0000;
           box-shadow: 0 8px 24px rgba(139, 0, 0, 0.3);
         }
 
@@ -1095,13 +1204,7 @@ const Portfolio = () => {
           position: relative;
           border-radius: 18px;
           padding: 1px;
-          background: conic-gradient(
-            from 180deg at 50% 50%,
-            rgba(139, 0, 0, 0.6),
-            rgba(17, 24, 39, 0.6),
-            rgba(139, 0, 0, 0.6),
-            rgba(17, 24, 39, 0.6)
-          );
+          background: #8b0000;
           transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
@@ -1113,11 +1216,7 @@ const Portfolio = () => {
 
         .neon-inner-light {
           border-radius: 17px;
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.96),
-            rgba(255, 255, 255, 0.94)
-          );
+          background: rgba(255, 255, 255, 0.96);
           border: 1px solid rgba(2, 6, 23, 0.06);
           box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset,
             0 10px 20px rgba(2, 6, 23, 0.05);
@@ -1137,11 +1236,7 @@ const Portfolio = () => {
           gap: 6px;
           transition: opacity 0.25s ease, transform 0.25s ease;
           transform: scale(0.98);
-          background: radial-gradient(
-            60% 60% at 50% 50%,
-            rgba(255, 255, 255, 0.4),
-            rgba(255, 255, 255, 0.75)
-          );
+          background: rgba(255, 255, 255, 0.75);
         }
 
         .neon-card-light:hover .card-overlay-light {
@@ -1220,13 +1315,7 @@ const Portfolio = () => {
           content: "";
           position: absolute;
           inset: 0;
-          background: conic-gradient(
-            from 180deg at 50% 50%,
-            rgba(139, 0, 0, 0.6),
-            rgba(17, 24, 39, 0.6),
-            rgba(139, 0, 0, 0.6),
-            rgba(17, 24, 39, 0.6)
-          );
+          background: #8b0000;
           opacity: 0;
           transition: opacity 0.3s ease;
           z-index: -1;
@@ -1237,11 +1326,7 @@ const Portfolio = () => {
         }
 
         .creative-tab.active {
-          background: linear-gradient(
-            135deg,
-            rgba(139, 0, 0, 0.1),
-            rgba(17, 24, 39, 0.1)
-          );
+          background: rgba(139, 0, 0, 0.1);
           border-color: rgba(139, 0, 0, 0.3);
           box-shadow: 0 12px 30px rgba(139, 0, 0, 0.2),
             0 0 40px rgba(17, 24, 39, 0.15);
@@ -1260,7 +1345,7 @@ const Portfolio = () => {
           width: 48px;
           height: 48px;
           border-radius: 12px;
-          background: linear-gradient(135deg, #8b0000, #111827);
+          background: #8b0000;
           box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
           transition: transform 0.3s ease;
         }
@@ -1302,7 +1387,7 @@ const Portfolio = () => {
           height: 32px;
           padding: 0 8px;
           border-radius: 999px;
-          background: linear-gradient(135deg, #8b0000, #111827);
+          background: #8b0000;
           color: white;
           font-size: 0.875rem;
           font-weight: 700;
@@ -1332,7 +1417,7 @@ const Portfolio = () => {
         }
 
         .nav-arrow:hover {
-          background: linear-gradient(135deg, #8b0000, #111827);
+          background: #8b0000;
           color: white;
           transform: scale(1.1);
           box-shadow: 0 8px 20px rgba(139, 0, 0, 0.4);
