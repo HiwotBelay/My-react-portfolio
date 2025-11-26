@@ -197,7 +197,13 @@ const Home = () => {
             </span>
             <span
               className="name-belay"
-              style={{ fontWeight: 900, color: "#111827" }}
+              style={{
+                fontWeight: 900,
+                background: "linear-gradient(135deg, #8B0000 0%, #111827 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
             >
               Belay
             </span>
