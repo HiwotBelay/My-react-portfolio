@@ -43,6 +43,7 @@ const Portfolio = () => {
   const [experienceTab, setExperienceTab] = useState("frontend"); // NEW: for experience tabs
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mouseTrail, setMouseTrail] = useState([]);
+  const [projectImageIndex, setProjectImageIndex] = useState({});
 
   const videoRefs = useRef({});
   const VIDEO_SPEED = 2;
@@ -133,6 +134,19 @@ const Portfolio = () => {
 
   const projects = useMemo(
     () => [
+      {
+        id: 0,
+        title: "AI Recruitment System",
+        subtitle: "Hackathon Winning Project",
+        images: ["/a1.png", "/a2.png", "/a3.png"],
+        category: "AI Solution",
+        description:
+          "An innovative AI-powered recruitment system designed to eliminate bias in hiring processes. Features an intelligent knowledge base that matches candidates based on skills and qualifications, ensuring fair and unbiased candidate evaluation.",
+        technologies:
+          "Next.js, TypeScript, AI/ML Integration, Prisma, PostgreSQL, Tailwind CSS",
+        github: "https://github.com/hosanna1616/Airecruiter",
+        demo: "#",
+      },
       {
         id: 1,
         title: "Digital Pet Twin",
@@ -395,84 +409,171 @@ const Portfolio = () => {
     </div>
   );
 
-  const renderProjectCard = (project) => (
-    <div key={project.id} className="masonry-item">
-      <div className="neon-card-light group">
-        <div className="neon-inner-light tilt relative overflow-hidden">
-          <div className="w-full bg-white relative overflow-hidden">
-            <video
-              ref={(el) => setVideoRef(project.id, el)}
-              src={project.video}
-              className="w-full h-[260px] object-cover"
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              onClick={() => handleVideoPlay(project.id)}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/35 to-white/0" />
-            <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
-            <button
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white bg-[#8B0000] shadow-[0_0_30px_rgba(139,0,0,0.4)] group-hover:scale-105 transition-all"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleVideoPlay(project.id);
-              }}
-              aria-label={
-                playingVideo === project.id ? "Pause video" : "Play video"
-              }
-            >
-              {playingVideo === project.id ? <FaPause /> : <FaPlay />}
-            </button>
-            <div className="absolute bottom-3 left-3 z-10">
-              <span className="text-[11px] md:text-xs font-medium px-2.5 py-1 rounded-full bg-white/70 backdrop-blur border border-slate-200">
-                {project.category}
-              </span>
-            </div>
-          </div>
+  const renderProjectCard = (project) => {
+    const currentImageIndex = projectImageIndex[project.id] || 0;
+    const hasImages = project.images && project.images.length > 0;
+    const currentImage = hasImages ? project.images[currentImageIndex] : null;
+    const isHackathon = project.id === 0;
 
-          <div className="p-5 md:p-6">
-            <h3 className="text-xl font-semibold text-slate-900 mb-2">
-              {project.title}
-            </h3>
-            <p className="text-slate-600 text-sm mb-4 line-clamp-3">
-              {project.description}
-            </p>
+    const handleNextImage = (e) => {
+      e.stopPropagation();
+      if (hasImages && project.images.length > 1) {
+        setProjectImageIndex((prev) => ({
+          ...prev,
+          [project.id]: (currentImageIndex + 1) % project.images.length,
+        }));
+      }
+    };
 
-            <div className="flex flex-wrap gap-1.5 mb-5">
-              {project.technologies.split(", ").map((tech, index) => (
-                <span
-                  key={index}
-                  className="text-[11px] md:text-xs px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700"
-                >
-                  {tech}
+    const handlePrevImage = (e) => {
+      e.stopPropagation();
+      if (hasImages && project.images.length > 1) {
+        setProjectImageIndex((prev) => ({
+          ...prev,
+          [project.id]:
+            currentImageIndex === 0
+              ? project.images.length - 1
+              : currentImageIndex - 1,
+        }));
+      }
+    };
+
+    return (
+      <div
+        key={project.id}
+        className={`masonry-item ${isHackathon ? "hackathon-featured" : ""}`}
+      >
+        <div
+          className={`neon-card-light group ${
+            isHackathon ? "hackathon-card" : ""
+          }`}
+        >
+          <div className="neon-inner-light tilt relative overflow-hidden">
+            <div className="w-full bg-white relative overflow-hidden">
+              {hasImages ? (
+                <>
+                  <img
+                    src={currentImage}
+                    alt={`${project.title} - Image ${currentImageIndex + 1}`}
+                    className="w-full h-[260px] object-cover cursor-pointer"
+                    onClick={() => setSelectedImage(currentImage)}
+                  />
+                  {project.images.length > 1 && (
+                    <>
+                      <button
+                        className="absolute top-1/2 left-2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-white bg-[#8B0000]/80 hover:bg-[#8B0000] shadow-lg transition-all z-10"
+                        onClick={handlePrevImage}
+                        aria-label="Previous image"
+                      >
+                        <FaChevronLeft className="text-sm" />
+                      </button>
+                      <button
+                        className="absolute top-1/2 right-2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-white bg-[#8B0000]/80 hover:bg-[#8B0000] shadow-lg transition-all z-10"
+                        onClick={handleNextImage}
+                        aria-label="Next image"
+                      >
+                        <FaChevronRight className="text-sm" />
+                      </button>
+                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                        {project.images.map((_, idx) => (
+                          <div
+                            key={idx}
+                            className={`w-1.5 h-1.5 rounded-full transition-all ${
+                              idx === currentImageIndex
+                                ? "bg-[#8B0000] w-4"
+                                : "bg-white/60"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <video
+                    ref={(el) => setVideoRef(project.id, el)}
+                    src={project.video}
+                    className="w-full h-[260px] object-cover"
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    onClick={() => handleVideoPlay(project.id)}
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/35 to-white/0" />
+                  <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
+                  <button
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white bg-[#8B0000] shadow-[0_0_30px_rgba(139,0,0,0.4)] group-hover:scale-105 transition-all"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleVideoPlay(project.id);
+                    }}
+                    aria-label={
+                      playingVideo === project.id ? "Pause video" : "Play video"
+                    }
+                  >
+                    {playingVideo === project.id ? <FaPause /> : <FaPlay />}
+                  </button>
+                </>
+              )}
+              <div className="absolute bottom-3 left-3 z-10">
+                <span className="text-[11px] md:text-xs font-medium px-2.5 py-1 rounded-full bg-white/70 backdrop-blur border border-slate-200">
+                  {project.category}
                 </span>
-              ))}
+              </div>
             </div>
 
-            <div className="flex justify-between items-center pt-3 border-t border-slate-200">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 transition-colors"
-              >
-                <FaGithub /> GitHub
-              </a>
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm text-fuchsia-600 hover:text-fuchsia-800 transition-colors"
-              >
-                <FaExternalLinkAlt /> Live Demo
-              </a>
+            <div className="p-5 md:p-6">
+              {project.subtitle && (
+                <p className="text-xs uppercase tracking-wide text-[#8B0000] font-semibold mb-1">
+                  {project.subtitle}
+                </p>
+              )}
+              <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                {project.title}
+              </h3>
+              <p className="text-slate-600 text-sm mb-4 line-clamp-3">
+                {project.description}
+              </p>
+
+              <div className="flex flex-wrap gap-1.5 mb-5">
+                {project.technologies.split(", ").map((tech, index) => (
+                  <span
+                    key={index}
+                    className="text-[11px] md:text-xs px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex justify-between items-center pt-3 border-t border-slate-200">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-sm text-teal-600 hover:text-teal-800 transition-colors"
+                >
+                  <FaGithub /> GitHub
+                </a>
+                {project.demo !== "#" && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-sm text-fuchsia-600 hover:text-fuchsia-800 transition-colors"
+                  >
+                    <FaExternalLinkAlt /> Live Demo
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section
@@ -518,7 +619,7 @@ const Portfolio = () => {
                 onClick={() => setExperienceTab("frontend")}
               >
                 <span className="tab-label">Frontend Experience</span>
-                <span className="tab-badge">1</span>
+                <span className="tab-badge">3</span>
               </button>
               <button
                 className={`experience-tab ${
@@ -529,7 +630,7 @@ const Portfolio = () => {
                 <span className="tab-label">
                   Backend and Fullstack Experience
                 </span>
-                <span className="tab-badge">2</span>
+                <span className="tab-badge">3</span>
               </button>
             </div>
           </div>
@@ -538,25 +639,128 @@ const Portfolio = () => {
           <div className="experience-cards-container">
             {/* Frontend Experiences */}
             {experienceTab === "frontend" && (
-              <div
-                className="experience-clean-card"
-                data-aos="fade-up"
-                data-aos-duration="600"
-              >
-                <h3 className="company-name">Helder</h3>
-                <p className="role-title">
-                  Front-End Developer (Paid Internship)
-                </p>
-                <p className="experience-works">
-                  Real Client Projects - UI/UX Design - Development &
-                  Integration
-                </p>
-                <div className="experience-images">
-                  <div className="experience-image-placeholder">
-                    <span>Image 1</span>
+              <div className="experience-frontend-grid">
+                <div className="experience-frontend-column">
+                  {/* BrainBite */}
+                  <div
+                    className="experience-clean-card"
+                    data-aos="fade-up"
+                    data-aos-duration="600"
+                  >
+                    <h3 className="company-name">
+                      <a
+                        href="https://www.brainbite.ai/en"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="company-link"
+                      >
+                        BrainBite
+                        <FaExternalLinkAlt className="company-link-icon" />
+                      </a>
+                    </h3>
+                    <p className="role-title">Frontend Developer Intern</p>
+                    <p className="experience-works">
+                      UI/UX and JavaScript & TypeScript focused frontend
+                      development
+                    </p>
                   </div>
-                  <div className="experience-image-placeholder">
-                    <span>Image 2</span>
+
+                  {/* Bahir Dar University Career Center */}
+                  <div
+                    className="experience-clean-card experience-bdu-card"
+                    data-aos="fade-up"
+                    data-aos-duration="600"
+                    data-aos-delay="300"
+                  >
+                    <h3 className="company-name">
+                      <a
+                        href="https://www.bdu.edu.et/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="company-link"
+                      >
+                        Bahir Dar University Career Center
+                        <FaExternalLinkAlt className="company-link-icon" />
+                      </a>
+                    </h3>
+                    <p className="role-title">
+                      Frontend team lead, Website developer, Event organizer
+                    </p>
+                    <p className="experience-works">
+                      Leading frontend development team and managing university
+                      career center website projects
+                    </p>
+                    <div className="experience-images">
+                      <div
+                        className="experience-image-wrapper"
+                        onClick={() => setSelectedImage("/bit1.jpg")}
+                      >
+                        <img
+                          src="/bit1.jpg"
+                          alt="Bahir Dar University Career Center Experience 1"
+                          className="experience-image"
+                        />
+                      </div>
+                      <div
+                        className="experience-image-wrapper"
+                        onClick={() => setSelectedImage("/bit2.jpg")}
+                      >
+                        <img
+                          src="/bit2.jpg"
+                          alt="Bahir Dar University Career Center Experience 2"
+                          className="experience-image"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="experience-frontend-column">
+                  {/* Helder Technologies */}
+                  <div
+                    className="experience-clean-card"
+                    data-aos="fade-up"
+                    data-aos-duration="600"
+                    data-aos-delay="200"
+                  >
+                    <h3 className="company-name">
+                      <a
+                        href="https://heldertechnologies.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="company-link"
+                      >
+                        Helder Technologies
+                        <FaExternalLinkAlt className="company-link-icon" />
+                      </a>
+                    </h3>
+                    <p className="role-title">Frontend Developer</p>
+                    <p className="experience-works">
+                      Real Client Projects - UI/UX Design - Development &
+                      Integration
+                    </p>
+                    <div className="experience-images">
+                      <div
+                        className="experience-image-wrapper"
+                        onClick={() => setSelectedImage("/helder1.png")}
+                      >
+                        <img
+                          src="/helder1.png"
+                          alt="Helder Technologies Experience 1"
+                          className="experience-image"
+                        />
+                      </div>
+                      <div
+                        className="experience-image-wrapper"
+                        onClick={() => setSelectedImage("/helder2.png")}
+                      >
+                        <img
+                          src="/helder2.png"
+                          alt="Helder Technologies Experience 2"
+                          className="experience-image"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -564,7 +768,7 @@ const Portfolio = () => {
 
             {/* Backend and Fullstack Experiences */}
             {experienceTab === "fullstack" && (
-              <>
+              <div className="experience-fullstack-grid">
                 {/* Ethioware */}
                 <div
                   className="experience-clean-card"
@@ -579,6 +783,7 @@ const Portfolio = () => {
                       className="company-link"
                     >
                       Ethioware - EdTech Initiative
+                      <FaExternalLinkAlt className="company-link-icon" />
                     </a>
                   </h3>
                   <p className="role-title">
@@ -617,24 +822,99 @@ const Portfolio = () => {
                   className="experience-clean-card"
                   data-aos="fade-up"
                   data-aos-duration="600"
-                  data-aos-delay="100"
+                  data-aos-delay="200"
                 >
-                  <h3 className="company-name">SewAsset</h3>
-                  <p className="role-title">Full-Stack Developer</p>
+                  <h3 className="company-name">
+                    <a
+                      href="https://www.sewasset.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="company-link"
+                    >
+                      Sew Asset
+                      <FaExternalLinkAlt className="company-link-icon" />
+                    </a>
+                  </h3>
+                  <p className="role-title">
+                    From UI/UX Designer to Full System Development
+                  </p>
                   <p className="experience-works">
-                    Consulting Company - Helping System Development - Full-Stack
-                    Solutions
+                    End-to-end development from design to full system
+                    implementation and deployment
                   </p>
                   <div className="experience-images">
-                    <div className="experience-image-placeholder">
-                      <span>Image 1</span>
+                    <div
+                      className="experience-image-wrapper"
+                      onClick={() => setSelectedImage("/sew1.png")}
+                    >
+                      <img
+                        src="/sew1.png"
+                        alt="Sew Asset Experience 1"
+                        className="experience-image"
+                      />
                     </div>
-                    <div className="experience-image-placeholder">
-                      <span>Image 2</span>
+                    <div
+                      className="experience-image-wrapper"
+                      onClick={() => setSelectedImage("/sew2.png")}
+                    >
+                      <img
+                        src="/sew2.png"
+                        alt="Sew Asset Experience 2"
+                        className="experience-image"
+                      />
                     </div>
                   </div>
                 </div>
-              </>
+
+                {/* Azemera Farms */}
+                <div
+                  className="experience-clean-card"
+                  data-aos="fade-up"
+                  data-aos-duration="600"
+                  data-aos-delay="300"
+                >
+                  <h3 className="company-name">
+                    <a
+                      href="https://azemerafarms.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="company-link"
+                    >
+                      Azemera Farms
+                      <FaExternalLinkAlt className="company-link-icon" />
+                    </a>
+                  </h3>
+                  <p className="role-title">
+                    Fullstack Developer, Agri E-learning system
+                  </p>
+                  <p className="experience-works">
+                    Developing comprehensive e-learning platform for
+                    agricultural education and training
+                  </p>
+                  <div className="experience-images">
+                    <div
+                      className="experience-image-wrapper"
+                      onClick={() => setSelectedImage("/azmera1.png")}
+                    >
+                      <img
+                        src="/azmera1.png"
+                        alt="Azemera Farms Experience 1"
+                        className="experience-image"
+                      />
+                    </div>
+                    <div
+                      className="experience-image-wrapper"
+                      onClick={() => setSelectedImage("/azmera2.png")}
+                    >
+                      <img
+                        src="/azmera2.png"
+                        alt="Azemera Farms Experience 2"
+                        className="experience-image"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -927,6 +1207,40 @@ const Portfolio = () => {
           min-height: 200px;
         }
 
+        .experience-frontend-grid {
+          display: flex;
+          gap: 24px;
+        }
+
+        .experience-frontend-column {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .experience-frontend-column .experience-clean-card {
+          margin-bottom: 0;
+          margin-top: 0;
+          height: fit-content;
+        }
+
+        .experience-frontend-column .experience-clean-card:not(:first-child) {
+          margin-top: 0;
+        }
+
+        .experience-fullstack-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+          align-items: start;
+        }
+
+        .experience-fullstack-grid .experience-clean-card {
+          margin-bottom: 0;
+          height: fit-content;
+        }
+
         /* Clean Experience Layout */
         .experience-clean-container {
           position: relative;
@@ -964,13 +1278,27 @@ const Portfolio = () => {
           color: #8b0000;
           text-decoration: none;
           transition: all 0.3s ease;
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
         }
 
         .company-link:hover {
           color: #111827;
           text-decoration: underline;
           transform: translateX(4px);
+        }
+
+        .company-link-icon {
+          width: 14px;
+          height: 14px;
+          opacity: 0.7;
+          transition: all 0.3s ease;
+        }
+
+        .company-link:hover .company-link-icon {
+          opacity: 1;
+          transform: translate(2px, -2px);
         }
 
         .role-title {
@@ -985,6 +1313,10 @@ const Portfolio = () => {
           line-height: 1.6;
           color: #4b5563;
           margin-bottom: 18px;
+        }
+
+        .experience-clean-card:not(:has(.experience-images)) .experience-works {
+          margin-bottom: 0;
         }
 
         .experience-images {
@@ -1054,6 +1386,16 @@ const Portfolio = () => {
 
           .tab-label {
             font-size: 14px;
+          }
+
+          .experience-frontend-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+
+          .experience-fullstack-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
           }
 
           .experience-clean-card {
@@ -1262,6 +1604,76 @@ const Portfolio = () => {
         @media (min-width: 768px) {
           .neon-card-light:hover .desc-light {
             display: block;
+          }
+        }
+
+        /* Hackathon Featured Project */
+        .hackathon-featured {
+          order: -1;
+          position: relative;
+        }
+
+        .hackathon-featured::before {
+          content: "🏆";
+          position: absolute;
+          top: -15px;
+          right: -15px;
+          font-size: 40px;
+          z-index: 10;
+          animation: float 3s ease-in-out infinite;
+          filter: drop-shadow(0 4px 8px rgba(139, 0, 0, 0.4));
+        }
+
+        .hackathon-card {
+          border: 3px solid #8b0000;
+          box-shadow: 0 0 30px rgba(139, 0, 0, 0.4),
+            0 10px 40px rgba(139, 0, 0, 0.2);
+          position: relative;
+          background: linear-gradient(
+            135deg,
+            rgba(139, 0, 0, 0.05) 0%,
+            rgba(17, 24, 39, 0.05) 100%
+          );
+        }
+
+        .hackathon-card::after {
+          content: "";
+          position: absolute;
+          inset: -3px;
+          border-radius: inherit;
+          padding: 3px;
+          background: linear-gradient(135deg, #8b0000, #111827, #8b0000);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          z-index: -1;
+          animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        .hackathon-card:hover {
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 0 50px rgba(139, 0, 0, 0.6),
+            0 15px 50px rgba(139, 0, 0, 0.3);
+        }
+
+        @keyframes borderGlow {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.7;
+          }
+        }
+
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-10px) rotate(5deg);
           }
         }
 

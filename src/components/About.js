@@ -38,11 +38,11 @@ const About = () => {
   }, []);
 
   const skills = [
-    { name: "React", percentage: 90, delay: 0 },
+    { name: "React/Next.js", percentage: 90, delay: 0 },
     { name: "JavaScript/TypeScript", percentage: 90, delay: 100 },
     { name: "MongoDB & Postgres", percentage: 80, delay: 200 },
-    { name: "AI Integration", percentage: 85, delay: 300 },
-    { name: "Tailwind CSS", percentage: 90, delay: 400 },
+    { name: "AI API Integration", percentage: 85, delay: 300 },
+    { name: "Tailwind CSS/HTML5", percentage: 90, delay: 400 },
     { name: "Node.js & Express.js & PHP", percentage: 80, delay: 500 },
   ];
 
