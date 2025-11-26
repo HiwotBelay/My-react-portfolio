@@ -1,15 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import {
-  Github,
-  Send,
-  Linkedin,
-  Download,
-  X,
-  Menu,
-  Play,
-  Terminal,
-} from "lucide-react";
+import { Github, Send, Linkedin, Download, Play, Terminal } from "lucide-react";
 import { ReactTyped } from "react-typed";
 import {
   SiReact,
@@ -171,8 +162,6 @@ const CodeEditor = () => {
 };
 
 const Home = () => {
-  const [menu, toggleMenu] = useState(false);
-  const headerRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
 
   // Check if screen is mobile size
@@ -185,35 +174,10 @@ const Home = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (headerRef.current && !headerRef.current.contains(event.target)) {
-        toggleMenu(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  function handleNavLinkClick() {
-    toggleMenu(false);
-  }
-
   return (
     <>
-      {isMobile && (
-        <div
-          className="absolute top-4 right-4 z-50 text-gray-800 text-3xl cursor-pointer"
-          onClick={() => toggleMenu(!menu)}
-        >
-          {menu ? <X /> : <Menu />}
-        </div>
-      )}
-
       <section
-        className="hero relative overflow-hidden flex items-center min-h-screen"
+        className="hero relative overflow-hidden flex flex-col md:flex-row items-center justify-center min-h-screen"
         id="home"
       >
         {/* Simple Background */}
@@ -222,21 +186,31 @@ const Home = () => {
         {/* Name Section - Independent, Close to Navbar */}
         <div
           className="home-name-section relative md:absolute left-0 md:top-1/2 md:-translate-y-1/2 z-20 text-left px-4 md:px-0"
-          style={{ marginLeft: "435px" }}
+          style={{ marginLeft: "clamp(300px, 25vw, 350px)" }}
         >
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight whitespace-nowrap">
-            <span style={{ fontWeight: 900, color: "#8B0000" }}>
-              Hiwot Belay
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 md:mb-6 leading-normal whitespace-nowrap">
+            <span
+              className="name-hiwot"
+              style={{ fontWeight: 900, color: "#8B0000" }}
+            >
+              Hiwot{" "}
+            </span>
+            <span
+              className="name-belay"
+              style={{ fontWeight: 900, color: "#111827" }}
+            >
+              Belay
             </span>
           </h1>
 
-          <p className="text-xl md:text-3xl font-medium mb-8 text-slate-700">
+          {/* Typing Animation - Visible on Mobile */}
+          <p className="text-xl md:text-3xl font-medium mb-6 md:mb-8 text-slate-700">
             I'm{" "}
             <span className="relative inline-block brand-color-text">
               <ReactTyped
                 strings={[
-                  "Software Engineer",
                   "Full-Stack Developer",
+                  "Software Engineer",
                   "Accountant",
                 ]}
                 typeSpeed={100}
@@ -248,7 +222,7 @@ const Home = () => {
           </p>
 
           {/* Social Icons */}
-          <div className="social relative z-30 flex justify-start gap-4 mb-12">
+          <div className="social relative z-30 flex justify-center md:justify-start gap-6 mb-8 md:mb-12">
             <a
               href="https://github.com/HiwotBelay"
               target="_blank"
@@ -292,16 +266,16 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Interactive Code Editor - Independent, Right Side */}
+        {/* Interactive Code Editor - Independent, Right Side - Hidden on Mobile */}
         <div
-          className="home-code-section relative md:absolute right-0 md:top-1/2 md:-translate-y-1/2 z-20 px-4 md:px-0 mt-8 md:mt-0 flex items-center justify-center"
+          className="home-code-section hidden md:block relative md:absolute right-0 md:top-1/2 md:-translate-y-1/2 z-20 px-4 md:px-0 mt-8 md:mt-0 flex items-center justify-center"
           style={{ marginRight: "clamp(20px, 3vw, 60px)" }}
         >
           <CodeEditor />
         </div>
 
-        {/* CV Download Button - EXACT same positioning */}
-        <div className="cv-download absolute top-4 right-4 z-30">
+        {/* CV Download Button - Positioned below icons on mobile */}
+        <div className="cv-download relative md:absolute md:top-4 md:right-4 z-30 mt-8 md:mt-0 w-full md:w-auto flex justify-center md:justify-end">
           <a
             href="/Hiwot_Belay CV.pdf"
             download
@@ -599,30 +573,79 @@ const Home = () => {
               height: 22px;
             }
 
+            /* Hero Section Mobile */
+            .hero {
+              padding: 2rem 1rem !important;
+              min-height: 100vh !important;
+              justify-content: center !important;
+            }
+
             /* Name Section Mobile */
             .home-name-section {
               position: relative !important;
               margin-left: 0 !important;
-              margin-top: 2rem;
-              margin-bottom: 2rem;
-              text-align: center;
+              margin-top: 3rem !important;
+              margin-bottom: 0 !important;
+              text-align: center !important;
+              width: 100% !important;
+              display: flex !important;
+              flex-direction: column !important;
+              align-items: center !important;
+              padding: 0 1.5rem !important;
             }
 
             .home-name-section h1 {
-              font-size: 2.5rem !important;
-              white-space: normal !important;
+              font-size: 3.5rem !important;
+              white-space: nowrap !important;
+              text-align: center !important;
+              margin-bottom: 2rem !important;
+              line-height: 1.2 !important;
+              overflow: visible !important;
             }
 
+            /* Mobile: Both names in red */
+            .home-name-section .name-hiwot,
+            .home-name-section .name-belay {
+              color: #8b0000 !important;
+            }
+
+            /* Typing Text Mobile */
             .home-name-section p {
-              font-size: 1.25rem !important;
+              font-size: 1.5rem !important;
+              margin-bottom: 2.5rem !important;
+              text-align: center !important;
+              line-height: 1.4 !important;
             }
 
-            /* Code Section Mobile */
+            /* Social Icons Mobile */
+            .social {
+              justify-content: center !important;
+              margin-bottom: 2.5rem !important;
+              gap: 1.5rem !important;
+            }
+
+            /* Code Section Mobile - Hidden */
             .home-code-section {
+              display: none !important;
+            }
+
+            /* CV Button Mobile */
+            .cv-download {
               position: relative !important;
-              margin-left: 0 !important;
-              margin-top: 1rem;
-              margin-bottom: 2rem;
+              margin-top: 0 !important;
+              width: 100% !important;
+              display: flex !important;
+              justify-content: center !important;
+            }
+
+            .portfolio-cv-button {
+              width: auto !important;
+            }
+
+            .portfolio-cv-inner {
+              padding: 14px 28px !important;
+              font-size: 15px !important;
+              font-weight: 600 !important;
             }
           }
 

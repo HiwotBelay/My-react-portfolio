@@ -5,8 +5,6 @@ import {
   FaExternalLinkAlt,
   FaPlay,
   FaPause,
-  FaAward,
-  FaCode,
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
@@ -36,10 +34,10 @@ import behavVideo from "./img/behav.mp4";
 import ethiotel from "./img/ethiotel.mp4";
 
 const Portfolio = () => {
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("design"); // "design" = Awards, "illustration" = Projects
   const [selectedImage, setSelectedImage] = useState(null);
   const [playingVideo, setPlayingVideo] = useState(null);
-  const [allViewTab, setAllViewTab] = useState("awards"); // NEW: for "all" filter creative view
+  const [selectedVideo, setSelectedVideo] = useState(null); // For video modal
   const [experienceTab, setExperienceTab] = useState("frontend"); // NEW: for experience tabs
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mouseTrail, setMouseTrail] = useState([]);
@@ -50,8 +48,62 @@ const Portfolio = () => {
 
   // Marquee (awards) refs / state
   const awardsRef = useRef(null);
+  const certificatesCarouselRef = useRef(null);
   const [marqueePaused, setMarqueePaused] = useState(false);
   const MARQUEE_SPEED = 40; // px per second (adjust: larger = faster)
+
+  // Certificate carousel drag scroll
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleMouseDown = (e) => {
+    if (certificatesCarouselRef.current) {
+      setIsDragging(true);
+      setStartX(e.pageX - certificatesCarouselRef.current.offsetLeft);
+      setScrollLeft(certificatesCarouselRef.current.scrollLeft);
+      setMarqueePaused(true);
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || !certificatesCarouselRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - certificatesCarouselRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    certificatesCarouselRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  // Touch events for mobile
+  const handleTouchStart = (e) => {
+    if (certificatesCarouselRef.current) {
+      setIsDragging(true);
+      setStartX(
+        e.touches[0].pageX - certificatesCarouselRef.current.offsetLeft
+      );
+      setScrollLeft(certificatesCarouselRef.current.scrollLeft);
+      setMarqueePaused(true);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || !certificatesCarouselRef.current) return;
+    const x = e.touches[0].pageX - certificatesCarouselRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    certificatesCarouselRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
 
   // Mouse tracking - SAME AS HOME
   useEffect(() => {
@@ -148,6 +200,19 @@ const Portfolio = () => {
         demo: "#",
       },
       {
+        id: 3,
+        title: "Tender Management System",
+        images: ["/t1.png", "/t2.png", "/t3.png"],
+        video: tenderVideo,
+        category: "Enterprise Solution",
+        description:
+          "A comprehensive system for managing the tendering process for government and private organizations. Features include tender posting, bid submission, evaluation, and award notification.",
+        technologies:
+          "Frontend: React, Tailwind CSS, Node.js, Express.js, MongoDB,JWT, OAuth",
+        github: "https://github.com/HiwotBelay/Tender-Managment-System",
+        demo: "#",
+      },
+      {
         id: 1,
         title: "Digital Pet Twin",
         video: petVideo,
@@ -169,18 +234,6 @@ const Portfolio = () => {
         technologies:
           "Next.js, React, Node.js, Express, Firebase Realtime Database, PostgreSQL, Prisma",
         github: "https://github.com/HiwotBelay/E-commerce",
-        demo: "#",
-      },
-      {
-        id: 3,
-        title: "Tender Management System",
-        video: tenderVideo,
-        category: "Enterprise Solution",
-        description:
-          "A comprehensive system for managing the tendering process for government and private organizations. Features include tender posting, bid submission, evaluation, and award notification.",
-        technologies:
-          "Frontend: React, Tailwind CSS, Node.js, Express.js, MongoDB,JWT, OAuth",
-        github: "https://github.com/HiwotBelay/Tender-Managment-System",
         demo: "#",
       },
       {
@@ -300,12 +353,6 @@ const Portfolio = () => {
         subtitle: "Algorithms",
         desc: certificateDescriptions.prog,
       },
-      {
-        img: code,
-        title: "DevQuest 2025",
-        subtitle: "Problem Solving",
-        desc: certificateDescriptions.code,
-      },
     ],
     [certificateDescriptions]
   );
@@ -374,12 +421,10 @@ const Portfolio = () => {
     requestAnimationFrame(() => {
       items.forEach((el) => el.classList.add("enter"));
     });
-  }, [filter, allViewTab]);
+  }, [filter]);
 
   const showAwards = filter === "design";
   const showProjects = filter === "illustration";
-  const showVenture = filter === "videos";
-  const showAll = filter === "all";
 
   const renderCertificateCard = (cert, index) => (
     <div
@@ -557,16 +602,26 @@ const Portfolio = () => {
                 >
                   <FaGithub /> GitHub
                 </a>
-                {project.demo !== "#" && (
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm text-fuchsia-600 hover:text-fuchsia-800 transition-colors"
-                  >
-                    <FaExternalLinkAlt /> Live Demo
-                  </a>
-                )}
+                <div className="flex items-center gap-3">
+                  {project.video && hasImages && (
+                    <button
+                      onClick={() => setSelectedVideo(project.video)}
+                      className="flex items-center gap-1.5 text-sm text-[#8B0000] hover:text-[#111827] transition-colors font-semibold"
+                    >
+                      <FaPlay className="text-xs" /> Watch Demo
+                    </button>
+                  )}
+                  {project.demo !== "#" && (
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-sm text-fuchsia-600 hover:text-fuchsia-800 transition-colors"
+                    >
+                      <FaExternalLinkAlt /> Live Demo
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -921,15 +976,9 @@ const Portfolio = () => {
 
         {/* Filter Pills */}
         <div
-          className="flex w-[360px] items-center justify-between my-6 rounded-3xl px-2 bg-white/80 backdrop-blur-md shadow-[inset_0_0_0_1px_rgba(2,6,23,0.06)]"
+          className="flex items-center justify-center gap-2 my-6 rounded-3xl px-3 py-1 bg-white/80 backdrop-blur-md shadow-[inset_0_0_0_1px_rgba(2,6,23,0.06)]"
           data-aos="zoom-in"
         >
-          <button
-            className={`pill-light ${filter === "all" ? "active" : ""}`}
-            onClick={() => setFilter("all")}
-          >
-            All
-          </button>
           <button
             className={`pill-light ${filter === "design" ? "active" : ""}`}
             onClick={() => setFilter("design")}
@@ -944,155 +993,68 @@ const Portfolio = () => {
           >
             Projects
           </button>
-          <button
-            className={`pill-light ${filter === "videos" ? "active" : ""}`}
-            onClick={() => setFilter("videos")}
-          >
-            Venture
-          </button>
         </div>
 
-        {/* 🎉 WOW CREATIVE "ALL" VIEW */}
-        {showAll && (
-          <div className="w-full max-w-7xl mx-auto mb-8">
-            {/* Creative Tab Switcher */}
-            <div className="creative-tab-wrapper">
-              <div className="creative-tabs">
-                <button
-                  className={`creative-tab ${
-                    allViewTab === "awards" ? "active" : ""
-                  }`}
-                  onClick={() => setAllViewTab("awards")}
-                >
-                  <div className="tab-icon-wrapper">
-                    <FaAward className="tab-icon" />
-                  </div>
-                  <span className="tab-text">Awards & Certificates</span>
-                  <span className="tab-count">{certificates.length}</span>
-                </button>
-
-                <button
-                  className={`creative-tab ${
-                    allViewTab === "projects" ? "active" : ""
-                  }`}
-                  onClick={() => setAllViewTab("projects")}
-                >
-                  <div className="tab-icon-wrapper">
-                    <FaCode className="tab-icon" />
-                  </div>
-                  <span className="tab-text">Projects</span>
-                  <span className="tab-count">{projects.length}</span>
-                </button>
-              </div>
-
-              {/* Navigation Arrows */}
-              <div className="creative-nav-arrows">
-                <button
-                  className="nav-arrow"
-                  onClick={() =>
-                    setAllViewTab(
-                      allViewTab === "awards" ? "projects" : "awards"
-                    )
-                  }
-                  aria-label="Previous"
-                >
-                  <FaChevronLeft />
-                </button>
-                <button
-                  className="nav-arrow"
-                  onClick={() =>
-                    setAllViewTab(
-                      allViewTab === "awards" ? "projects" : "awards"
-                    )
-                  }
-                  aria-label="Next"
-                >
-                  <FaChevronRight />
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Certificates Horizontal Carousel - Only for Awards */}
-        {(showAwards || (showAll && allViewTab === "awards")) && (
-          <div className="certificates-carousel-container w-full mt-8">
-            <div
-              className="certificates-carousel-track"
-              onMouseEnter={() => setMarqueePaused(true)}
-              onMouseLeave={() => setMarqueePaused(false)}
-            >
-              {/* Duplicate certificates for seamless loop */}
-              {[...certificates, ...certificates].map((cert, i) => (
-                <div key={`cert-${i}`} className="certificate-carousel-item">
-                  <div
-                    className="neon-card-light group"
-                    onClick={() => setSelectedImage(cert.img)}
-                  >
-                    <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
-                      <img
-                        src={cert.img || "/placeholder.svg"}
-                        className="w-full h-auto object-contain"
-                        alt={cert.title}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
-                      <div className="card-overlay-light">
-                        <h4 className="text-lg md:text-xl font-bold">
-                          {cert.title}
-                        </h4>
-                        <p className="text-xs uppercase tracking-wide text-slate-500">
-                          {cert.subtitle}
-                        </p>
-                        <p className="desc-light">{cert.desc}</p>
+        {showAwards && (
+          <div className="certificates-carousel-wrapper w-full mt-8 relative">
+            <div className="certificates-carousel-container w-full">
+              <div
+                ref={certificatesCarouselRef}
+                className={`certificates-carousel-track ${
+                  isDragging ? "dragging" : ""
+                }`}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseLeave}
+                onMouseEnter={() => setMarqueePaused(true)}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
+                {/* Duplicate certificates for seamless loop */}
+                {[...certificates, ...certificates].map((cert, i) => (
+                  <div key={`cert-${i}`} className="certificate-carousel-item">
+                    <div
+                      className="neon-card-light group"
+                      onClick={() => setSelectedImage(cert.img)}
+                    >
+                      <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
+                        <img
+                          src={cert.img || "/placeholder.svg"}
+                          className="w-full h-auto object-contain"
+                          alt={cert.title}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
+                        <div className="card-overlay-light">
+                          <h4 className="text-lg md:text-xl font-bold">
+                            {cert.title}
+                          </h4>
+                          <p className="text-xs uppercase tracking-wide text-slate-500">
+                            {cert.subtitle}
+                          </p>
+                          <p className="desc-light">{cert.desc}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         )}
 
         {/* Projects Grid */}
-        <div className="mt-8 w-[92%] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
-          {showAll &&
-            allViewTab === "projects" &&
-            projects.map((project) => renderProjectCard(project))}
+        {showProjects && (
+          <div className="mt-8 w-[92%] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
+            {projects.map((project) => renderProjectCard(project))}
+          </div>
+        )}
 
-          {showProjects &&
-            projects.map((project) => renderProjectCard(project))}
-
-          {showVenture && (
-            <div className="masonry-item col-span-full">
-              <div className="neon-card-light">
-                <div className="neon-inner-light relative overflow-hidden p-8 md:p-10 text-center">
-                  <h3
-                    className="text-2xl md:text-3xl font-extrabold"
-                    style={{ color: "#8B0000" }}
-                  >
-                    For More Projects Check on my github profile
-                  </h3>
-                  <p className="mt-3 text-slate-600">
-                    Explore additional ventures, experiments, and
-                    works-in-progress.
-                  </p>
-                  <a
-                    href="https://github.com/HiwotBelay"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full text-white font-semibold bg-[#8B0000] shadow-[0_12px_30px_rgba(139,0,0,0.3)] hover:scale-[1.015] transition-transform"
-                  >
-                    <FaGithub /> GitHub
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Lightbox */}
+        {/* Image Lightbox */}
         {selectedImage && (
           <div
             className="fixed top-0 left-0 w-full h-screen flex justify-center items-center z-[9999] bg-black/50 backdrop-blur-sm"
@@ -1105,6 +1067,33 @@ const Portfolio = () => {
               loading="lazy"
               decoding="async"
             />
+          </div>
+        )}
+
+        {/* Video Modal */}
+        {selectedVideo && (
+          <div
+            className="fixed top-0 left-0 w-full h-screen flex justify-center items-center z-[9999] bg-black/70 backdrop-blur-sm"
+            onClick={() => setSelectedVideo(null)}
+          >
+            <div className="relative max-w-[95%] max-h-[95%] w-full md:w-auto">
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="absolute -top-10 right-0 text-white text-2xl font-bold hover:text-red-400 transition-colors"
+                aria-label="Close video"
+              >
+                ×
+              </button>
+              <video
+                src={selectedVideo}
+                controls
+                autoPlay
+                className="max-w-full max-h-[90vh] rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] bg-black"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
           </div>
         )}
       </div>
@@ -1417,10 +1406,33 @@ const Portfolio = () => {
         }
 
         /* Certificates Horizontal Carousel */
+        .certificates-carousel-wrapper {
+          position: relative;
+          padding: 20px 0;
+        }
+
         .certificates-carousel-container {
-          overflow: hidden;
+          overflow-x: auto;
+          overflow-y: hidden;
           padding: 20px 0;
           position: relative;
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+          cursor: grab;
+        }
+
+        .certificates-carousel-container::-webkit-scrollbar {
+          height: 8px;
+        }
+
+        .certificates-carousel-container::-webkit-scrollbar-track {
+          background: rgba(139, 0, 0, 0.1);
+          border-radius: 4px;
+        }
+
+        .certificates-carousel-container::-webkit-scrollbar-thumb {
+          background: #8b0000;
+          border-radius: 4px;
         }
 
         .certificates-carousel-track {
@@ -1428,9 +1440,16 @@ const Portfolio = () => {
           gap: 20px;
           animation: scrollCertificates 30s linear infinite;
           will-change: transform;
+          user-select: none;
         }
 
-        .certificates-carousel-container:hover .certificates-carousel-track {
+        .certificates-carousel-track.dragging {
+          cursor: grabbing;
+          animation-play-state: paused;
+        }
+
+        .certificates-carousel-container:hover .certificates-carousel-track,
+        .certificates-carousel-wrapper:hover .certificates-carousel-track {
           animation-play-state: paused;
         }
 
@@ -1690,170 +1709,6 @@ const Portfolio = () => {
         .masonry-item.enter {
           opacity: 1;
           transform: translate(0, 0) scale(1);
-        }
-
-        /* 🎉 WOW CREATIVE TAB STYLES */
-        .creative-tab-wrapper {
-          position: relative;
-          width: 100%;
-          max-width: 900px;
-          margin: 0 auto;
-          padding: 0 1rem;
-        }
-
-        .creative-tabs {
-          display: flex;
-          gap: 1rem;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-
-        .creative-tab {
-          position: relative;
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 1.25rem 2rem;
-          border-radius: 20px;
-          background: rgba(255, 255, 255, 0.8);
-          backdrop-filter: blur(10px);
-          border: 2px solid rgba(2, 6, 23, 0.06);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-          overflow: hidden;
-        }
-
-        .creative-tab::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: #8b0000;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          z-index: -1;
-        }
-
-        .creative-tab:hover::before {
-          opacity: 0.15;
-        }
-
-        .creative-tab.active {
-          background: rgba(139, 0, 0, 0.1);
-          border-color: rgba(139, 0, 0, 0.3);
-          box-shadow: 0 12px 30px rgba(139, 0, 0, 0.2),
-            0 0 40px rgba(17, 24, 39, 0.15);
-          transform: translateY(-4px) scale(1.02);
-        }
-
-        .creative-tab:hover {
-          transform: translateY(-2px) scale(1.01);
-          box-shadow: 0 8px 20px rgba(2, 6, 23, 0.08);
-        }
-
-        .tab-icon-wrapper {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 48px;
-          height: 48px;
-          border-radius: 12px;
-          background: #8b0000;
-          box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
-          transition: transform 0.3s ease;
-        }
-
-        .creative-tab:hover .tab-icon-wrapper {
-          transform: rotate(10deg) scale(1.1);
-        }
-
-        .creative-tab.active .tab-icon-wrapper {
-          animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-glow {
-          0%,
-          100% {
-            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
-          }
-          50% {
-            box-shadow: 0 8px 30px rgba(139, 0, 0, 0.7);
-          }
-        }
-
-        .tab-icon {
-          color: white;
-          font-size: 1.5rem;
-        }
-
-        .tab-text {
-          font-size: 1.125rem;
-          font-weight: 700;
-          color: #1e293b;
-        }
-
-        .tab-count {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 32px;
-          height: 32px;
-          padding: 0 8px;
-          border-radius: 999px;
-          background: #8b0000;
-          color: white;
-          font-size: 0.875rem;
-          font-weight: 700;
-          box-shadow: 0 2px 8px rgba(139, 0, 0, 0.4);
-        }
-
-        .creative-nav-arrows {
-          display: flex;
-          gap: 0.5rem;
-          justify-content: center;
-          margin-top: 1.5rem;
-        }
-
-        .nav-arrow {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(2, 6, 23, 0.06);
-          color: #475569;
-          transition: all 0.3s ease;
-          cursor: pointer;
-        }
-
-        .nav-arrow:hover {
-          background: #8b0000;
-          color: white;
-          transform: scale(1.1);
-          box-shadow: 0 8px 20px rgba(139, 0, 0, 0.4);
-        }
-
-        @media (max-width: 768px) {
-          .creative-tab {
-            flex-direction: column;
-            padding: 1rem 1.5rem;
-            text-align: center;
-          }
-
-          .tab-text {
-            font-size: 0.95rem;
-          }
-
-          .tab-icon-wrapper {
-            width: 40px;
-            height: 40px;
-          }
-
-          .tab-icon {
-            font-size: 1.25rem;
-          }
         }
       `}</style>
     </section>

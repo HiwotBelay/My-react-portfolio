@@ -59,7 +59,8 @@ const Footer = () => {
           {/* Left: Brand & Copyright */}
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
             <h2 className="text-xl md:text-2xl font-bold">
-              <span style={{ color: "#8B0000" }}>Hiwot Belay</span>
+              <span style={{ color: "#8B0000" }}>Hiwot </span>
+              <span style={{ color: "#111827" }}>Belay</span>
             </h2>
             <div className="hidden md:block w-[2px] h-8 bg-[#8B0000] rounded-full" />
             <div className="text-center md:text-left">
@@ -69,7 +70,10 @@ const Footer = () => {
               <p className="text-slate-600 text-xs">
                 Designed by{" "}
                 <span style={{ color: "#8B0000" }} className="font-semibold">
-                  Hiwot Belay
+                  Hiwot{" "}
+                </span>
+                <span style={{ color: "#111827" }} className="font-semibold">
+                  Belay
                 </span>
               </p>
             </div>
