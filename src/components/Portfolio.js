@@ -1422,17 +1422,12 @@ const Portfolio = () => {
         }
 
         .certificates-carousel-container::-webkit-scrollbar {
-          height: 8px;
+          display: none;
         }
 
-        .certificates-carousel-container::-webkit-scrollbar-track {
-          background: rgba(139, 0, 0, 0.1);
-          border-radius: 4px;
-        }
-
-        .certificates-carousel-container::-webkit-scrollbar-thumb {
-          background: #8b0000;
-          border-radius: 4px;
+        .certificates-carousel-container {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
 
         .certificates-carousel-track {
