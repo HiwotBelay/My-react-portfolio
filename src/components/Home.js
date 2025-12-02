@@ -183,6 +183,11 @@ const Home = () => {
         {/* Simple Background */}
         <div className="absolute inset-0 -z-10 bg-[#F5F5F0]" />
 
+        {/* Logo in Hero Section */}
+        <div className="hero-logo-container">
+          <img src="/mylogo3.png" alt="Logo" className="hero-logo" />
+        </div>
+
         {/* Name Section - Independent, Close to Navbar */}
         <div
           className="home-name-section relative md:absolute left-0 md:top-1/2 md:-translate-y-1/2 z-20 text-left px-4 md:px-0"
@@ -296,6 +301,46 @@ const Home = () => {
 
         {/* Styles */}
         <style jsx>{`
+          /* Hero Logo Styling */
+          .hero-logo-container {
+            position: fixed;
+            top: 8px;
+            left: 8px;
+            z-index: 10000;
+          }
+
+          .hero-logo {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            border: none !important;
+            outline: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            transition: all 0.3s ease;
+            mix-blend-mode: normal;
+            opacity: 1;
+            cursor: pointer;
+            display: block;
+          }
+
+          .hero-logo:hover {
+            transform: scale(1.1);
+            opacity: 1;
+          }
+
+          @media (max-width: 768px) {
+            .hero-logo-container {
+              top: 5px;
+              left: 5px;
+            }
+
+            .hero-logo {
+              width: 80px;
+              height: 80px;
+            }
+          }
+
           /* Portfolio Aurora Light Effect - EXACT MATCH */
 
           /* Fixed Creative Background */
