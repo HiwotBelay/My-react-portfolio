@@ -26,13 +26,14 @@ const About = () => {
       });
     }, options);
 
-    if (progressRef.current) {
-      observer.observe(progressRef.current);
+    const node = progressRef.current;
+    if (node) {
+      observer.observe(node);
     }
 
     return () => {
-      if (progressRef.current) {
-        observer.unobserve(progressRef.current);
+      if (node) {
+        observer.unobserve(node);
       }
     };
   }, []);

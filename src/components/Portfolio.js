@@ -22,7 +22,6 @@ import new2 from "./img/new2.jpg";
 import new3 from "./img/new3.jpg";
 import helder from "./img/helder.jpg";
 import kuraz from "./img/kuraz.jpg";
-import code from "./img/code.jpg";
 import ethioware from "./img/ethioware.png";
 
 import petVideo from "./img/pet.mp4";
@@ -39,18 +38,12 @@ const Portfolio = () => {
   const [playingVideo, setPlayingVideo] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null); // For video modal
   const [experienceTab, setExperienceTab] = useState("frontend"); // NEW: for experience tabs
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [mouseTrail, setMouseTrail] = useState([]);
   const [projectImageIndex, setProjectImageIndex] = useState({});
 
   const videoRefs = useRef({});
   const VIDEO_SPEED = 2;
 
-  // Marquee (awards) refs / state
-  const awardsRef = useRef(null);
   const certificatesCarouselRef = useRef(null);
-  const [marqueePaused, setMarqueePaused] = useState(false);
-  const MARQUEE_SPEED = 40; // px per second (adjust: larger = faster)
 
   // Certificate carousel drag scroll
   const [isDragging, setIsDragging] = useState(false);
@@ -62,7 +55,6 @@ const Portfolio = () => {
       setIsDragging(true);
       setStartX(e.pageX - certificatesCarouselRef.current.offsetLeft);
       setScrollLeft(certificatesCarouselRef.current.scrollLeft);
-      setMarqueePaused(true);
     }
   };
 
@@ -90,7 +82,6 @@ const Portfolio = () => {
         e.touches[0].pageX - certificatesCarouselRef.current.offsetLeft
       );
       setScrollLeft(certificatesCarouselRef.current.scrollLeft);
-      setMarqueePaused(true);
     }
   };
 
@@ -104,28 +95,6 @@ const Portfolio = () => {
   const handleTouchEnd = () => {
     setIsDragging(false);
   };
-
-  // Mouse tracking - SAME AS HOME
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const newPosition = {
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1,
-        clientX: e.clientX,
-        clientY: e.clientY,
-        timestamp: Date.now(),
-      };
-
-      setMousePosition(newPosition);
-
-      setMouseTrail((prev) => {
-        const newTrail = [...prev, newPosition].slice(-8);
-        return newTrail.filter((pos) => Date.now() - pos.timestamp < 500);
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -177,7 +146,6 @@ const Portfolio = () => {
         "This was my paid internship experience as a Front-End Developer. I had a chance to work on real client projects. I worked starting from UI/UX to developing and integration phase this has been amazing experience skill wise and other supportive skills career wise.",
       kuraz:
         "It was Backend Development Internship. I had a role on doing real projects. I worked on PHP and MySQL database management. It was great experience and I learned a lot from it.",
-      code: "I have participated on DevQuest 2025, where me and my team had done a lot of real solving exam competitons.",
       ethioware:
         "Recognition for successfully completing the Fullstack Development 3 Month internship program, I was my group team lead too and me as an individual and my team got 2 recognitions on the best top 10 performers. Had practical skills in software development and industry best practices.",
     }),
@@ -426,34 +394,6 @@ const Portfolio = () => {
   const showAwards = filter === "design";
   const showProjects = filter === "illustration";
 
-  const renderCertificateCard = (cert, index) => (
-    <div
-      key={index}
-      className="masonry-item"
-      onClick={() => setSelectedImage(cert.img)}
-    >
-      <div className="neon-card-light group">
-        <div className="neon-inner-light tilt is-certificate relative overflow-hidden">
-          <img
-            src={cert.img || "/placeholder.svg"}
-            className="w-full h-auto object-cover"
-            alt={cert.title}
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="glare pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300" />
-          <div className="card-overlay-light">
-            <h4 className="text-lg md:text-xl font-bold">{cert.title}</h4>
-            <p className="text-xs uppercase tracking-wide text-slate-500">
-              {cert.subtitle}
-            </p>
-            <p className="desc-light">{cert.desc}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   const renderProjectCard = (project) => {
     const currentImageIndex = projectImageIndex[project.id] || 0;
     const hasImages = project.images && project.images.length > 0;
@@ -499,7 +439,7 @@ const Portfolio = () => {
                 <>
                   <img
                     src={currentImage}
-                    alt={`${project.title} - Image ${currentImageIndex + 1}`}
+                    alt={`${project.title} — view ${currentImageIndex + 1} of ${project.images.length}`}
                     className="w-full h-[260px] object-cover cursor-pointer"
                     onClick={() => setSelectedImage(currentImage)}
                   />
@@ -1072,7 +1012,6 @@ const Portfolio = () => {
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseLeave}
-                onMouseEnter={() => setMarqueePaused(true)}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}

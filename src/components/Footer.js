@@ -1,23 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
 import { FaTelegram, FaLinkedin, FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  // Mouse tracking for subtle glow effect
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
@@ -43,15 +28,6 @@ const Footer = () => {
     <footer className="relative w-full overflow-hidden bg-[#F5F5F0] border-t-[3px] border-transparent footer-border-gradient">
       {/* Clean Background Effects - NO FLOATING ITEMS */}
       <div className="absolute inset-0 -z-10"></div>
-
-      {/* Subtle Mouse Glow */}
-      <div
-        className="absolute inset-0 z-0 opacity-30 pointer-events-none"
-        style={{
-          background: `transparent`,
-          transition: "background 0.3s ease-out",
-        }}
-      />
 
       {/* Main Footer Content - HORIZONTAL LAYOUT */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-6">

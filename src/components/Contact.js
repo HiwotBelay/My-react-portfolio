@@ -1,5 +1,4 @@
 "use client";
-import { useState, useEffect } from "react";
 import { FaMapMarkerAlt, FaEnvelope, FaPhone } from "react-icons/fa";
 
 const Contact = () => {
