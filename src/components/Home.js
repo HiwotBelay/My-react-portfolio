@@ -138,7 +138,8 @@ const Home = () => {
           </h1>
 
           <p className="hero-subtitle reveal delay-5">
-            React, Next.js, Node.js, and AI-driven applications.
+            I can design and build any digital product you need, from idea to
+            production-ready system.
           </p>
 
           <div className="hero-cta-group reveal delay-6">
