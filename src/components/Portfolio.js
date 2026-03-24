@@ -687,6 +687,15 @@ const Portfolio = () => {
                 </span>
                 <span className="tab-badge">3</span>
               </button>
+              <button
+                className={`experience-tab ${
+                  experienceTab === "dsa" ? "active" : ""
+                }`}
+                onClick={() => setExperienceTab("dsa")}
+              >
+                <span className="tab-label">Data Structure and Algorithm</span>
+                <span className="tab-badge">1</span>
+              </button>
             </div>
           </div>
 
@@ -971,6 +980,61 @@ const Portfolio = () => {
                 </div>
               </div>
             )}
+
+            {/* Data Structure and Algorithm Experience */}
+            {experienceTab === "dsa" && (
+              <div className="experience-dsa-grid">
+                <div
+                  className="experience-clean-card"
+                  data-aos="fade-up"
+                  data-aos-duration="600"
+                >
+                  <h3 className="company-name">
+                    <a
+                      href="https://a2sv.org/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="company-link"
+                    >
+                      Africa to Silicon Valley (A2SV)
+                      <FaExternalLinkAlt className="company-link-icon" />
+                    </a>
+                  </h3>
+                  <p className="role-title">
+                    Data Structures and Algorithms Trainee
+                  </p>
+                  <p className="experience-works">
+                    Intensive problem-solving and algorithmic thinking practice
+                    with a strong focus on Python and Java. Solved coding
+                    challenges on arrays, strings, trees, graphs, and dynamic
+                    programming while improving clean-code and interview
+                    readiness skills.
+                  </p>
+                  <div className="experience-images">
+                    <div
+                      className="experience-image-wrapper"
+                      onClick={() => setSelectedImage("/d1.png")}
+                    >
+                      <img
+                        src="/d1.png"
+                        alt="A2SV Data Structures and Algorithms Experience 1"
+                        className="experience-image"
+                      />
+                    </div>
+                    <div
+                      className="experience-image-wrapper"
+                      onClick={() => setSelectedImage("/d2.png")}
+                    >
+                      <img
+                        src="/d2.png"
+                        alt="A2SV Data Structures and Algorithms Experience 2"
+                        className="experience-image"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -1230,6 +1294,13 @@ const Portfolio = () => {
           height: fit-content;
         }
 
+        .experience-dsa-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 24px;
+          align-items: start;
+        }
+
         /* Clean Experience Layout */
         .experience-clean-container {
           position: relative;
@@ -1383,6 +1454,11 @@ const Portfolio = () => {
           }
 
           .experience-fullstack-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+
+          .experience-dsa-grid {
             grid-template-columns: 1fr;
             gap: 20px;
           }
